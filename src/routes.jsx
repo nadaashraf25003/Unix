@@ -4,7 +4,6 @@ import App from "@/App";
 
 // Import your module route arrays
 import { erpRoutes } from "./Routing/erp.routes";
-import { ecommerceRoutes } from "./E-commerce/Routing/ecommerce.routes";
 
 // UI Components
 import Loader from "./Components/Global/Loader.jsx";
@@ -15,10 +14,6 @@ export const router = createBrowserRouter([
     path: "/",
     element: <App />, // App.jsx wraps all children below
     children: [
-      // 1. E-commerce Module Routes
-      ...ecommerceRoutes,
-      
-      // 2. ERP Module Routes
       ...erpRoutes,
     ],
   },
