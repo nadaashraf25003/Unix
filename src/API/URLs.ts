@@ -124,6 +124,8 @@ const Urls = {
     GET_ALL: "room-paths",
     GET_PATH: (fromRoomId: number, toRoomId: number) =>
       `room-paths/from/${fromRoomId}/to/${toRoomId}`,
+    GENERATE: (fromRoomId: number, toRoomId: number) =>
+    `room-paths/generate-path?fromRoomId=${fromRoomId}&toRoomId=${toRoomId}`, // new
   },
 
   /* =========================
