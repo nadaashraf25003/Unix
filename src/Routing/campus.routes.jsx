@@ -1,14 +1,13 @@
-import CampusNavigation from "@/pages/CampusNavigation/CampusNavigation";
-import ProtectedRoute from "@/Auth/ProtectedRoute";
+import ProtectedRoute from '@/utils/RequireAuth';
 import CampusNavigation from '@/Views/CampusNavigation/pages/CampusNavigation';
 
 const CampusRoutes = [
   {
-    path: "/campus-navigation",
+    path: "campus-navigation",
     element: (
-    //   <ProtectedRoute allowedRoles={["Student"]}>
+      // <ProtectedRoute allowedRoles={["Student"]}>
         <CampusNavigation />
-    //   </ProtectedRoute>
+      // </ProtectedRoute>
     ),
   },
 ];

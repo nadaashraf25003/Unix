@@ -6,6 +6,7 @@ import { authRoutes } from "./auth.routes";
 import { sharedPublicRoutes } from "./PublicRoutes";
 import { studentProtectedRoutes } from "./home.routes";
 import { adminProtectedRoutes } from "./admin.routes";
+import CampusRoutes from './campus.routes';
 
 const ERPLayout = lazy(() => import("@/Views/ERPLayout"));
 const AuthLayout = lazy(() => import("@/Views/Auth/AuthLayout"));
@@ -21,7 +22,8 @@ export const erpRoutes = [
     children: [
       // 🔓 PUBLIC ROUTES (no login)
       ...sharedPublicRoutes,
-
+      ...CampusRoutes
+,
       // 🔓 AUTH (public)
       {
         path: "auth",
