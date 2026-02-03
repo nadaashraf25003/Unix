@@ -36,7 +36,8 @@ const useSections = () => {
     useQuery({
       queryKey: ["sections", departmentId],
       queryFn: async () =>
-        (await api.get(`${Urls.SECTIONS.GET_BY_DEPARTMENT}/${departmentId}`))
+        (await api.get(Urls.SECTIONS.GET_BY_DEPARTMENT(departmentId))
+)
           .data as SectionDto[],
       enabled: !!departmentId,
     });
@@ -49,23 +50,24 @@ const useSections = () => {
   });
 
   const updateSectionMutation = useMutation({
-    mutationFn: async ({
-      id,
-      data,
-    }: {
-      id: number;
-      data: CreateSectionDto;
-    }) => (await api.put(`${Urls.SECTIONS.UPDATE}/${id}`, data)).data,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["sections"] }),
-  });
+  mutationFn: async ({
+    id,
+    data,
+  }: {
+    id: number;
+    data: CreateSectionDto;
+  }) => (await api.put(Urls.SECTIONS.UPDATE(id), data)).data, // صح ✅
+  onSuccess: () =>
+    queryClient.invalidateQueries({ queryKey: ["sections"] }),
+});
 
-  const deleteSectionMutation = useMutation({
-    mutationFn: async (id: number) =>
-      (await api.delete(`${Urls.SECTIONS.DELETE}/${id}`)).data,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["sections"] }),
-  });
+
+const deleteSectionMutation = useMutation({
+  mutationFn: async (id: number) =>
+    (await api.delete(Urls.SECTIONS.DELETE(id))).data, // صح ✅
+  onSuccess: () =>
+    queryClient.invalidateQueries({ queryKey: ["sections"] }),
+});
 
   return {
     sectionsQuery,

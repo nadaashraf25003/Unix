@@ -136,9 +136,11 @@ const useAuth = () => {
   });
 
   /* -------- Logout -------- */
-  const logout = () => {
-    clearToken();
-  };
+const logout = () => {
+  clearToken();              // يمسح التوكن
+  toast.success("Logged out successfully");
+};
+
 
   return {
     registerMutation,

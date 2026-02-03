@@ -5,7 +5,7 @@ import { z } from "zod";
 import useAuth from "@/Hooks/useAuth";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import {Link } from "react-router-dom";
+import {Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 type LoginForm = z.infer<typeof loginSchema>;
 
@@ -13,6 +13,14 @@ const Login = () => {
   const navigate = useNavigate();
   const { loginMutation } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+const location = useLocation();
+ 
+
+const from = location.state?.from?.pathname || "/erp";
+
+const handleLoginSuccess = () => {
+  navigate(from, { replace: true });
+};
 
   const {
     register,
@@ -30,8 +38,9 @@ const Login = () => {
     loginMutation.mutate(data, {
       onSuccess: (res) => {
       console.log("Response from backend:", res); // <-- log backend response
-      toast.success("Logged in successfully");
-      navigate("/erp");
+     
+      handleLoginSuccess();
+
     },
       onError: () => toast.error("Invalid credentials"),
     });

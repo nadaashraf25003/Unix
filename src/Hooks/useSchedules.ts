@@ -46,16 +46,19 @@ const useSchedules = () => {
     useQuery({
       queryKey: ["section-schedule", sectionId],
       queryFn: async () =>
-        (await api.get(`${Urls.SCHEDULES.SECTION}/${sectionId}`))
-          .data as ScheduleDto[],
+        (await api.get(`${Urls.SCHEDULES.SECTION}/${sectionId}`)).data as ScheduleDto[],
       enabled: !!sectionId,
     });
 
   const createScheduleMutation = useMutation({
     mutationFn: async (data: CreateScheduleDto) =>
       (await api.post(Urls.SCHEDULES.CREATE, data)).data,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["section-schedule"] }),
+    onSuccess: (_, variables) => {
+      // يحدث الجدول للشعبة المحددة فقط
+      queryClient.invalidateQueries({
+        queryKey: ["section-schedule", variables.sectionId],
+      });
+    },
   });
 
   const updateScheduleMutation = useMutation({
@@ -66,6 +69,12 @@ const useSchedules = () => {
       id: number;
       data: CreateScheduleDto;
     }) => (await api.put(`${Urls.SCHEDULES.UPDATE}/${id}`, data)).data,
+    onSuccess: (_, variables) => {
+      // يحدث الجدول للشعبة المحددة فقط
+      queryClient.invalidateQueries({
+        queryKey: ["section-schedule", variables.data.sectionId],
+      });
+    },
   });
 
   const deleteScheduleMutation = useMutation({

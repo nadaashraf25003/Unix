@@ -1,8 +1,11 @@
-import { authRoutes } from "./auth.routes";
-
-
 import { lazy, Suspense } from "react";
 import Loader from "@/Components/Global/Loader";
+import ProtectedRoute from "@/utils/RequireAuth.jsx";
+
+import { authRoutes } from "./auth.routes";
+import { sharedPublicRoutes } from "./PublicRoutes";
+import { studentProtectedRoutes } from "./home.routes";
+import { adminProtectedRoutes } from "./admin.routes";
 
 const ERPLayout = lazy(() => import("@/Views/ERPLayout"));
 const AuthLayout = lazy(() => import("@/Views/Auth/AuthLayout"));
@@ -16,6 +19,10 @@ export const erpRoutes = [
       </Suspense>
     ),
     children: [
+      // 🔓 PUBLIC ROUTES (no login)
+      ...sharedPublicRoutes,
+
+      // 🔓 AUTH (public)
       {
         path: "auth",
         element: (
@@ -24,6 +31,15 @@ export const erpRoutes = [
           </Suspense>
         ),
         children: authRoutes,
+      },
+
+      // 🔐 PROTECTED ROUTES
+      {
+        element: <ProtectedRoute />,
+        children: [
+          ...studentProtectedRoutes,
+          ...adminProtectedRoutes,
+        ],
       },
     ],
   },
