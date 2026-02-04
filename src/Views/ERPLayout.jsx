@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom';
+import DashboardLayout from '@/Components/Navbar/NavbarLayout';
 
 const ERPLayout = () => {
   return (
@@ -8,7 +9,9 @@ const ERPLayout = () => {
       
       <main>
         {/* THIS IS THE KEY: Without this, children won't show! */}
-        <Outlet /> 
+       <DashboardLayout>
+          <Outlet />
+        </DashboardLayout>
       </main>
     </div>
   );

@@ -23,82 +23,86 @@ const DepartmentManager: React.FC = () => {
     (CreateDepartmentDto & { id: number }) | null
   >(null);
 
- const onSubmit = async (data: CreateDepartmentDto) => {
-  if (editingDept) {
-    try {
-      setIsSaving(true);
+  const onSubmit = async (data: CreateDepartmentDto) => {
+    if (editingDept) {
+      try {
+        setIsSaving(true);
 
-      // 🔹 حط هنا الـ console.logs
-      console.log("Editing department id:", editingDept.id);
-      console.log("URL being called:", Urls.DEPARTMENTS.UPDATE(editingDept.id));
-      console.log("Data being sent:", { name: data.name, code: data.code });
+        // 🔹 حط هنا الـ console.logs
+        console.log("Editing department id:", editingDept.id);
+        console.log(
+          "URL being called:",
+          Urls.DEPARTMENTS.UPDATE(editingDept.id),
+        );
+        console.log("Data being sent:", { name: data.name, code: data.code });
 
-      await updateDepartmentMutation.mutateAsync({ 
-        id: editingDept.id, 
-        data: { name: data.name, code: data.code } 
-      });
+        await updateDepartmentMutation.mutateAsync({
+          id: editingDept.id,
+          data: { name: data.name, code: data.code },
+        });
 
-      toast.success("تم تعديل القسم بنجاح");
-      setEditingDept(null);
-      reset();
-    } catch {
-      toast.error("فشل تعديل القسم");
-    } finally {
-      setIsSaving(false);
+        toast.success("تم تعديل القسم بنجاح");
+        setEditingDept(null);
+        reset();
+      } catch {
+        toast.error("فشل تعديل القسم");
+      } finally {
+        setIsSaving(false);
+      }
+    } else {
+      try {
+        setIsSaving(true);
+        await createDepartmentMutation.mutateAsync(data);
+        toast.success("تم إضافة القسم بنجاح");
+        reset();
+      } catch {
+        toast.error("فشل إضافة القسم");
+      } finally {
+        setIsSaving(false);
+      }
     }
-  } else {
-    try {
-      setIsSaving(true);
-      await createDepartmentMutation.mutateAsync(data);
-      toast.success("تم إضافة القسم بنجاح");
-      reset();
-    } catch {
-      toast.error("فشل إضافة القسم");
-    } finally {
-      setIsSaving(false);
-    }
-  }
-};
+  };
 
-const handleDelete = (id: number, name: string) => {
-  console.log("Deleting department id:", id);
-console.log("URL:", `${Urls.DEPARTMENTS.DELETE(id)}`);
+  const handleDelete = (id: number, name: string) => {
+    console.log("Deleting department id:", id);
+    console.log("URL:", `${Urls.DEPARTMENTS.DELETE(id)}`);
 
-  toast(
-    (t) => (
-      <div className="flex flex-col gap-4 p-4">
-        <span>هل أنت متأكد من حذف القسم <strong>{name}</strong>؟</span>
-        <div className="flex justify-end gap-2">
-          <button
-            className="px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
-            onClick={() => toast.dismiss(t.id)}
-          >
-            إلغاء
-          </button>
-          <button
-            className="px-3 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600"
-            onClick={async () => {
-              try {
-                setIsDeletingId(id);
-                await deleteDepartmentMutation.mutateAsync(id);
-                toast.success("تم حذف القسم");
-              } catch {
-                toast.error("فشل حذف القسم");
-              } finally {
-                setIsDeletingId(null);
-                toast.dismiss(t.id);
-              }
-            }}
-          >
-            حذف
-          </button>
+    toast(
+      (t) => (
+        <div className="flex flex-col gap-4 p-4">
+          <span>
+            هل أنت متأكد من حذف القسم <strong>{name}</strong>؟
+          </span>
+          <div className="flex justify-end gap-2">
+            <button
+              className="px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+              onClick={() => toast.dismiss(t.id)}
+            >
+              إلغاء
+            </button>
+            <button
+              className="px-3 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600"
+              onClick={async () => {
+                try {
+                  setIsDeletingId(id);
+                  await deleteDepartmentMutation.mutateAsync(id);
+                  toast.success("تم حذف القسم");
+                } catch {
+                  toast.error("فشل حذف القسم");
+                } finally {
+                  setIsDeletingId(null);
+                  toast.dismiss(t.id);
+                }
+              }}
+            >
+              حذف
+            </button>
+          </div>
         </div>
-      </div>
-    ),
-    { duration: Infinity }
-  );
-};
-
+      ),
+      { duration: Infinity },
+    );
+  };
 
   const departments = departmentsQuery.data || [];
 
@@ -110,7 +114,9 @@ console.log("URL:", `${Urls.DEPARTMENTS.DELETE(id)}`);
           <Building2 className="text-white w-8 h-8" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-light">إدارة الأقسام</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-light">
+            إدارة الأقسام
+          </h1>
           <p className="text-gray-500 dark:text-gray-300">
             أضف وتحكم في أقسام الكلية/المدرسة
           </p>
@@ -159,8 +165,8 @@ console.log("URL:", `${Urls.DEPARTMENTS.DELETE(id)}`);
               {isSaving
                 ? "جاري الحفظ..."
                 : editingDept
-                ? "تحديث القسم"
-                : "حفظ القسم"}
+                  ? "تحديث القسم"
+                  : "حفظ القسم"}
             </button>
 
             {editingDept && (
@@ -196,7 +202,9 @@ console.log("URL:", `${Urls.DEPARTMENTS.DELETE(id)}`);
                   className="card flex justify-between items-center group hover:border-primary dark:hover:border-dark-primary transition-all"
                 >
                   <div>
-                    <h3 className="font-bold text-gray-800 dark:text-light">{dept.name}</h3>
+                    <h3 className="font-bold text-gray-800 dark:text-light">
+                      {dept.name}
+                    </h3>
                     <span className="text-xs font-mono bg-info/10 dark:bg-dark-info/20 text-info dark:text-dark-info px-2 py-1 rounded-md">
                       {dept.code}
                     </span>
@@ -211,14 +219,13 @@ console.log("URL:", `${Urls.DEPARTMENTS.DELETE(id)}`);
                     >
                       <Edit2 className="w-5 h-5" />
                     </button>
-                  <button
-  onClick={() => handleDelete(dept.id, dept.name)}
-  disabled={isDeletingId === dept.id}
-  className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg transition-all"
->
-  <Trash2 className="w-5 h-5" />
-</button>
-
+                    <button
+                      onClick={() => handleDelete(dept.id, dept.name)}
+                      disabled={isDeletingId === dept.id}
+                      className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg transition-all"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
                   </div>
                 </div>
               ))

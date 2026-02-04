@@ -13,17 +13,14 @@ const AuthLayout = lazy(() => import("@/Views/Auth/AuthLayout"));
 
 export const erpRoutes = [
   {
-    path: "erp",
+    path: "unix",
     element: (
       <Suspense fallback={<Loader />}>
         <ERPLayout />
       </Suspense>
     ),
     children: [
-      // 🔓 PUBLIC ROUTES (no login)
-      ...sharedPublicRoutes,
-      ...CampusRoutes
-,
+      // 🔓 PUBLIC ROUTES (no login),
       // 🔓 AUTH (public)
       {
         path: "auth",
@@ -43,6 +40,9 @@ export const erpRoutes = [
           ...adminProtectedRoutes,
         ],
       },
+
+      ...CampusRoutes,
+      ...sharedPublicRoutes,
     ],
   },
 ];

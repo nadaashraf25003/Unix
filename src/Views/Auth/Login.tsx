@@ -16,7 +16,7 @@ const Login = () => {
 const location = useLocation();
  
 
-const from = location.state?.from?.pathname || "/erp";
+const from = location.state?.from?.pathname || "/unix";
 
 const handleLoginSuccess = () => {
   navigate(from, { replace: true });
