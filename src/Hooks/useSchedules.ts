@@ -8,8 +8,10 @@ import Urls from "@/API/URLs";
 
 export interface ScheduleDto {
   id: number;
+  courseId: number;
+  roomId: number;
+  instructorId: number;
   courseName: string;
-  courseCode: string;
   instructorName: string;
   roomCode: string;
   dayOfWeek: number;
@@ -34,19 +36,11 @@ export interface CreateScheduleDto {
 const useSchedules = () => {
   const queryClient = useQueryClient();
 
-  // Student schedule
-  const studentScheduleQuery = useQuery({
-    queryKey: ["student-schedule"],
-    queryFn: async () =>
-      (await api.get(Urls.SCHEDULES.STUDENT)).data as ScheduleDto[],
-  });
-
-  // Section schedule (Admin)
   const sectionScheduleQuery = (sectionId: number) =>
     useQuery({
       queryKey: ["section-schedule", sectionId],
       queryFn: async () =>
-        (await api.get(`${Urls.SCHEDULES.SECTION}/${sectionId}`)).data as ScheduleDto[],
+        (await api.get(Urls.SCHEDULES.SECTION(sectionId))).data as ScheduleDto[],
       enabled: !!sectionId,
     });
 
@@ -54,7 +48,6 @@ const useSchedules = () => {
     mutationFn: async (data: CreateScheduleDto) =>
       (await api.post(Urls.SCHEDULES.CREATE, data)).data,
     onSuccess: (_, variables) => {
-      // يحدث الجدول للشعبة المحددة فقط
       queryClient.invalidateQueries({
         queryKey: ["section-schedule", variables.sectionId],
       });
@@ -68,9 +61,8 @@ const useSchedules = () => {
     }: {
       id: number;
       data: CreateScheduleDto;
-    }) => (await api.put(`${Urls.SCHEDULES.UPDATE}/${id}`, data)).data,
+    }) => (await api.put(Urls.SCHEDULES.UPDATE(id), data)).data,
     onSuccess: (_, variables) => {
-      // يحدث الجدول للشعبة المحددة فقط
       queryClient.invalidateQueries({
         queryKey: ["section-schedule", variables.data.sectionId],
       });
@@ -79,11 +71,13 @@ const useSchedules = () => {
 
   const deleteScheduleMutation = useMutation({
     mutationFn: async (id: number) =>
-      (await api.delete(`${Urls.SCHEDULES.DELETE}/${id}`)).data,
+      (await api.delete(Urls.SCHEDULES.DELETE(id))).data,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["section-schedule"] });
+    },
   });
 
   return {
-    studentScheduleQuery,
     sectionScheduleQuery,
     createScheduleMutation,
     updateScheduleMutation,

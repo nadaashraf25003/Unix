@@ -33,15 +33,19 @@ const useStageDrivers = () => {
   const queryClient = useQueryClient();
 
   // Student materials
-  const studentMaterialsQuery = useQuery({
-    queryKey: ["stage-drivers", "student"],
-    queryFn: async () => {
-      const res = await api.get<StageDriver[]>(
-        Urls.STAGE_DRIVERS.STUDENT
-      );
+ const studentMaterialsQuery = useQuery({
+  queryKey: ["stage-drivers", "student"],
+  queryFn: async () => {
+    try {
+      const res = await api.get<StageDriver[]>(Urls.STAGE_DRIVERS.STUDENT);
       return res.data;
-    },
-  });
+    } catch (err) {
+      console.error("Fetch error:", err);
+      throw err;
+    }
+  },
+});
+
 
   // Create
   const createStageDriverMutation = useMutation({
@@ -56,28 +60,43 @@ const useStageDrivers = () => {
   });
 
   // Update
-  const updateStageDriverMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: CreateStageDriverData }) => {
-      const res = await api.put(`${Urls.STAGE_DRIVERS.UPDATE}/${id}`, data);
-      return res.data;
-    },
-    onSuccess: () => {
-      toast.success("Material updated");
-      queryClient.invalidateQueries({ queryKey: ["stage-drivers"] });
-    },
-  });
+const updateStageDriverMutation = useMutation({
+  mutationFn: async ({
+    id,
+    data,
+  }: {
+    id: number;
+    data: CreateStageDriverData;
+  }) => {
+    const res = await api.put(
+      Urls.STAGE_DRIVERS.UPDATE(id), // ✅ الاستدعاء الصحيح
+      data
+    );
+    return res.data;
+  },
+  onSuccess: () => {
+    toast.success("Material updated");
+    queryClient.invalidateQueries({ queryKey: ["stage-drivers"] });
+  },
+  onError: (error: any) => {
+    console.error("Update error:", error?.response?.data || error);
+    toast.error("فشل تحديث المادة");
+  },
+});
+
 
   // Delete
-  const deleteStageDriverMutation = useMutation({
-    mutationFn: async (id: number) => {
-      const res = await api.delete(`${Urls.STAGE_DRIVERS.DELETE}/${id}`);
-      return res.data;
-    },
-    onSuccess: () => {
-      toast.success("Material deleted");
-      queryClient.invalidateQueries({ queryKey: ["stage-drivers"] });
-    },
-  });
+const deleteStageDriverMutation = useMutation({
+  mutationFn: async (id: number) => {
+    const res = await api.delete(Urls.STAGE_DRIVERS.DELETE(id));
+    return res.data;
+  },
+  onSuccess: () => {
+    toast.success("Material deleted");
+    queryClient.invalidateQueries({ queryKey: ["stage-drivers"] });
+  },
+});
+
 
   return {
     studentMaterialsQuery,

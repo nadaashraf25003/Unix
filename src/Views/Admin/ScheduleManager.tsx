@@ -13,7 +13,7 @@ const ScheduleManager: React.FC = () => {
   const { sectionsQuery } = useSections();
   const { roomsQuery } = useRooms();
   const { instructorsQuery } = useInstructors();
-  const { createScheduleMutation, updateScheduleMutation, sectionScheduleQuery } = useSchedules();
+  const { createScheduleMutation, updateScheduleMutation, deleteScheduleMutation, sectionScheduleQuery } = useSchedules();
 
   // اختيار الشعبة
   const [selectedSectionId, setSelectedSectionId] = React.useState<number>(0);
@@ -37,35 +37,48 @@ const ScheduleManager: React.FC = () => {
   const [editingId, setEditingId] = React.useState<number | null>(null);
   const [isSaving, setIsSaving] = React.useState(false);
 
- const onSubmit = async (data: CreateScheduleDto) => {
-  if (!selectedSectionId) {
-    toast.error("اختر الشعبة أولًا");
-    return;
-  }
-
-  try {
-    setIsSaving(true);
-    data.sectionId = selectedSectionId;
-
-    if (editingId) {
-      await updateScheduleMutation.mutateAsync({ id: editingId, data });
-      toast.success("تم تعديل الجدول بنجاح");
-      setEditingId(null);
-    } else {
-      await createScheduleMutation.mutateAsync(data);
-      toast.success("تم إضافة الجدول بنجاح");
+  const onSubmit = async (data: CreateScheduleDto) => {
+    if (!selectedSectionId) {
+      toast.error("اختر الشعبة أولًا");
+      return;
     }
 
-    // تحديث الجدول فورًا بعد الإضافة/التعديل
-    scheduleQuery.refetch();
-    reset();
-  } catch {
-    toast.error("فشل حفظ الجدول");
-  } finally {
-    setIsSaving(false);
-  }
-};
+    try {
+      setIsSaving(true);
+      data.sectionId = selectedSectionId;
 
+      if (editingId) {
+        await updateScheduleMutation.mutateAsync({ id: editingId, data });
+        toast.success("تم تعديل الجدول بنجاح");
+        setEditingId(null);
+      } else {
+        await createScheduleMutation.mutateAsync(data);
+        toast.success("تم إضافة الجدول بنجاح");
+      }
+
+      scheduleQuery.refetch();
+      reset();
+    } catch {
+      toast.error("فشل حفظ الجدول");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // حذف جدول
+  const handleDelete = (id: number) => {
+    if (!selectedSectionId) return;
+
+    if (window.confirm("هل أنت متأكد من حذف هذا الجدول؟ ❌")) {
+      deleteScheduleMutation.mutate(id, {
+        onSuccess: () => {
+          toast.success("تم حذف الجدول بنجاح");
+          scheduleQuery.refetch();
+        },
+        onError: () => toast.error("فشل حذف الجدول"),
+      });
+    }
+  };
 
   return (
     <div className="p-6 bg-light dark:bg-dark min-h-screen" dir="rtl">
@@ -100,6 +113,7 @@ const ScheduleManager: React.FC = () => {
                 <th className="border p-2">الغرفة</th>
                 <th className="border p-2">من</th>
                 <th className="border p-2">إلى</th>
+                <th className="border p-2">إجراءات</th>
               </tr>
             </thead>
             <tbody>
@@ -113,11 +127,39 @@ const ScheduleManager: React.FC = () => {
                   <td className="border p-2">{sch.roomCode}</td>
                   <td className="border p-2">{sch.startTime}</td>
                   <td className="border p-2">{sch.endTime}</td>
+                  <td className="border p-2 flex gap-2 justify-center">
+                    {/* تعديل */}
+                    <button
+                      type="button"
+                      className="btn-secondary btn-sm"
+                      onClick={() => {
+                        setEditingId(sch.id);
+                        reset({
+                          courseId: sch.courseId,
+                          roomId: sch.roomId,
+                          instructorId: sch.instructorId,
+                          dayOfWeek: sch.dayOfWeek,
+                          startTime: sch.startTime,
+                          endTime: sch.endTime,
+                        });
+                      }}
+                    >
+                      تعديل
+                    </button>
+                    {/* حذف */}
+                    <button
+                      type="button"
+                      className="btn-danger btn-sm"
+                      onClick={() => handleDelete(sch.id)}
+                    >
+                      حذف
+                    </button>
+                  </td>
                 </tr>
               ))}
               {!scheduleQuery.data?.length && (
                 <tr>
-                  <td className="border p-2 text-center" colSpan={6}>
+                  <td className="border p-2 text-center" colSpan={7}>
                     لا توجد حصص للشعبة المختارة
                   </td>
                 </tr>
