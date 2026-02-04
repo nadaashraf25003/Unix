@@ -32,15 +32,15 @@ const useSections = () => {
       (await api.get(Urls.SECTIONS.GET_ALL)).data as SectionDto[],
   });
 
-  const sectionsByDepartment = (departmentId: number) =>
-    useQuery({
-      queryKey: ["sections", departmentId],
-      queryFn: async () =>
-        (await api.get(Urls.SECTIONS.GET_BY_DEPARTMENT(departmentId))
-)
-          .data as SectionDto[],
-      enabled: !!departmentId,
-    });
+//   const sectionsByDepartment = (departmentId: number) =>
+//     useQuery({
+//       queryKey: ["sections", departmentId],
+//       queryFn: async () =>
+//         (await api.get(Urls.SECTIONS.GET_BY_DEPARTMENT(departmentId))
+// )
+//           .data as SectionDto[],
+//       enabled: !!departmentId,
+//     });
 
   const createSectionMutation = useMutation({
     mutationFn: async (data: CreateSectionDto) =>
@@ -71,8 +71,7 @@ const deleteSectionMutation = useMutation({
 
   return {
     sectionsQuery,
-    sectionsByDepartment,
-    createSectionMutation,
+     createSectionMutation,
     updateSectionMutation,
     deleteSectionMutation,
   };
