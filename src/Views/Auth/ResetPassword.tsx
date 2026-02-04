@@ -6,6 +6,7 @@ import useAuth from "@/Hooks/useAuth";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { ROUTES } from "@/Routing/routePaths";
 type ResetForm = z.infer<typeof resetSchema>;
 
 const ResetPassword = () => {
@@ -26,7 +27,7 @@ const ResetPassword = () => {
     resetPasswordMutation.mutate(data, {
       onSuccess: (res) => {
         toast.success(res.message);
-        navigate("/erp/auth/login");
+        navigate(ROUTES.LOGIN);
       },
       onError: (err: any) => toast.error(err.response?.data?.message || "Password reset failed"),
       

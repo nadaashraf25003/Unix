@@ -9,20 +9,20 @@ export default {
     extend: {
       colors: {
         // Light mode colors
-        primary: '#9c27b0',
-        secondary: '#f44336',
-        info: '#00acc1',
-        success: '#4caf50',
-        warning: '#ff9800',
+        primary: '#FF7802',       // bright orange
+        secondary: '#DD8327',     // orange/brown
+        info: '#407593',          // blue/teal
+        success: '#A0F78F',       // green
+        warning: '#FAF494',       // light yellow
         light: '#f8f9fa',
         dark: '#212121',
 
-        // separate dark mode colors
-        'dark-primary': '#ce93d8',
-        'dark-secondary': '#ef9a9a',
-        'dark-info': '#80deea',
-        'dark-success': '#81c784',
-        'dark-warning': '#ffb74d',
+        // Dark mode colors
+        'dark-primary': '#8E6330',   // brown/dark accent
+        'dark-secondary': '#8E6330', // can reuse brown
+        'dark-info': '#FAF494',      // light yellow for contrast
+        'dark-success': '#A0F78F',
+        'dark-warning': '#DD8327',   // dark orange
         'dark-bg': '#121212',
         'dark-card': '#1e1e1e',
       },
@@ -38,7 +38,7 @@ export default {
         'xl': '1rem',
         '2xl': '1.5rem',
       },
-       keyframes: {
+      keyframes: {
         slideDown: {
           "0%": { opacity: 0, transform: "translateY(-10px)" },
           "100%": { opacity: 1, transform: "translateY(0)" },

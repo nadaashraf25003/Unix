@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast";
 import {Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Logout } from "@mui/icons-material";
+import { ROUTES } from "@/Routing/routePaths";
 
 type LoginForm = z.infer<typeof loginSchema>;
 
@@ -161,7 +162,7 @@ const handleLoginSuccess = () => {
             </span>
           </label>
           <Link
-            to={"/erp/auth/forgot-password"}
+            to={ROUTES.FORGOT_PASSWORD}
             className="text-sm text-primary dark:text-dark-primary hover:underline"
           >
             Forgot password?

@@ -5,6 +5,7 @@ import { z } from "zod";
 import useAuth from "@/Hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { ROUTES } from "@/Routing/routePaths";
 
 type ForgotForm = z.infer<typeof forgotSchema>;
 
@@ -23,7 +24,7 @@ const ForgotPassword = () => {
     forgotPasswordMutation.mutate(data.email, {
       onSuccess: (res) => { 
         toast.success(res.message);
-        navigate("/erp/auth/reset-password");
+        navigate(ROUTES.RESET_PASSWORD);
       },
     });
   };
@@ -105,7 +106,7 @@ const ForgotPassword = () => {
 
       <div className="mt-8 text-center">
         <Link 
-          to="/erp/auth/login" 
+          to={ROUTES.LOGIN} 
           className="inline-flex items-center text-primary dark:text-dark-primary hover:underline"
         >
           <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

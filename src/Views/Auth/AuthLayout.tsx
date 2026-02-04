@@ -1,9 +1,10 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { toast } from "react-hot-toast";
+import { ROUTES } from "@/Routing/routePaths";
 const AuthLayout = () => {
   const location = useLocation();
-  const isLoginPage = location.pathname === "/erp/auth/login";
+  const isLoginPage = location.pathname === ROUTES.LOGIN;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 to-info/5 dark:from-dark-bg dark:to-dark-card p-4">
@@ -29,7 +30,7 @@ const AuthLayout = () => {
             <p className="text-center text-gray-600 dark:text-gray-300">
               {isLoginPage ? "Don't have an account?" : "Already have an account?"}
               <Link 
-                to={isLoginPage ? "/erp/auth/register" : "/erp/auth/login"} 
+                to={isLoginPage ? ROUTES.REGISTER  : ROUTES.LOGIN} 
                 className="text-primary dark:text-dark-primary font-semibold ml-2 hover:underline"
               >
                 {isLoginPage ? "Sign up" : "Sign in"}

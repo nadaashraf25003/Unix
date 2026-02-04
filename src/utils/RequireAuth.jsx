@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { getToken } from "@/API/token";
+import { ROUTES } from "@/Routing/routePaths";
 
 const ProtectedRoute = () => {
   const token = getToken();
@@ -8,7 +9,7 @@ const ProtectedRoute = () => {
   if (!token) {
     return (
       <Navigate
-        to="/erp/auth/login"
+        to={ROUTES.LOGIN}
         state={{ from: location }}
         replace
       />

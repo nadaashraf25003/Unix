@@ -4,6 +4,7 @@ import { verifySchema } from "./auth.schema";
 import useAuth from "@/Hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { ROUTES } from "@/Routing/routePaths";
 const VerifyEmail = () => {
   const navigate = useNavigate();
   const { verifyEmailMutation } = useAuth();
@@ -20,7 +21,7 @@ const VerifyEmail = () => {
     verifyEmailMutation.mutate(data, {
       onSuccess: () => {
         toast.success("Email verified successfully");
-        navigate("/erp/auth/login");
+        navigate(ROUTES.LOGIN);
       },
     });
   };
@@ -131,7 +132,7 @@ const VerifyEmail = () => {
           </button>
 
           <Link
-            to="/erp/auth/resend-verification"
+            to={ROUTES.RESEND_VERIFICATION}
             className="btn-secondary flex-1 py-3 flex items-center justify-center space-x-2"
           >
             <span>Resend Code</span>
@@ -146,13 +147,13 @@ const VerifyEmail = () => {
         <div>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Already verified?{' '}
-            <Link to="/erp/auth/login" className="text-primary dark:text-dark-primary font-medium hover:underline">
+            <Link to={ROUTES.LOGIN} className="text-primary dark:text-dark-primary font-medium hover:underline">
               Sign in to your account
             </Link>
           </p>
         </div>
         <Link 
-          to="/erp/auth/login" 
+          to={ROUTES.LOGIN}
           className="inline-flex items-center text-primary dark:text-dark-primary hover:underline"
         >
           <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

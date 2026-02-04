@@ -5,6 +5,7 @@ import { z } from "zod";
 import useAuth from "@/Hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { ROUTES } from "@/Routing/routePaths";
 type ResendForm = z.infer<typeof forgotSchema>;
 
 function ResendVerification() {
@@ -23,13 +24,13 @@ function ResendVerification() {
     resendVerificationMutation.mutate(data.email, {
       onSuccess: (res) => { 
         toast.success(res.message);
-        navigate("/erp/auth/verify-email");
+        navigate(ROUTES.VERIFY_EMAIL);
       },
       onError: (err) => toast.error(err.message),
     });
   };
 
-  return (
+  return (  
     <>
       <div className="text-center mb-8">
         <div className="w-16 h-16 bg-gradient-to-br from-info/20 to-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -120,7 +121,7 @@ function ResendVerification() {
             Back to Login
           </Link> */}
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Already verified? <Link to="/erp/auth/login" className="text-primary dark:text-dark-primary font-medium hover:underline">Sign in</Link>
+            Already verified? <Link to={ROUTES.LOGIN} className="text-primary dark:text-dark-primary font-medium hover:underline">Sign in</Link>
           </p>
         </div>
       </div>
