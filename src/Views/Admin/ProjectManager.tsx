@@ -1,96 +1,156 @@
-// src/Pages/AdminProjects.tsx
 import React, { useState } from "react";
-import useProjects, { GraduationProjectDto, CreateProjectDto } from "@/Hooks/useProjects";
-import { useMutation } from "@tanstack/react-query";
-import api from "@/API/Config";
-import Urls from "@/API/URLs";
-import toast from "react-hot-toast";
- import ProjectMembersModal from "./Components/ProjectMembersModal";
+import useProjects from "@/Hooks/useAdminProjects";
+import { Edit, Trash2, Plus } from "lucide-react";
+
+const emptyForm = {
+  title: "",
+  description: "",
+  supervisor: "",
+  startDate: "",
+  repositoryLink: "",
+};
 
 const AdminProjectsPage: React.FC = () => {
-  const { projectsQuery, projectMembersQuery, createProjectMutation } = useProjects();
-  const [newProjectName, setNewProjectName] = useState("");
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const {
+    projectsQuery,
+    createProjectMutation,
+    updateProjectMutation,
+    deleteProjectMutation,
+  } = useProjects();
 
-  if (projectsQuery.isLoading) return <p>Loading projects...</p>;
-  if (projectsQuery.isError) return <p>Error loading projects</p>;
+  const [form, setForm] = useState(emptyForm);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
-  const handleCreateProject = () => {
-    if (!newProjectName.trim()) return toast.error("Project name required");
-    createProjectMutation.mutate({ projectName: newProjectName } as CreateProjectDto);
-    setNewProjectName("");
-  };
+  /* ================= HANDLERS ================= */
 
-  const handleDeleteProject = async (projectId: number) => {
-    try {
-      await api.delete(Urls.PROJECTS.GET_ALL + `/${projectId}`);
-      toast.success("Project deleted");
-      projectsQuery.refetch();
-    } catch (err) {
-      toast.error("Failed to delete project");
+  const handleSubmit = () => {
+    const payload = {
+      ...form,
+      students: [], // ممكن نضيفهم بعدين
+    };
+
+    if (editingId) {
+      updateProjectMutation.mutate({ id: editingId, dto: payload });
+    } else {
+      createProjectMutation.mutate(payload);
     }
+
+    setForm(emptyForm);
+    setEditingId(null);
   };
+
+  const handleEdit = (project: any) => {
+    setEditingId(project.id);
+    setForm({
+      title: project.title,
+      description: project.description,
+      supervisor: project.supervisor,
+      startDate: project.startDate.split("T")[0],
+      repositoryLink: project.repositoryLink,
+    });
+  };
+
+  /* ================= RENDER ================= */
+
+  if (projectsQuery.isLoading) {
+    return <p className="p-4">Loading projects...</p>;
+  }
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Admin: Graduation Projects</h1>
+    <div className="p-6 space-y-8">
+      <h1 className="text-2xl font-bold">Graduation Projects – Admin</h1>
 
-      {/* Create Project */}
-      <div className="mb-6 flex gap-2">
-        <input
-          type="text"
-          placeholder="New Project Name"
-          value={newProjectName}
-          onChange={(e) => setNewProjectName(e.target.value)}
-          className="border p-2 rounded"
-        />
-        <button onClick={handleCreateProject} className="bg-blue-500 text-white p-2 rounded">
-          Create
+      {/* ========= FORM ========= */}
+      <div className="bg-white p-4 rounded shadow space-y-4">
+        <h2 className="font-semibold">
+          {editingId ? "Edit Project" : "Create New Project"}
+        </h2>
+
+        <div className="grid grid-cols-2 gap-4">
+          <input
+            placeholder="Title"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            className="border p-2 rounded"
+          />
+
+          <input
+            placeholder="Supervisor"
+            value={form.supervisor}
+            onChange={(e) => setForm({ ...form, supervisor: e.target.value })}
+            className="border p-2 rounded"
+          />
+
+          <input
+            type="date"
+            value={form.startDate}
+            onChange={(e) => setForm({ ...form, startDate: e.target.value })}
+            className="border p-2 rounded"
+          />
+
+          <input
+            placeholder="Repository Link"
+            value={form.repositoryLink}
+            onChange={(e) =>
+              setForm({ ...form, repositoryLink: e.target.value })
+            }
+            className="border p-2 rounded"
+          />
+
+          <textarea
+            placeholder="Description"
+            value={form.description}
+            onChange={(e) =>
+              setForm({ ...form, description: e.target.value })
+            }
+            className="border p-2 rounded col-span-2"
+          />
+        </div>
+
+        <button
+          onClick={handleSubmit}
+          className="bg-blue-600 text-white px-4 py-2 rounded flex items-center gap-2"
+        >
+          <Plus size={18} />
+          {editingId ? "Update Project" : "Create Project"}
         </button>
       </div>
 
-      {/* Projects Table */}
-      <table className="w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border p-2">ID</th>
-            <th className="border p-2">Project Name</th>
-            <th className="border p-2">Members Count</th>
-            <th className="border p-2">Actions</th>
+      {/* ========= TABLE ========= */}
+      <table className="w-full border rounded overflow-hidden">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="p-2">Title</th>
+            <th className="p-2">Supervisor</th>
+            <th className="p-2">Members</th>
+            <th className="p-2">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {projectsQuery.data?.map((project) => (
-            <tr key={project.id}>
-              <td className="border p-2">{project.id}</td>
-              <td className="border p-2">{project.projectName}</td>
-              <td className="border p-2">{project.memberCount}</td>
-              <td className="border p-2 flex gap-2">
+          {projectsQuery.data?.map((project: any) => (
+            <tr key={project.id} className="border-t">
+              <td className="p-2">{project.title}</td>
+              <td className="p-2">{project.supervisor}</td>
+              <td className="p-2 text-center">{project.memberCount}</td>
+              <td className="p-2 flex gap-3 justify-center">
                 <button
-                  onClick={() => setSelectedProjectId(project.id)}
-                  className="bg-green-500 text-white p-1 rounded"
+                  onClick={() => handleEdit(project)}
+                  className="text-blue-600"
                 >
-                  Members
+                  <Edit size={18} />
                 </button>
+
                 <button
-                  onClick={() => handleDeleteProject(project.id)}
-                  className="bg-red-500 text-white p-1 rounded"
+                  onClick={() => deleteProjectMutation.mutate(project.id)}
+                  className="text-red-600"
                 >
-                  Delete
+                  <Trash2 size={18} />
                 </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {/* Members Modal */}
-      {selectedProjectId && (
-        <ProjectMembersModal
-          projectId={selectedProjectId}
-          onClose={() => setSelectedProjectId(null)}
-        />
-      )}
     </div>
   );
 };

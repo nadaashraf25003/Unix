@@ -6,32 +6,51 @@ export const loginSchema = z.object({
       .regex(/[a-zA-Z]/, "Password must contain letters")
       .regex(/\d/, "Password must contain numbers"),});
 
- 
+  
 
 export const registerSchema = z
   .object({
-    fullName: z.string().min(3, "Full name must be at least 3 characters"),
+    fullName: z
+      .string()
+      .min(3, "Full name must be at least 3 characters"),
+
     email: z.string().email("Invalid email address"),
+
     password: z
       .string()
       .min(8, "Password must be at least 8 characters")
       .regex(/[a-zA-Z]/, "Password must contain letters")
       .regex(/\d/, "Password must contain numbers"),
+
     confirmPassword: z.string(),
+
     role: z.enum(["Student", "Admin"]),
-    department: z.string().optional(), // هنا ضفنا الـ department
+
+    departmentId: z.number().optional(),
+    sectionId: z.number().optional(),
   })
+  // تطابق الباسورد
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
   })
+  // department مطلوب لو Student
   .refine(
-    (data) => (data.role === "Student" ? !!data.department : true),
+    (data) => (data.role === "Student" ? !!data.departmentId : true),
     {
       message: "Department is required for students",
-      path: ["department"],
+      path: ["departmentId"],
+    }
+  )
+  // section مطلوب لو Student
+  .refine(
+    (data) => (data.role === "Student" ? !!data.sectionId : true),
+    {
+      message: "Section is required for students",
+      path: ["sectionId"],
     }
   );
+
 
 
 export const verifySchema = z.object({

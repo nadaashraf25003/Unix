@@ -1,6 +1,6 @@
 // src/Components/ProjectMembersModal.tsx
 import React from "react";
-import useProjects, { ProjectMemberDto } from "@/Hooks/useProjects";
+import useProjects, { ProjectMemberDto } from "@/Hooks/useAdminProjects";
 
 interface Props {
   projectId: number;
