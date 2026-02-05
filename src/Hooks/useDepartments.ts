@@ -67,10 +67,11 @@ const updateDepartmentMutation = useMutation({
 });
 
 
-
 const deleteDepartmentMutation = useMutation({
   mutationFn: async (id: number) =>
-    (await api.delete(Urls.DEPARTMENTS.DELETE(id))).data, // صح ✅
+    await api.delete(Urls.DEPARTMENTS.DELETE(id), {
+      headers: { "Content-Type": "application/json" },
+    }),
   onSuccess: () => {
     toast.success("تم حذف القسم");
     queryClient.invalidateQueries({ queryKey: ["departments"] });
@@ -80,6 +81,7 @@ const deleteDepartmentMutation = useMutation({
     toast.error("فشل حذف القسم: " + (err.response?.data?.message || err.message));
   },
 });
+
 
 
   return {
