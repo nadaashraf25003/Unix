@@ -11,6 +11,8 @@ const Sections = lazy(() => import("@/views/Admin/Sections"));
 const Courses = lazy(() => import("@/views/Admin/Coursemanage"));
 const Instructors = lazy(() => import("@/views/Admin/InstructorManager"));
 const Projects = lazy(() => import("@/views/Admin/ProjectManager"));
+const ExamSchedule = lazy(() => import("@/views/Admin/ExamSchedule"));
+const LostFound = lazy(() => import("@/views/Admin/LostAndFoundAdminPage"));
 export const adminProtectedRoutes = [
   { index: true, element: <AdminDashboard /> },
   { path: "dashboard", element: <AdminDashboard /> },
@@ -22,4 +24,6 @@ export const adminProtectedRoutes = [
   { path: "courses", element: <Courses /> },
   { path: "instructors", element: <Instructors /> },
   {path: "projects", element: <Projects />},
+  {path: "examsmange", element: <ExamSchedule />},
+  {path: "lost-found-Admin", element: <LostFound />},
 ];
