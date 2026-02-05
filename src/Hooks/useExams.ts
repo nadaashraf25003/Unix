@@ -36,11 +36,48 @@ export interface CreateExamDto {
 const useExams = () => {
   const queryClient = useQueryClient();
 
+ const adminExamsQuery = useQuery({
+  queryKey: ["admin-exams"],
+  queryFn: async () => {
+    const { data } = await api.get(Urls.EXAMS.CREATE); // GET على "exams" للأدمين
+    return data.map((exam: any) => ({
+      id: exam.id,
+      courseId: exam.course?.id || 0,
+      sectionId: exam.section?.id || 0,
+      courseName: exam.course?.name || "",
+      sectionName: exam.section?.name || "",
+      instructorName: exam.instructor?.fullName || "",
+      roomCode: exam.room?.code || "",
+      stage: exam.stage,
+      examType: exam.examType,
+      examDate: exam.examDate,
+      startTime: exam.startTime,
+      endTime: exam.endTime,
+    })) as ExamDto[];
+  },
+});
+
   // جلب امتحانات الطالب
-  const studentExamsQuery = useQuery({
-    queryKey: ["student-exams"],
-    queryFn: async () => (await api.get(Urls.EXAMS.STUDENT)).data as ExamDto[],
-  });
+ const studentExamsQuery = useQuery({
+  queryKey: ["student-exams"],
+  queryFn: async () => {
+    const { data } = await api.get(Urls.EXAMS.STUDENT);
+
+    // map البيانات لتطابق ExamDto
+    return data.map((exam: any) => ({
+      id: exam.id,
+      courseName: exam.course?.name || "",
+      sectionName: exam.section?.name || "",
+      instructorName: exam.instructor?.fullName || "",
+      roomCode: exam.room?.code || "",
+      stage: exam.stage,
+      examType: exam.examType,
+      examDate: exam.examDate,
+      startTime: exam.startTime,
+      endTime: exam.endTime,
+    })) as ExamDto[];
+  },
+});
 
   // إنشاء امتحان جديد
   const createExamMutation = useMutation({
@@ -66,6 +103,7 @@ const useExams = () => {
     createExamMutation,
     updateExamMutation,
     deleteExamMutation,
+    adminExamsQuery,
   };
 };
 
