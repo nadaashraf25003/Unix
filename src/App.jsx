@@ -40,7 +40,7 @@ export default function App() {
   return (
     <ThemeProvider>
       <QueryClientProvider client={queryClient}>
-        <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground dark:bg-gray-800 m-0">
+        <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
           {/* Global UI Elements */}
           <ThemeToggle />
           <ScrollToTop />

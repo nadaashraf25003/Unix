@@ -52,17 +52,17 @@ export default function LandingPage() {
     },
     {
       key: "freeRooms",
-      label: "Free Rooms",
-      items: ["Find Rooms", "Room Booking", "Room Status", "Room Map"],
+      label: "Rooms",
+      items: ["Find Rooms",  "Room Status"],
     },
     {
       key: "projects",
       label: "Projects",
       items: [
-        "Group Projects",
-        "Individual Projects",
-        "Submission",
-        "Templates",
+        "Graduation Projects",
+        // "Individual Projects",
+        // "Submission",
+        // "Templates",
       ],
     },
   ];
@@ -208,18 +208,24 @@ export default function LandingPage() {
                   Logout
                 </Button>
               ) : (
-                <Button variant="ghost" size="sm">
-                  <a href={login}> Log in</a>
-                </Button>
+                <a href={login}>
+                  <Button variant="ghost" size="sm">
+                    Log in
+                  </Button>
+                </a>
               )}
               {token ? (
-                <Button variant="ghost" size="sm">
-                  <a href="unix/">My Account</a>
-                </Button>
+                <a href="unix/">
+                  <Button variant="primary" size="sm">
+                    My Account
+                  </Button>
+                </a>
               ) : (
-                <Button variant="primary" size="sm">
-                  <a href={register}> Explore</a>
-                </Button>
+                <a href={register}>
+                  <Button variant="primary" size="sm">
+                    Explore
+                  </Button>
+                </a>
               )}
             </div>
           </div>
@@ -258,12 +264,26 @@ export default function LandingPage() {
 
             {/* Call-to-Action Button */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <a
+              {/* <a
                 href={getStartedLink}
                 className="bg-primary dark:bg-dark-primary text-white font-semibold py-3 px-8 rounded-lg text-base hover:bg-primary/90 dark:hover:bg-dark-primary/90 transition-colors duration-200 text-center"
-              >
-                {token ? "My Account" : "Get Started Free"}
-              </a>
+              > */}
+              {token ? (
+                <a href="unix/">
+                  <Button variant="primary" size="lg">
+                    My Account
+                  </Button>
+                </a>
+              ) : (
+                <a href={register}>
+                  <Button variant="primary" size="lg">
+                    Get Started Free
+                  </Button>
+                </a>
+              )}
+
+              {/* {token ? "My Account" : "Get Started Free"} */}
+              {/* </a> */}
             </div>
 
             {/* Illustration Section */}
@@ -289,11 +309,19 @@ export default function LandingPage() {
                 academic life.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button variant="primary" size="lg">
-                  <a href={register}>
-                    {token ? "My Account" : "Get Started for free"}
+                {token ? (
+                  <a href="unix/">
+                    <Button variant="primary" size="lg">
+                      My Account
+                    </Button>
                   </a>
-                </Button>
+                ) : (
+                  <a href={register}>
+                    <Button variant="primary" size="lg">
+                      Get Started Free
+                    </Button>
+                  </a>
+                )}
                 {/* <Button variant="secondary" size="lg">
                   <a href={exploreLink}>Unix Features</a>
                 </Button> */}

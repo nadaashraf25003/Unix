@@ -4,12 +4,14 @@ import App from "@/App";
 
 // Import your module route arrays
 import { erpRoutes } from "./Routing/unix.routes";
+import { homeRoutes } from "./Routing/home.routes";
 
 // UI Components
 import Loader from "./Components/Global/Loader.jsx";
 import Landing from "./Views/LandingPage/Landingpage";
 import UnixFeatures from "./Views/LandingPage/UnixFeatures";
 const Error404 = lazy(() => import("./Components/Global/Error404"));
+
 
 export const router = createBrowserRouter([
   {
@@ -25,7 +27,8 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
       },
-
+     
+      ...homeRoutes,
       // 2. ERP Module Routes
       ...erpRoutes,
     ],

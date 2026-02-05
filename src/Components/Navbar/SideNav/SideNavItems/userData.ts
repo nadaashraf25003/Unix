@@ -93,8 +93,6 @@ const sideNav: NavSection[] = [
     icon: "",
     items: [
       { title: "Rooms", icon: "MeetingRoom", url: ROUTES.ROOMS },
-      // { title: "Lost & Found", icon: "ReportProblem", url: ROUTES.LOST_FOUND },
-      // { title: "Drivers", icon: "DriveEta", url: ROUTES.DRIVERS },
     ],
   },
   {

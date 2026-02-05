@@ -1,18 +1,29 @@
-// routes/student.routes.ts
+// home.routes.jsx
+import { lazy, Suspense } from "react";
+import Home from "@/views/Home/Home";
+import Rooms from "@/views/Rooms/Rooms";
+import CampusNavigation from "@/Views/CampusNavigation/pages/CampusNavigation";
 import LostAndFoundUserPage from "@/Views/LostFound/LostFound";
-import { lazy } from "react";
-
-const Home = lazy(() => import("@/views/Home/Home"));
-const Rooms = lazy(() => import("@/views/Rooms/Rooms"));
-  const Projects = lazy(() => import("@/views/Graduation/Graduation"));
-const Drivers = lazy(() => import("@/views/Drivers/Drivers"));
-const ExamSchedule = lazy(() => import("@/views/ExamTable"));
-export const studentProtectedRoutes = [
+import Drivers from "@/views/Drivers/Drivers";
+import ExamSchedule from "@/views/ExamTable";
+import Loader from "@/Components/Global/Loader";
+const DepartmentsPage = lazy(
+  () => import("@/Views/LandingPage/DepartmentsPage"),
+);
+export const homeRoutes = [
+  {
+    path: "departments",
+    element: (
+      <Suspense fallback={<Loader />}>
+        <DepartmentsPage />
+      </Suspense>
+    ),
+  },
   { index: true, element: <Home /> },
-  { path: "home", element: <Home /> },
+  { path: "campus-navigation", element: <CampusNavigation /> },
   { path: "rooms", element: <Rooms /> },
   { path: "lost-found", element: <LostAndFoundUserPage /> },
   { path: "drivers", element: <Drivers /> },
-  { path: "graduation", element: <Projects /> },
+  { path: "graduation", element: <CampusNavigation /> },
   { path: "exam-schedule", element: <ExamSchedule /> },
 ];

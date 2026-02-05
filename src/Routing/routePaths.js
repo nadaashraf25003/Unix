@@ -1,7 +1,16 @@
 export const ROUTES = {
   // Landing / public
   HOME: "/",
+  DEPARTMENTS: "/unix/departments",
 
+  // Home
+  CAMPUS_NAVIGATION_HOME :"/campus-navigation",
+  ROOMS_HOME: "/rooms",
+  STUDENT_SCHEDULE_HOME: "/schedule",
+  LOST_FOUND_HOME: "/lost-found",
+  DRIVERS_HOME: "/drivers",
+  GRADUATION_PROJECTS_HOME : "/graduation",
+  DEPARTMENTS_HOME: "/departments",
   // Auth
   LOGIN: "/unix/auth/login",
   REGISTER: "/unix/auth/register",

@@ -14,7 +14,7 @@ const features = [
     badgeColor: "bg-brand-success",
     gradient: "from-info/10 to-info/5",
     darkGradient: "from-dark-info/20 to-transparent",
-    link: ROUTES.CAMPUS_NAVIGATION,
+    link: ROUTES.CAMPUS_NAVIGATION_HOME,
   },
   {
     title: "Room Tables",
@@ -26,7 +26,7 @@ const features = [
     badgeColor: "bg-brand-warning",
     gradient: "from-warning/10 to-warning/5",
     darkGradient: "from-dark-warning/20 to-transparent",
-    link: ROUTES.ROOMS,
+    link: ROUTES.ROOMS_HOME,
   },
   {
     title: "Student Schedule",
@@ -38,7 +38,7 @@ const features = [
     badgeColor: "bg-info",
     gradient: "from-primary/10 to-primary/5",
     darkGradient: "from-dark-primary/20 to-transparent",
-    link: ROUTES.STUDENT_SCHEDULE,
+    link: ROUTES.STUDENT_SCHEDULE_HOME,
   },
   {
     title: "Lost & Found",
@@ -50,7 +50,7 @@ const features = [
     badgeColor: "bg-secondary",
     gradient: "from-secondary/10 to-secondary/5",
     darkGradient: "from-dark-secondary/20 to-transparent",
-    link: ROUTES.LOST_FOUND,
+    link: ROUTES.LOST_FOUND_HOME,
   },
   {
     title: "Drivers Management",
@@ -62,7 +62,7 @@ const features = [
     badgeColor: "bg-primary",
     gradient: "from-success/10 to-success/5",
     darkGradient: "from-dark-success/20 to-transparent",
-    link: ROUTES.DRIVERS,
+    link: ROUTES.DRIVERS_HOME,
   },
   {
     title: "Graduation Projects",
@@ -74,8 +74,21 @@ const features = [
     badgeColor: "bg-brand-info",
     gradient: "from-warning/10 to-primary/5",
     darkGradient: "from-dark-info/20 to-transparent",
-    link: ROUTES.GRADUATION_PROJECTS,
+    link: ROUTES.GRADUATION_PROJECTS_HOME,
   },
+  {
+  title: "Departments",
+  description:
+    "Explore all university departments and their sections. View stages, sections, and department details in multiple layouts.",
+  icon: "🏛️",
+  category: "Academic",
+  badge: "Core",
+  badgeColor: "bg-primary",
+  gradient: "from-primary/10 to-primary/5",
+  darkGradient: "from-dark-primary/20 to-transparent",
+  link: ROUTES.DEPARTMENTS_HOME,
+},
+
 ];
 
 const UnixFeatures = () => {

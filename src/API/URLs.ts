@@ -18,10 +18,12 @@ const Urls = {
      USERS & PROFILES
   ========================= */
   USERS: {
-    GET_PROFILE: "users/profile",
+    GET_ALL: "users", // fetch all users (admin only)
     GET_BY_ID: (id: number) => `users/${id}`,
+     DELETE: (id: number) => `users/${id}`, // add this
     ACTIVATE: (id: number) => `users/${id}/activate`,
     DEACTIVATE: (id: number) => `users/${id}/deactivate`,
+    GET_PROFILE: "users/profile", // fetch own profile
   },
 
   STUDENTS: {
@@ -45,8 +47,9 @@ const Urls = {
   },
 
   SECTIONS: {
-    GET_ALL: "sections",  // [Authorize(Roles = "Admin")]
-    GET_BY_DEPARTMENT: (departmentId: number) => `sections/by-department/${departmentId}`,
+    GET_ALL: "sections", // [Authorize(Roles = "Admin")]
+    GET_BY_DEPARTMENT: (departmentId: number) =>
+      `sections/by-department/${departmentId}`,
     CREATE: "sections",
     UPDATE: (id: number) => `sections/${id}`,
     DELETE: (id: number) => `sections/${id}`,
@@ -54,7 +57,7 @@ const Urls = {
 
   COURSES: {
     GET_ALL: "courses", // [Authorize(Roles = "Admin")]
-    CREATE: "courses",  // [Authorize(Roles = "Admin")]
+    CREATE: "courses", // [Authorize(Roles = "Admin")]
     UPDATE: (id: number) => `courses/${id}`, // [Authorize(Roles = "Admin")]
     DELETE: (id: number) => `courses/${id}`, // [Authorize(Roles = "Admin")]
   },
@@ -62,7 +65,7 @@ const Urls = {
   SCHEDULES: {
     STUDENT: "schedules/student", //  [Authorize(Roles = "Student")]
     SECTION: (sectionId: number) => `schedules/section/${sectionId}`,
-    CREATE: "schedules",  // [Authorize(Roles = "Admin")]
+    CREATE: "schedules", // [Authorize(Roles = "Admin")]
     UPDATE: (id: number) => `schedules/${id}`, //  [Authorize(Roles = "Admin")]
     DELETE: (id: number) => `schedules/${id}`, //  [Authorize(Roles = "Admin")]
   },
@@ -80,9 +83,9 @@ const Urls = {
   PROJECTS: {
     GET_ALL: "projects", // [Authorize]
     CREATE: "projects", //  [Authorize(Roles = "Admin")]
-    JOIN: (projectId: number) => `projects/${projectId}/join`,  // [Authorize]
-    MY_PROJECTS: "projects/my",  // [Authorize]
-    MEMBERS: (projectId: number) => `projects/${projectId}/members`,  // [Authorize]
+    JOIN: (projectId: number) => `projects/${projectId}/join`, // [Authorize]
+    MY_PROJECTS: "projects/my", // [Authorize]
+    MEMBERS: (projectId: number) => `projects/${projectId}/members`, // [Authorize]
   },
 
   /* =========================
@@ -90,7 +93,7 @@ const Urls = {
   ========================= */
   BUILDINGS: {
     GET_ALL: "buildings",
-    CREATE: "buildings",  // [Authorize(Roles = "Admin")]
+    CREATE: "buildings", // [Authorize(Roles = "Admin")]
   },
 
   ROOMS: {
@@ -125,7 +128,7 @@ const Urls = {
     GET_PATH: (fromRoomId: number, toRoomId: number) =>
       `room-paths/from/${fromRoomId}/to/${toRoomId}`,
     GENERATE: (fromRoomId: number, toRoomId: number) =>
-    `room-paths/generate-path?fromRoomId=${fromRoomId}&toRoomId=${toRoomId}`, // new
+      `room-paths/generate-path?fromRoomId=${fromRoomId}&toRoomId=${toRoomId}`, // new
   },
 
   /* =========================
@@ -136,15 +139,15 @@ const Urls = {
     CREATE: "lost-found", // [Authorize]
     RESOLVE: (id: number) => `lost-found/${id}/resolve`, // [Authorize(Roles = "Admin")]
     DELETE: (id: number) => `lost-found/${id}`, // [Authorize(Roles = "Admin")]
-  }, 
+  },
 
   /* =========================
      STAGE DRIVERS
   ========================= */
   STAGE_DRIVERS: {
-    STUDENT: "stage-drivers/student",   //  [Authorize]
-    CREATE: "stage-drivers", 
-    UPDATE: (id: number) => `stage-drivers/${id}`, 
+    STUDENT: "stage-drivers/student", //  [Authorize]
+    CREATE: "stage-drivers",
+    UPDATE: (id: number) => `stage-drivers/${id}`,
     DELETE: (id: number) => `stage-drivers/${id}`, // [Authorize(Roles = "Admin")]
   },
 

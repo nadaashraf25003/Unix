@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import DashboardLayout from '@/Components/Navbar/NavbarLayout';
 
-const ERPLayout = () => {
+const AdminLayout = () => {
   return (
     <div className="erp-container">
       {/* If you have a Sidebar or Navbar, they go here */}
@@ -17,4 +17,4 @@ const ERPLayout = () => {
   );
 };
 
-export default ERPLayout;
+export default AdminLayout;
