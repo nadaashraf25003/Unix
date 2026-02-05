@@ -60,7 +60,7 @@ const useAuth = () => {
     },
     onSuccess: (data) => {
       toast.success(
-        data?.message || "Email verified. Waiting for admin approval"
+        data?.message || "Email verified. Waiting for admin approval",
       );
     },
   });
@@ -85,6 +85,7 @@ const useAuth = () => {
     onSuccess: (data) => {
       setToken(data.accessToken);
       toast.success("Login successful");
+      localStorage.setItem("user", JSON.stringify(data.user));
     },
     onError: (err: any) => {
       toast.error(err?.response?.data?.message || "Login failed");
@@ -136,11 +137,10 @@ const useAuth = () => {
   });
 
   /* -------- Logout -------- */
-const logout = () => {
-  clearToken();              // يمسح التوكن
-  toast.success("Logged out successfully");
-};
-
+  const logout = () => {
+    clearToken(); // يمسح التوكن
+    toast.success("Logged out successfully");
+  };
 
   return {
     registerMutation,

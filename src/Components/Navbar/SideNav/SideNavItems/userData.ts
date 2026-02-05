@@ -1,156 +1,132 @@
 import DefaultProfilePic from "@/assets/default-avatar.png";
+import { ROUTES } from "@/Routing/routePaths";
 
-const UserName = "shadcn";
-const userEmail = "m@example.com";
-const userRole = "Admin";
+/* =======================
+   Types
+======================= */
+export type Role = "Admin" | "Student" | "Instructor";
 
-export const userData = {
-  admin: {
-    userTopNav: {
-      name: UserName,
-      email: userEmail,
-      avatar: DefaultProfilePic,
-      role: userRole,
-      items: [
-        { title: "Dashboard", url: "/dashboard" },
-        { title: "Profile", url: "/profile" },
-        { title: "Notifications", url: "/notifications" },
-        { title: "Logout", url: "/logout" },
-      ],
-    },
+interface User {
+  name: string;
+  email: string;
+  role: Role;
+}
 
-    sideNav: [
-      {
-        section: "Main",
-        icon: "Dashboard",
-        items: [
-          { title: "Dashboard", icon: "Dashboard", url: "/dashboard" },
-          { title: "Profile", icon: "AccountCircle", url: "/profile" },
-          {
-            title: "Analytics",
-            icon: "Analytics",
-            url: "/dashboard/analytics",
-          },
-          {
-            title: "Activities",
-            icon: "Notifications",
-            url: "/dashboard/activities",
-          },
-        ],
-      },
+interface NavItem {
+  title: string;
+  icon: string;
+  url: string;
+  roles?: Role[]; // 👈 allowed roles
+}
 
-      {
-        section: "Sales",
-        icon: "ShoppingCart",
-        items: [
-          { title: "POS", icon: "PointOfSale", url: "/sales/pos" },
-          { title: "Orders", icon: "ShoppingCart", url: "/sales/orders" },
-          { title: "Returns", icon: "AssignmentReturn", url: "/sales/returns" },
-          { title: "Customers", icon: "People", url: "/sales/customers" },
-        ],
-      },
+interface NavSection {
+  section: string;
+  icon: string;
+  items: NavItem[];
+}
 
-      {
-        section: "Inventory",
-        icon: "Inventory",
-        items: [
-          { title: "Products", icon: "Inventory", url: "/inventory/items" },
-          {
-            title: "Categories",
-            icon: "Category",
-            url: "/inventory/categories",
-          },
-          {
-            title: "Suppliers",
-            icon: "LocalShipping",
-            url: "/inventory/suppliers",
-          },
-        ],
-      },
+/* =======================
+   Get user from localStorage
+======================= */
+let user: User | null = null;
 
-      {
-        section: "Accounting",
-        icon: "AccountBalance",
-        items: [
-          { title: "Dashboard", icon: "AccountBalance", url: "/accounting" },
-          { title: "Expenses", icon: "Receipt", url: "/accounting/expenses" },
-          { title: "Reports", icon: "Assessment", url: "/accounting/reports" },
-          {
-            title: "Statements",
-            icon: "BarChart",
-            url: "/accounting/statements",
-          },
-        ],
-      },
+try {
+  const userString = localStorage.getItem("user");
+  user = userString ? JSON.parse(userString) : null;
+} catch (error) {
+  console.error("Error parsing user from localStorage:", error);
+}
 
-      {
-        section: "Settings",
-        icon: "Settings",
-        items: [
-          { title: "General", icon: "Settings", url: "/settings/general" },
-          { title: "Financial", icon: "Paid", url: "/settings/financial" },
-          { title: "Users", icon: "Group", url: "/settings/users" },
-          {
-            title: "Organization",
-            icon: "Apartment",
-            url: "/settings/organization",
-          },
-        ],
-      },
+const userName = user?.name || "shadcn";
+const userEmail = user?.email || "m@example.com";
+const userRole: Role = user?.role || "Admin";
+
+/* =======================
+   Role-based filter
+======================= */
+function filterSideNavByRole(sideNav: NavSection[], role: Role): NavSection[] {
+  return sideNav
+    .map((section) => ({
+      ...section,
+      items: section.items.filter(
+        (item) => !item.roles || item.roles.includes(role)
+      ),
+    }))
+    .filter((section) => section.items.length > 0);
+}
+
+/* =======================
+   Base navigation config
+   for all roles
+======================= */
+const sideNav: NavSection[] = [
+  {
+    section: "Main",
+    icon: "Dashboard",
+    items: [
+      { title: "Profile", icon: "", url: ROUTES.HOME_STUDENT },
+      { title: "Dashboard", icon: "", url: ROUTES.ADMIN_DASHBOARD, roles: ["Admin"] },
+      { title: "Schedule", icon: "CalendarMonth", url: ROUTES.STUDENT_SCHEDULE }, 
+      { title: "Campus Map", icon: "Map", url: ROUTES.CAMPUS_NAVIGATION },
+      { title: "Lost & Found", icon: "ReportProblem", url: ROUTES.LOST_FOUND },
+      { title: "Drivers", icon: "DriveEta", url: ROUTES.DRIVERS ,roles: ["Student", "Instructor"]},
     ],
-
-    routes: {
-      auth: [
-        { path: "/login", name: "Login" },
-        { path: "/register", name: "Register" },
-        { path: "/register/verify", name: "Verify Email" },
-        { path: "/register/success", name: "Verification Success" },
-      ],
-
-      setup: [
-        { path: "/setup", name: "Basic Info" },
-        { path: "/setup/address", name: "Address Info" },
-        { path: "/setup/financial", name: "Financial Info" },
-      ],
-
-      dashboard: [
-        { path: "/dashboard", name: "Main Dashboard" },
-        { path: "/dashboard/sales-chart", name: "Sales Chart" },
-        { path: "/dashboard/recent-orders", name: "Recent Orders" },
-        { path: "/dashboard/activities", name: "Activities" },
-      ],
-
-      sales: [
-        { path: "/sales/pos", name: "POS" },
-        { path: "/sales/pos/order/:id", name: "POS Order Details" },
-        { path: "/sales/orders", name: "Orders" },
-        { path: "/sales/orders/:id", name: "Order Details" },
-        { path: "/sales/returns", name: "Returns" },
-        { path: "/sales/customers", name: "Customers" },
-        { path: "/sales/customers/:id", name: "Customer Details" },
-        { path: "/sales/customers/:id/edit", name: "Edit Customer" },
-      ],
-
-      inventory: [
-        { path: "/inventory/items", name: "Products" },
-        { path: "/inventory/items/:id/edit", name: "Edit Product" },
-        { path: "/inventory/categories", name: "Categories" },
-        { path: "/inventory/suppliers", name: "Suppliers" },
-      ],
-
-      accounting: [
-        { path: "/accounting", name: "Accounting Dashboard" },
-        { path: "/accounting/expenses", name: "Expenses" },
-        { path: "/accounting/expenses/:id/edit", name: "Edit Expense" },
-        { path: "/accounting/reports", name: "Reports" },
-        { path: "/accounting/statements", name: "Financial Statements" },
-      ],
-
-      common: [
-        { path: "/loading", name: "Loading" },
-        { path: "/error", name: "Error" },
-        { path: "*", name: "Not Found" },
-      ],
-    },
   },
-};
+  {
+    section: "Graduation Projects",
+    icon: "School",
+    items: [
+      { title: "Projects", icon: "Folder", url: ROUTES.GRADUATION_PROJECTS, roles: ["Student", "Instructor","Admin"] },
+      { title: "Manage Projects", icon: "ManageAccounts", url: ROUTES.PROJECTS, roles: ["Admin"] },
+    ],
+  },
+  {
+    section: "Drivers",
+    icon: "School",
+    items: [
+      { title: "Drivers", icon: "DriveEta", url: ROUTES.DRIVERS ,roles: ["Admin"]},
+      { title: "Drivers Management", icon: "DriveEta", url: ROUTES.DRIVERS_MANAGEMENT, roles: ["Admin"] },
+    ],
+  },
+  {
+    section: "Rooms",
+    icon: "",
+    items: [
+      { title: "Rooms", icon: "MeetingRoom", url: ROUTES.ROOMS },
+      // { title: "Lost & Found", icon: "ReportProblem", url: ROUTES.LOST_FOUND },
+      // { title: "Drivers", icon: "DriveEta", url: ROUTES.DRIVERS },
+    ],
+  },
+  {
+    section: "Admin Dashboard",
+    icon: "DashboardCustomize",
+    items: [
+      
+      { title: "Users", icon: "", url: ROUTES.USERS, roles: ["Admin"] },
+      { title: "Departments", icon: "", url: ROUTES.DEPARTMENTS, roles: ["Admin"] },
+      { title: "Sections", icon: "", url: ROUTES.SECTIONS, roles: ["Admin"] },
+      { title: "Courses", icon: "MenuBook", url: ROUTES.COURSES, roles: ["Admin"] },
+      { title: "Instructors", icon: "Person", url: ROUTES.INSTRUCTORS, roles: ["Admin"] },
+      { title: "Projects", icon: "Folder", url: ROUTES.PROJECTS, roles: ["Admin"] },
+      { title: "Schedule Management", icon: "CalendarMonth", url: ROUTES.SCHEDULE_MANAGEMENT, roles: ["Admin"] },
+    ],
+  },
+];
+
+/* =======================
+   Exported user data
+======================= */
+export const userData = (role: Role) => ({
+  userTopNav: {
+    name: userName,
+    email: userEmail,
+    avatar: DefaultProfilePic,
+    role,
+    items: [
+      { title: "Profile", url: ROUTES.HOME_STUDENT },
+      { title: "Logout", url: ROUTES.LOGIN },
+    ],
+  },
+  sideNav: filterSideNavByRole(sideNav, role),
+});
+

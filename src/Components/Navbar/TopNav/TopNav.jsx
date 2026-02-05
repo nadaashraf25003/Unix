@@ -1,6 +1,4 @@
 import React, { useState } from "react";
- 
-
 import {
   AppBar,
   Toolbar,
@@ -12,17 +10,21 @@ import {
   styled,
   Badge,
 } from "@mui/material";
-import {
-  Search as SearchIcon,
-  Notifications as NotificationsIcon,
-  Mail as MailIcon,
-  Person as PersonIcon,
-} from "@mui/icons-material";
-import { MenuOpen as MenuOpenIcon } from "@mui/icons-material";
+
+// Direct path imports for icons
+import SearchIcon from "@mui/icons-material/Search";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import MailIcon from "@mui/icons-material/Mail";
+import PersonIcon from "@mui/icons-material/Person";
+import MenuIcon from "@mui/icons-material/Menu";
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 
 // Import Dropdown component and items
 import Dropdown from "@/Components/Global/Dropdown";
 import { mailItems, notificationItems, profileItems } from "./DropdownItems";
+import { clearToken } from "@/API/token";
+import { useNavigate } from "react-router-dom";
+import { Button } from "antd";
 
 // Styled Search Components
 const Search = styled("div")(({ theme }) => ({
@@ -67,11 +69,28 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function TopNav({ toggleSidebar, sidebarOpen }) {
-  
   const [openDropdown, setOpenDropdown] = useState(null);
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
 
+  // Toggle dropdown menus
   const handleToggleDropdown = (type) => {
     setOpenDropdown(openDropdown === type ? null : type);
+  };
+  const handleSearch = () => {
+    if (searchTerm.trim()) {
+      // Navigate to products page with search as query param
+      navigate(`/erp/inventory/items`);
+      setSearchTerm(""); // optional: clear input
+    }
+  };
+  // Logout handler
+  const handleLogout = () => {
+    clearToken(); // Remove accessToken from localStorage
+    localStorage.removeItem("user"); // Remove user data
+    setOpenDropdown(null); // Close dropdown
+    window.dispatchEvent(new Event("storage")); // Notify other components
+    navigate("/"); // Redirect to login
   };
 
   return (
@@ -86,7 +105,7 @@ export default function TopNav({ toggleSidebar, sidebarOpen }) {
       className="dark:bg-gray-900 dark:text-light"
     >
       <Toolbar className="justify-between">
-        {/* Left Side */}
+        {/* Left Side: Menu & Brand */}
         <div className="flex items-center">
           <IconButton
             edge="start"
@@ -94,7 +113,10 @@ export default function TopNav({ toggleSidebar, sidebarOpen }) {
             onClick={toggleSidebar}
             className="mr-4 p-2 rounded-lg bg-gray-900 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
           >
-            <MenuOpenIcon className="text-gray-800 dark:text-white" fontSize="medium" />
+            <MenuOpenIcon
+              className="text-gray-800 dark:text-white"
+              fontSize="medium"
+            />
           </IconButton>
 
           <Typography
@@ -103,7 +125,7 @@ export default function TopNav({ toggleSidebar, sidebarOpen }) {
             component="div"
             className="hidden md:block font-bold text-gray-800 dark:text-light pl-3"
           >
-            AppSales
+            Unix
           </Typography>
         </div>
 
@@ -114,16 +136,20 @@ export default function TopNav({ toggleSidebar, sidebarOpen }) {
               <SearchIcon className="text-gray-500" />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search here..."
+              placeholder="Search products..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSearch();
+              }}
               inputProps={{ "aria-label": "search" }}
-              className="text-gray-800 dark:text-light"
             />
           </Search>
         </Box>
 
-        {/* Right Side */}
+        {/* Right Side Icons */}
         <Box className="flex items-center space-x-2 relative">
-          {/* Mail */}
+           {/* Mail */}
           <div className="relative">
             <IconButton
               color="inherit"
@@ -158,7 +184,7 @@ export default function TopNav({ toggleSidebar, sidebarOpen }) {
               items={notificationItems}
             />
           </div>
-
+        
           {/* Profile */}
           <div className="relative">
             <IconButton
@@ -171,7 +197,24 @@ export default function TopNav({ toggleSidebar, sidebarOpen }) {
             <Dropdown
               isOpen={openDropdown === "profile"}
               onClose={() => setOpenDropdown(null)}
-              items={profileItems}
+              items={profileItems.map((item) => {
+                if (item.label === "Logout") {
+                  return { ...item, onClick: handleLogout }; // keep logout handler
+                } else if (
+                  item.label === "Profile" ||
+                  item.label === "Dashboard" ||
+                  (item.label === "Home" && item.url)
+                ) {
+                  return {
+                    ...item,
+                    onClick: () => {
+                      setOpenDropdown(null); // close dropdown
+                      navigate(item.url); // redirect to profile page
+                    },
+                  };
+                }
+                return item;
+              })}
             />
           </div>
         </Box>
