@@ -8,15 +8,62 @@ import Urls from "@/API/URLs";
 
 export interface ScheduleDto {
   id: number;
+
   courseId: number;
   roomId: number;
+  sectionId: number;
   instructorId: number;
-  courseName: string;
-  instructorName: string;
-  roomCode: string;
-  dayOfWeek: number;
+
+  scheduleType: "Lecture" | "Lab" | "Section"; // أو string لو حابة
+  dayOfWeek: string; 
+
   startTime: string;
   endTime: string;
+
+  // دول لو الباك بيرجعهم للعرض
+  courseName?: string;
+  instructorName?: string;
+  roomCode?: string;
+}
+
+
+export interface CreateScheduleDto {
+  courseId: number;
+  sectionId: number;
+  roomId: number;
+  instructorId: number;
+
+  scheduleType: "Lecture" | "Lab" | "Section"; // <-- جديد
+  dayOfWeek: string; // <-- string
+
+  startTime: string;
+  endTime: string;
+}
+
+
+/* =======================
+   Hook
+ 
+/* =======================
+   Types
+======================= */
+
+export interface ScheduleDto {
+  id: number;
+  courseId: number;
+  roomId: number;
+  sectionId: number;
+  instructorId: number;
+
+  scheduleType: "Lecture" | "Lab" | "Section";
+  dayOfWeek: string;
+
+  startTime: string;
+  endTime: string;
+
+  courseName?: string;
+  instructorName?: string;
+  roomCode?: string;
 }
 
 export interface CreateScheduleDto {
@@ -24,7 +71,10 @@ export interface CreateScheduleDto {
   sectionId: number;
   roomId: number;
   instructorId: number;
-  dayOfWeek: number;
+
+  scheduleType: "Lecture" | "Lab" | "Section";
+  dayOfWeek: string;
+
   startTime: string;
   endTime: string;
 }
@@ -40,7 +90,8 @@ const useSchedules = () => {
     useQuery({
       queryKey: ["section-schedule", sectionId],
       queryFn: async () =>
-        (await api.get(Urls.SCHEDULES.SECTION(sectionId))).data as ScheduleDto[],
+        (await api.get(Urls.SCHEDULES.SECTION(sectionId)))
+          .data as ScheduleDto[],
       enabled: !!sectionId,
     });
 
@@ -61,7 +112,8 @@ const useSchedules = () => {
     }: {
       id: number;
       data: CreateScheduleDto;
-    }) => (await api.put(Urls.SCHEDULES.UPDATE(id), data)).data,
+    }) =>
+      (await api.put(Urls.SCHEDULES.UPDATE(id), data)).data,
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: ["section-schedule", variables.data.sectionId],
@@ -73,7 +125,9 @@ const useSchedules = () => {
     mutationFn: async (id: number) =>
       (await api.delete(Urls.SCHEDULES.DELETE(id))).data,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["section-schedule"] });
+      queryClient.invalidateQueries({
+        queryKey: ["section-schedule"],
+      });
     },
   });
 

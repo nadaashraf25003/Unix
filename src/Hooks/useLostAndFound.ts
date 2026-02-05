@@ -55,28 +55,30 @@ const useLostAndFound = () => {
   });
 
   // Resolve item (Admin)
-  const resolveItemMutation = useMutation({
-    mutationFn: async (id: number) => {
-      const res = await api.put(`${Urls.LOST_FOUND.RESOLVE}/${id}/resolve`);
-      return res.data;
-    },
-    onSuccess: () => {
-      toast.success("Item marked as resolved");
-      queryClient.invalidateQueries({ queryKey: ["lost-found"] });
-    },
-  });
+const resolveItemMutation = useMutation({
+  mutationFn: async (id: number) => {
+    const res = await api.put(Urls.LOST_FOUND.RESOLVE(id));
+    return res.data;
+  },
+  onSuccess: () => {
+    toast.success("Item marked as resolved");
+    queryClient.invalidateQueries({ queryKey: ["lost-found"] });
+  },
+});
+
 
   // Delete item (Admin)
-  const deleteItemMutation = useMutation({
-    mutationFn: async (id: number) => {
-      const res = await api.delete(`${Urls.LOST_FOUND.DELETE}/${id}`);
-      return res.data;
-    },
-    onSuccess: () => {
-      toast.success("Item deleted");
-      queryClient.invalidateQueries({ queryKey: ["lost-found"] });
-    },
-  });
+ const deleteItemMutation = useMutation({
+  mutationFn: async (id: number) => {
+    const res = await api.delete(Urls.LOST_FOUND.DELETE(id));
+    return res.data;
+  },
+  onSuccess: () => {
+    toast.success("Item deleted");
+    queryClient.invalidateQueries({ queryKey: ["lost-found"] });
+  },
+});
+
 
   return {
     lostAndFoundQuery,

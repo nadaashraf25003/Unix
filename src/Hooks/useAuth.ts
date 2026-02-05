@@ -18,8 +18,12 @@ export interface RegisterData {
   name: string;
   email: string;
   password: string;
-  role: string;
+  departmentId: number;
+  sectionId: number;
+  stage: number;
+  role: "Student" | "Instructor" | "Admin";
 }
+
 
 export interface VerifyEmailData {
   email: string;
@@ -42,15 +46,27 @@ export interface ResetPasswordData {
 
 const useAuth = () => {
   /* -------- Register -------- */
-  const registerMutation = useMutation({
-    mutationFn: async (data: RegisterData) => {
-      const res = await api.post(Urls.AUTH.REGISTER, data);
-      return res.data;
-    },
-    onSuccess: (data) => {
-      toast.success(data?.message || "Verification email sent");
-    },
-  });
+ const registerMutation = useMutation({
+  mutationFn: async (data: RegisterData) => {
+    const res = await api.post(Urls.AUTH.REGISTER, {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      departmentId: data.departmentId,
+      sectionId: data.sectionId,
+      stage: data.stage,
+      role: data.role,
+    });
+    return res.data;
+  },
+  onSuccess: (data) => {
+    toast.success(data?.message || "Verification email sent");
+  },
+  onError: (err: any) => {
+    toast.error(err?.response?.data?.message || "Registration failed");
+  },
+});
+
 
   /* -------- Verify Email -------- */
   const verifyEmailMutation = useMutation({
