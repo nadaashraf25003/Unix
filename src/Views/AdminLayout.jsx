@@ -5,7 +5,7 @@ const AdminLayout = () => {
   return (
     <div className="erp-container">
       {/* If you have a Sidebar or Navbar, they go here */}
-      {/* <aside>Sidebarnn</aside>  */}
+      {/* <aside>Sidebarnn</aside> dd */}
       
       <main>
         {/* THIS IS THE KEY: Without this, children won't show! */}
