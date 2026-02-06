@@ -25,50 +25,50 @@ const InstructorManager: React.FC = () => {
     (CreateInstructorDto & { id: number }) | null
   >(null);
 
-  // Mutation لإضافة محاضر جديد
+  // Mutation to add a new instructor
   const createInstructorMutation = useMutation({
     mutationFn: async (data: CreateInstructorDto) => {
       const res = await api.post(Urls.INSTRUCTORS.GET_ALL, data);
       return res.data as InstructorDto;
     },
     onSuccess: (newInstructor) => {
-      toast.success("تم إضافة المحاضر بنجاح");
+      toast.success("Instructor added successfully");
       queryClient.invalidateQueries({ queryKey: ["instructors"] });
       reset();
     },
     onError: (err: any) => {
-      toast.error("فشل إضافة المحاضر: " + (err.response?.data?.message || err.message));
+      toast.error("Failed to add instructor: " + (err.response?.data?.message || err.message));
     },
   });
 
-  // Mutation لتعديل محاضر
+  // Mutation to update an instructor
   const updateInstructorMutation = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: CreateInstructorDto }) => {
       const res = await api.put(`${Urls.INSTRUCTORS.GET_ALL}/${id}`, data);
       return res.data as InstructorDto;
     },
     onSuccess: () => {
-      toast.success("تم تعديل المحاضر بنجاح");
+      toast.success("Instructor updated successfully");
       queryClient.invalidateQueries({ queryKey: ["instructors"] });
       reset();
       setEditingInstructor(null);
     },
     onError: (err: any) => {
-      toast.error("فشل تعديل المحاضر: " + (err.response?.data?.message || err.message));
+      toast.error("Failed to update instructor: " + (err.response?.data?.message || err.message));
     },
   });
 
-  // Mutation لحذف محاضر
+  // Mutation to delete an instructor
   const deleteInstructorMutation = useMutation({
     mutationFn: async (id: number) => {
       await api.delete(`${Urls.INSTRUCTORS.GET_ALL}/${id}`);
     },
     onSuccess: () => {
-      toast.success("تم حذف المحاضر بنجاح");
+      toast.success("Instructor deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["instructors"] });
     },
     onError: (err: any) => {
-      toast.error("فشل حذف المحاضر: " + (err.response?.data?.message || err.message));
+      toast.error("Failed to delete instructor: " + (err.response?.data?.message || err.message));
     },
   });
 
@@ -97,14 +97,14 @@ const InstructorManager: React.FC = () => {
       (t) => (
         <div className="flex flex-col gap-4 p-4">
           <span>
-            هل أنت متأكد من حذف المحاضر <strong>{name}</strong>؟
+            Are you sure you want to delete instructor <strong>{name}</strong>?
           </span>
           <div className="flex justify-end gap-2">
             <button
               className="px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
               onClick={() => toast.dismiss(t.id)}
             >
-              إلغاء
+              Cancel
             </button>
             <button
               className="px-3 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600"
@@ -113,7 +113,7 @@ const InstructorManager: React.FC = () => {
                 toast.dismiss(t.id);
               }}
             >
-              حذف
+              Delete
             </button>
           </div>
         </div>
@@ -140,7 +140,7 @@ const InstructorManager: React.FC = () => {
   }
 
   return (
-    <div className="p-4 md:p-6 max-w-7xl mx-auto" dir="rtl">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6 md:mb-8">
         <div className="bg-primary dark:bg-dark-primary p-3 rounded-xl md:rounded-2xl shadow-card dark:shadow-card-dark">
@@ -148,10 +148,10 @@ const InstructorManager: React.FC = () => {
         </div>
         <div>
           <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-light">
-            إدارة المحاضرين
+            Instructor Management
           </h1>
           <p className="text-sm md:text-base text-gray-500 dark:text-gray-300">
-            إضافة وتعديل وحذف المحاضرين والأساتذة
+            Add, edit, and delete instructors and professors
           </p>
         </div>
       </div>
@@ -165,7 +165,7 @@ const InstructorManager: React.FC = () => {
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h2 className="text-base md:text-lg font-bold flex items-center gap-2 text-primary dark:text-dark-primary">
               <PlusCircle className="w-4 h-4 md:w-5 md:h-5" />
-              {editingInstructor ? "تعديل المحاضر" : "إضافة محاضر جديد"}
+              {editingInstructor ? "Edit Instructor" : "Add New Instructor"}
             </h2>
             {editingInstructor && (
               <button
@@ -173,7 +173,7 @@ const InstructorManager: React.FC = () => {
                 onClick={handleCancelEdit}
                 className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 flex items-center gap-2 text-sm"
               >
-                إلغاء التعديل
+                Cancel Edit
               </button>
             )}
           </div>
@@ -181,16 +181,16 @@ const InstructorManager: React.FC = () => {
           <div className="space-y-3 md:space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                الاسم الكامل *
+                Full Name *
               </label>
               <div className="relative">
                 <input
                   {...register("fullName", { 
-                    required: "الاسم الكامل مطلوب",
-                    minLength: { value: 3, message: "يجب أن يكون الاسم على الأقل 3 أحرف" }
+                    required: "Full name is required",
+                    minLength: { value: 3, message: "Name must be at least 3 characters" }
                   })}
                   className="input text-sm md:text-base pl-10"
-                  placeholder="أحمد محمد علي"
+                  placeholder="Ahmed Mohamed Ali"
                 />
                 <User className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
               </div>
@@ -201,16 +201,16 @@ const InstructorManager: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                البريد الإلكتروني *
+                Email *
               </label>
               <div className="relative">
                 <input
                   type="email"
                   {...register("email", { 
-                    required: "البريد الإلكتروني مطلوب",
+                    required: "Email is required",
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: "بريد إلكتروني غير صالح"
+                      message: "Invalid email address"
                     }
                   })}
                   className="input text-sm md:text-base pl-10"
@@ -225,17 +225,17 @@ const InstructorManager: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                القسم *
+                Department *
               </label>
               <div className="relative">
                 <select
                   {...register("departmentId", { 
-                    required: "القسم مطلوب",
-                    validate: value => value !== 0 || "يرجى اختيار قسم"
+                    required: "Department is required",
+                    validate: value => value !== 0 || "Please select a department"
                   })}
                   className="input text-sm md:text-base pl-10"
                 >
-                  <option value={0}>اختر القسم...</option>
+                  <option value={0}>Select Department...</option>
                   {departmentsQuery.data?.map((dep: DepartmentDto) => (
                     <option key={dep.id} value={dep.id}>
                       {dep.name} ({dep.code})
@@ -259,12 +259,12 @@ const InstructorManager: React.FC = () => {
                   <>
                     <Loader2 className="animate-spin w-4 h-4" />
                     <span className="text-sm">
-                      {editingInstructor ? "جاري التحديث..." : "جاري الإضافة..."}
+                      {editingInstructor ? "Updating..." : "Adding..."}
                     </span>
                   </>
                 ) : (
                   <span>
-                    {editingInstructor ? "تحديث المحاضر" : "إضافة محاضر"}
+                    {editingInstructor ? "Update Instructor" : "Add Instructor"}
                   </span>
                 )}
               </button>
@@ -275,7 +275,7 @@ const InstructorManager: React.FC = () => {
                   onClick={handleCancelEdit}
                   className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm"
                 >
-                  إلغاء
+                  Cancel
                 </button>
               )}
             </div>
@@ -287,11 +287,11 @@ const InstructorManager: React.FC = () => {
           <div className="card">
             <div className="flex justify-between items-center mb-4 md:mb-6">
               <h2 className="text-base md:text-lg font-bold text-gray-800 dark:text-light">
-                المحاضرون ({instructors.length})
+                Instructors ({instructors.length})
               </h2>
               {instructors.length > 0 && (
                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {instructors.length} محاضر
+                  {instructors.length} instructors
                 </span>
               )}
             </div>
@@ -302,10 +302,10 @@ const InstructorManager: React.FC = () => {
                   <Users className="text-gray-400 w-6 h-6" />
                 </div>
                 <div className="text-gray-400 dark:text-gray-500 text-lg font-semibold mb-2">
-                  لا توجد محاضرين
+                  No instructors found
                 </div>
                 <p className="text-gray-500 dark:text-gray-400 mb-4">
-                  ابدأ بإضافة أول محاضر
+                  Start by adding your first instructor
                 </p>
               </div>
             ) : (
@@ -335,7 +335,7 @@ const InstructorManager: React.FC = () => {
                           <div className="flex items-center text-xs text-gray-600 dark:text-gray-400">
                             <Building className="w-3 h-3 mr-1" />
                             <span>
-                              {departmentsQuery.data?.find(dep => dep.id === instructor.departmentId)?.name || "غير معروف"}
+                              {departmentsQuery.data?.find(dep => dep.id === instructor.departmentId)?.name || "Unknown"}
                             </span>
                           </div>
                           <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -347,7 +347,7 @@ const InstructorManager: React.FC = () => {
                         <button
                           onClick={() => handleEdit(instructor)}
                           className="p-1.5 md:p-2 text-gray-400 hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-all"
-                          title="تعديل"
+                          title="Edit"
                         >
                           <Edit2 className="w-4 h-4 md:w-5 md:h-5" />
                         </button>
@@ -355,7 +355,7 @@ const InstructorManager: React.FC = () => {
                           onClick={() => handleDelete(instructor.id, instructor.fullName)}
                           disabled={deleteInstructorMutation.isPending}
                           className="p-1.5 md:p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all"
-                          title="حذف"
+                          title="Delete"
                         >
                           {deleteInstructorMutation.isPending ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
@@ -375,7 +375,7 @@ const InstructorManager: React.FC = () => {
           {instructors.length > 0 && (
             <div className="mt-6 card">
               <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-light mb-4">
-                إحصائيات المحاضرين
+                Instructor Statistics
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                 <div className="text-center">
@@ -383,7 +383,7 @@ const InstructorManager: React.FC = () => {
                     {instructors.length}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                    إجمالي المحاضرين
+                    Total Instructors
                   </div>
                 </div>
                 <div className="text-center">
@@ -391,7 +391,7 @@ const InstructorManager: React.FC = () => {
                     {new Set(instructors.map(i => i.departmentId)).size}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                    أقسام مختلفة
+                    Different Departments
                   </div>
                 </div>
                 <div className="text-center">
@@ -401,7 +401,7 @@ const InstructorManager: React.FC = () => {
                     ).length || 0}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                    أقسام نشطة
+                    Active Departments
                   </div>
                 </div>
               </div>
@@ -414,7 +414,7 @@ const InstructorManager: React.FC = () => {
       {instructors.length > 0 && (
         <div className="mt-6 md:mt-8 card">
           <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-light mb-4">
-            توزيع المحاضرين على الأقسام
+            Instructor Distribution by Department
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {departmentsQuery.data?.map((dept) => {
@@ -428,12 +428,12 @@ const InstructorManager: React.FC = () => {
                       {dept.name}
                     </span>
                     <span className="text-xs bg-primary/10 dark:bg-dark-primary/20 text-primary dark:text-dark-primary px-2 py-1 rounded">
-                      {deptInstructors.length} محاضر
+                      {deptInstructors.length} instructors
                     </span>
                   </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400">
-                    {deptInstructors.slice(0, 2).map(inst => inst.fullName).join('، ')}
-                    {deptInstructors.length > 2 && `، +${deptInstructors.length - 2} آخرين`}
+                    {deptInstructors.slice(0, 2).map(inst => inst.fullName).join(', ')}
+                    {deptInstructors.length > 2 && `, +${deptInstructors.length - 2} more`}
                   </div>
                 </div>
               );

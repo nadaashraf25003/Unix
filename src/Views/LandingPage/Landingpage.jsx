@@ -141,7 +141,7 @@ export default function LandingPage() {
       <button
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
         {...props}
-        onClick={()=> navigate(url)}
+        // onClick={()=> navigate(url)}
       >
         {children}
       </button>

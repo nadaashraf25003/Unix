@@ -68,7 +68,7 @@ const StageDriverManager: React.FC = () => {
 
   const onSubmit = (data: StageDriverFormValues) => {
     if (!data.departmentId || !data.sectionId || !data.term || !data.year || !data.link) {
-      toast.error("يرجى ملء جميع الحقول");
+      toast.error("Please fill all fields");
       return;
     }
 
@@ -76,7 +76,7 @@ const StageDriverManager: React.FC = () => {
     const selectedSection = sectionsQuery.data?.find(s => s.id === Number(data.sectionId));
 
     if (!departmentName || !selectedSection) {
-      toast.error("القسم أو الفرقة غير صالح");
+      toast.error("Invalid department or section");
       return;
     }
 
@@ -91,19 +91,19 @@ const StageDriverManager: React.FC = () => {
     if (editingDriver) {
       updateStageDriverMutation.mutate({ id: editingDriver.id, data: payload }, {
         onSuccess: () => {
-          toast.success("🎉 تم تعديل الرابط بنجاح");
+          toast.success("🎉 Link updated successfully");
           setEditingDriver(null);
           reset();
         },
-        onError: () => toast.error("❌ فشل تعديل الرابط"),
+        onError: () => toast.error("❌ Failed to update link"),
       });
     } else {
       createStageDriverMutation.mutate(payload, {
         onSuccess: () => {
-          toast.success("✨ تم إضافة الرابط بنجاح");
+          toast.success("✨ Link added successfully");
           reset();
         },
-        onError: () => toast.error("❌ فشل إضافة الرابط"),
+        onError: () => toast.error("❌ Failed to add link"),
       });
     }
   };
@@ -127,33 +127,32 @@ const StageDriverManager: React.FC = () => {
 
   const handleDelete = (driver: StageDriver) => {
     Swal.fire({
-      title: '<div class="text-right text-2xl font-bold text-gray-800 dark:text-white">⚠️ تأكيد الحذف</div>',
+      title: '<div class="text-2xl font-bold text-gray-800 dark:text-white">⚠️ Confirm Deletion</div>',
       html: `
-        <div class="text-right">
+        <div>
           <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl mb-4">
-            <p class="text-gray-600 dark:text-gray-300 mb-2">سيتم حذف الرابط التالي نهائياً:</p>
+            <p class="text-gray-600 dark:text-gray-300 mb-2">The following link will be permanently deleted:</p>
             <p class="font-bold text-lg text-gray-800 dark:text-white">${driver.title}</p>
           </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400">هذا الإجراء لا يمكن التراجع عنه</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">This action cannot be undone</p>
         </div>
       `,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: '<span class="flex items-center gap-2"><Trash2 class="w-4 h-4" /> تأكيد الحذف</span>',
-      cancelButtonText: '<span class="flex items-center gap-2">إلغاء</span>',
+      confirmButtonText: '<span class="flex items-center gap-2"><Trash2 class="w-4 h-4" /> Confirm Delete</span>',
+      cancelButtonText: '<span class="flex items-center gap-2">Cancel</span>',
       confirmButtonColor: "#ef4444",
       cancelButtonColor: "#6b7280",
-      reverseButtons: true,
       customClass: {
-        popup: 'rtl rounded-2xl',
+        popup: 'rounded-2xl',
         confirmButton: 'px-6 py-3 rounded-xl font-bold',
         cancelButton: 'px-6 py-3 rounded-xl font-bold'
       }
     }).then((result) => {
       if (result.isConfirmed) {
         deleteStageDriverMutation.mutate(driver.id, {
-          onSuccess: () => toast.success("🗑️ تم حذف الرابط بنجاح"),
-          onError: () => toast.error("❌ فشل الحذف"),
+          onSuccess: () => toast.success("🗑️ Link deleted successfully"),
+          onError: () => toast.error("❌ Failed to delete"),
         });
       }
     });
@@ -185,21 +184,21 @@ const StageDriverManager: React.FC = () => {
   const copyToClipboard = (link: string) => {
     navigator.clipboard.writeText(link);
     setCopiedLink(link);
-    toast.success("📋 تم نسخ الرابط");
+    toast.success("📋 Link copied");
     setTimeout(() => setCopiedLink(null), 2000);
   };
 
   const getDepartmentStats = () => {
     const stats: Record<string, number> = {};
     studentMaterialsQuery.data?.forEach(driver => {
-      const dept = driver.departmentName || "غير محدد";
+      const dept = driver.departmentName || "Unknown";
       stats[dept] = (stats[dept] || 0) + 1;
     });
     return stats;
   };
 
   return (
-    <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 min-h-screen" dir="rtl">
+    <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 min-h-screen">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl"></div>
@@ -218,11 +217,11 @@ const StageDriverManager: React.FC = () => {
             </div>
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                إدارة المواد الدراسية
+                Study Materials Management
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-2 flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-yellow-500" />
-                أضف وادمج روابط المواد لكل قسم ودفعة
+                Add and organize material links for each department and batch
               </p>
             </div>
           </div>
@@ -233,13 +232,13 @@ const StageDriverManager: React.FC = () => {
               <div className="text-2xl font-bold text-primary dark:text-dark-primary">
                 {studentMaterialsQuery.data?.length || 0}
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">إجمالي الروابط</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">Total Links</div>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-lg">
               <div className="text-2xl font-bold text-info dark:text-dark-info">
                 {departmentsQuery.data?.length || 0}
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">الأقسام</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">Departments</div>
             </div>
           </div>
         </div>
@@ -258,7 +257,7 @@ const StageDriverManager: React.FC = () => {
                       {editingDriver ? <Edit2 className="w-5 h-5" /> : <PlusCircle className="w-5 h-5" />}
                     </div>
                     <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-                      {editingDriver ? "تعديل الرابط" : "إضافة رابط جديد"}
+                      {editingDriver ? "Edit Link" : "Add New Link"}
                     </h2>
                   </div>
                   {editingDriver && (
@@ -266,7 +265,7 @@ const StageDriverManager: React.FC = () => {
                       onClick={() => { reset(); setEditingDriver(null); }}
                       className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                     >
-                      ✕ إلغاء
+                      ✕ Cancel
                     </button>
                   )}
                 </div>
@@ -278,14 +277,14 @@ const StageDriverManager: React.FC = () => {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                     <Building className="w-4 h-4" />
-                    القسم
+                    Department
                   </label>
                   <div className="relative">
                     <select
-                      {...register("departmentId", { required: "اختر القسم" })}
+                      {...register("departmentId", { required: "Select department" })}
                       className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border ${errors.departmentId ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all`}
                     >
-                      <option value="">اختر القسم...</option>
+                      <option value="">Select Department...</option>
                       {departmentsQuery.data?.map(d => (
                         <option key={d.id} value={d.id}>{d.name}</option>
                       ))}
@@ -297,16 +296,16 @@ const StageDriverManager: React.FC = () => {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                     <Users className="w-4 h-4" />
-                    الفرقة / السكشن
+                    Section / Group
                   </label>
                   <select
-                    {...register("sectionId", { required: "اختر الفرقة" })}
+                    {...register("sectionId", { required: "Select section" })}
                     className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border ${errors.sectionId ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all disabled:opacity-50`}
                     disabled={!selectedDepartmentId}
                   >
-                    <option value="">{selectedDepartmentId ? "اختر الفرقة..." : "اختر القسم أولاً"}</option>
+                    <option value="">{selectedDepartmentId ? "Select Section..." : "Select department first"}</option>
                     {sectionsQuery.data?.map(s => (
-                      <option key={s.id} value={s.id}>{s.name} (المرحلة {s.stage})</option>
+                      <option key={s.id} value={s.id}>{s.name} (Stage {s.stage})</option>
                     ))}
                   </select>
                 </div>
@@ -315,29 +314,29 @@ const StageDriverManager: React.FC = () => {
                   {/* Term */}
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      الترم
+                      Term
                     </label>
                     <select
-                      {...register("term", { required: "اختر الترم" })}
+                      {...register("term", { required: "Select term" })}
                       className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border ${errors.term ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all`}
                     >
-                      <option value="">الترم...</option>
-                      <option value="First">الأول</option>
-                      <option value="Second">الثاني</option>
+                      <option value="">Term...</option>
+                      <option value="First">First</option>
+                      <option value="Second">Second</option>
                     </select>
                   </div>
 
                   {/* Year */}
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                      السنة
+                      Year
                     </label>
                     <input
                       {...register("year", { 
-                        required: "أدخل السنة الدراسية",
+                        required: "Enter academic year",
                         pattern: {
                           value: /^\d{4}\/\d{4}$/,
-                          message: "الصيغة: 2024/2025"
+                          message: "Format: 2024/2025"
                         }
                       })}
                       placeholder="2024/2025"
@@ -350,14 +349,14 @@ const StageDriverManager: React.FC = () => {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                     <Link2 className="w-4 h-4" />
-                    رابط Drive
+                    Drive Link
                   </label>
                   <input
                     {...register("link", { 
-                      required: "أدخل الرابط",
+                      required: "Enter link",
                       pattern: {
                         value: /^(https?:\/\/)/,
-                        message: "ابدأ بـ http:// أو https://"
+                        message: "Start with http:// or https://"
                       }
                     })}
                     placeholder="https://drive.google.com/..."
@@ -374,17 +373,17 @@ const StageDriverManager: React.FC = () => {
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-2">
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      جاري الحفظ...
+                      Saving...
                     </span>
                   ) : editingDriver ? (
                     <span className="flex items-center justify-center gap-2">
                       <CheckCircle className="w-5 h-5" />
-                      تحديث الرابط
+                      Update Link
                     </span>
                   ) : (
                     <span className="flex items-center justify-center gap-2">
                       <PlusCircle className="w-5 h-5" />
-                      إضافة الرابط
+                      Add Link
                     </span>
                   )}
                 </button>
@@ -395,11 +394,11 @@ const StageDriverManager: React.FC = () => {
                 <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center justify-between">
                   <span className="flex items-center gap-1">
                     <Globe className="w-4 h-4" />
-                    إجمالي الروابط: {studentMaterialsQuery.data?.length || 0}
+                    Total Links: {studentMaterialsQuery.data?.length || 0}
                   </span>
                   <span className="flex items-center gap-1">
                     <FolderOpen className="w-4 h-4" />
-                    {departmentsQuery.data?.length || 0} قسم
+                    {departmentsQuery.data?.length || 0} departments
                   </span>
                 </div>
               </div>
@@ -418,21 +417,21 @@ const StageDriverManager: React.FC = () => {
                     <BookOpen className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white">الموالح الدراسية</h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">إدارة روابط المواد لكل قسم وفرقة</p>
+                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Study Materials</h2>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Manage material links for each department and section</p>
                   </div>
                 </div>
 
                 {/* Search and Filter */}
                 <div className="flex flex-col sm:flex-row gap-3">
                   <div className="relative">
-                    <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
                       type="text"
-                      placeholder="ابحث في الروابط..."
+                      placeholder="Search links..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-4 pr-10 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 w-full sm:w-64"
+                      className="pr-4 pl-10 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 w-full sm:w-64"
                     />
                   </div>
                   <select
@@ -440,9 +439,9 @@ const StageDriverManager: React.FC = () => {
                     onChange={(e) => setFilterTerm(e.target.value)}
                     className="px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50"
                   >
-                    <option value="all">جميع الروابط</option>
-                    <option value="first">الترم الأول</option>
-                    <option value="second">الترم الثاني</option>
+                    <option value="all">All Links</option>
+                    <option value="first">First Term</option>
+                    <option value="second">Second Term</option>
                   </select>
                 </div>
               </div>
@@ -456,7 +455,7 @@ const StageDriverManager: React.FC = () => {
                     <div className="w-16 h-16 border-4 border-primary/20 rounded-full"></div>
                     <div className="absolute top-0 left-0 w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                   </div>
-                  <p className="mt-4 text-gray-600 dark:text-gray-400">جاري تحميل البيانات...</p>
+                  <p className="mt-4 text-gray-600 dark:text-gray-400">Loading data...</p>
                 </div>
               ) : filteredDrivers?.length === 0 ? (
                 <div className="text-center py-16">
@@ -464,16 +463,16 @@ const StageDriverManager: React.FC = () => {
                     <FolderOpen className="w-12 h-12 text-gray-400" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">
-                    لا توجد روابط
+                    No links found
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400 mb-6">
-                    {searchTerm ? "لم يتم العثور على نتائج" : "ابدأ بإضافة رابط جديد"}
+                    {searchTerm ? "No results found" : "Start by adding a new link"}
                   </p>
                   <button
                     onClick={() => { setSearchTerm(""); setFilterTerm("all"); }}
                     className="px-6 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-medium hover:shadow-lg transition-shadow"
                   >
-                    عرض الكل
+                    Show All
                   </button>
                 </div>
               ) : (
@@ -510,7 +509,7 @@ const StageDriverManager: React.FC = () => {
                                   </span>
                                   <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-lg text-sm text-white bg-gradient-to-r ${getTermColor(info.term)}`}>
                                     <Calendar className="w-3 h-3" />
-                                    {info.term === "First" ? "الترم الأول" : "الترم الثاني"}
+                                    {info.term === "First" ? "First Term" : "Second Term"}
                                   </span>
                                   <span className="inline-flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm">
                                     📅 {info.year}
@@ -529,26 +528,26 @@ const StageDriverManager: React.FC = () => {
                               className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all flex items-center gap-2 group"
                             >
                               <ExternalLink className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                              <span>فتح</span>
+                              <span>Open</span>
                             </a>
                             <button
                               onClick={() => copyToClipboard(driver.link)}
                               className={`px-3 py-2 rounded-xl border transition-all ${isCopied ? 'bg-green-100 dark:bg-green-900/30 border-green-500 text-green-600' : 'bg-gray-100 dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
-                              title="نسخ الرابط"
+                              title="Copy link"
                             >
                               {isCopied ? <CheckCircle className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
                             </button>
                             <button
                               onClick={() => handleEdit(driver)}
                               className="px-3 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded-xl hover:shadow-lg transition-all"
-                              title="تعديل"
+                              title="Edit"
                             >
                               <Edit2 className="w-5 h-5" />
                             </button>
                             <button
                               onClick={() => handleDelete(driver)}
                               className="px-3 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-xl hover:shadow-lg transition-all"
-                              title="حذف"
+                              title="Delete"
                             >
                               <Trash2 className="w-5 h-5" />
                             </button>
@@ -568,24 +567,24 @@ const StageDriverManager: React.FC = () => {
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      ترم أول: {filteredDrivers?.filter(d => d.title.includes("Term First")).length}
+                      First Term: {filteredDrivers?.filter(d => d.title.includes("Term First")).length}
                     </span>
                     <span className="flex items-center gap-1">
                       <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      ترم ثاني: {filteredDrivers?.filter(d => d.title.includes("Term Second")).length}
+                      Second Term: {filteredDrivers?.filter(d => d.title.includes("Term Second")).length}
                     </span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-gray-600 dark:text-gray-400">
-                    عرض <span className="font-bold text-primary">{filteredDrivers?.length}</span> من أصل <span className="font-bold">{studentMaterialsQuery.data?.length}</span>
+                    Showing <span className="font-bold text-primary">{filteredDrivers?.length}</span> of <span className="font-bold">{studentMaterialsQuery.data?.length}</span>
                   </span>
                   {searchTerm && (
                     <button
                       onClick={() => setSearchTerm("")}
                       className="text-primary hover:text-primary/80 transition-colors"
                     >
-                      ✕ مسح البحث
+                      ✕ Clear Search
                     </button>
                   )}
                 </div>
@@ -599,8 +598,8 @@ const StageDriverManager: React.FC = () => {
               <div key={dept} className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-700 shadow-lg">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">قسم {dept}</div>
-                    <div className="text-2xl font-bold text-gray-800 dark:text-white">{count} رابط</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{dept} Department</div>
+                    <div className="text-2xl font-bold text-gray-800 dark:text-white">{count} links</div>
                   </div>
                   <div className="text-4xl opacity-20">
                     {index === 0 ? "🥇" : index === 1 ? "🥈" : "🥉"}

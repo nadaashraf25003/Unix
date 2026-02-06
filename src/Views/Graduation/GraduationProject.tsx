@@ -7,20 +7,13 @@ import {
   Calendar,
   GitBranch,
   BookOpen,
+  Mail,
+  User,
+  FileText
 } from "lucide-react";
-
-const emptyForm = {
-  title: "",
-  description: "",
-  supervisor: "",
-  startDate: "",
-  repositoryLink: "",
-};
 
 const GraduationProject: React.FC = () => {
   const { projectsQuery } = useProjects();
-
-  const [form, setForm] = useState(emptyForm);
 
   if (projectsQuery.isLoading) {
     return (
@@ -40,11 +33,19 @@ const GraduationProject: React.FC = () => {
     );
   }
 
-  // Safe ID display function
-  const displayId = (id: any) => {
-    if (!id) return "N/A";
-    const idStr = String(id);
-    return idStr.length > 6 ? `${idStr.slice(0, 6)}...` : idStr;
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "Not set";
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch {
+      return dateString;
+    }
   };
 
   // Get supervisor initial for avatar
@@ -53,16 +54,30 @@ const GraduationProject: React.FC = () => {
     return name.charAt(0).toUpperCase();
   };
 
-  // Get random color for supervisor avatar
+  // Get color for avatar based on supervisor name
   const getAvatarColor = (name: string) => {
     const colors = [
-      "bg-primary/20 text-primary",
-      "bg-secondary/20 text-secondary",
-      "bg-info/20 text-info",
-      "bg-success/20 text-success",
+      "bg-primary/20 text-primary dark:bg-dark-primary/20 dark:text-dark-primary",
+      "bg-secondary/20 text-secondary dark:bg-dark-secondary/20 dark:text-dark-secondary",
+      "bg-info/20 text-info dark:bg-dark-info/20 dark:text-dark-info",
+      "bg-success/20 text-success dark:bg-dark-success/20 dark:text-dark-success",
     ];
-    const index = name.length % colors.length;
+    const index = (name?.length || 0) % colors.length;
     return colors[index];
+  };
+
+  // Get status color
+  const getStatusColor = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'completed':
+        return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300";
+      case 'in progress':
+        return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300";
+      case 'pending':
+        return "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300";
+      default:
+        return "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300";
+    }
   };
 
   return (
@@ -74,9 +89,10 @@ const GraduationProject: React.FC = () => {
             Graduation Projects
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Manage and track student graduation projects
+            Track students graduation projects
           </p>
         </div>
+       
       </div>
 
       {/* Stats Summary */}
@@ -84,15 +100,10 @@ const GraduationProject: React.FC = () => {
         <div className="card">
           <div className="flex items-center">
             <div className="w-12 h-12 bg-primary/10 dark:bg-dark-primary/20 rounded-xl flex items-center justify-center mr-4">
-              <BookOpen
-                className="text-primary dark:text-dark-primary"
-                size={24}
-              />
+              <BookOpen className="text-primary dark:text-dark-primary" size={24} />
             </div>
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Total Projects
-              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Total Projects</p>
               <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                 {projectsQuery.data?.length || 0}
               </p>
@@ -106,14 +117,10 @@ const GraduationProject: React.FC = () => {
               <Users className="text-info dark:text-dark-info" size={24} />
             </div>
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Total Members
-              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Total Students</p>
               <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                {projectsQuery.data?.reduce(
-                  (acc, project) => acc + (project.memberCount || 0),
-                  0,
-                ) || 0}
+                {projectsQuery.data?.reduce((total, project) => 
+                  total + (project.students?.length || 0), 0) || 0}
               </p>
             </div>
           </div>
@@ -122,18 +129,12 @@ const GraduationProject: React.FC = () => {
         <div className="card">
           <div className="flex items-center">
             <div className="w-12 h-12 bg-success/10 dark:bg-dark-success/20 rounded-xl flex items-center justify-center mr-4">
-              <Users
-                className="text-success dark:text-dark-success"
-                size={24}
-              />
+              <User className="text-success dark:text-dark-success" size={24} />
             </div>
             <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                Supervisors
-              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Supervisors</p>
               <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                {new Set(projectsQuery.data?.map((p) => p.supervisor)).size ||
-                  0}
+                {new Set(projectsQuery.data?.map(p => p.supervisor)).size || 0}
               </p>
             </div>
           </div>
@@ -142,15 +143,12 @@ const GraduationProject: React.FC = () => {
         <div className="card">
           <div className="flex items-center">
             <div className="w-12 h-12 bg-warning/10 dark:bg-dark-warning/20 rounded-xl flex items-center justify-center mr-4">
-              <Calendar
-                className="text-warning dark:text-dark-warning"
-                size={24}
-              />
+              <Calendar className="text-warning dark:text-dark-warning" size={24} />
             </div>
             <div>
               <p className="text-sm text-gray-500 dark:text-gray-400">Active</p>
               <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                {projectsQuery.data?.filter((p) => p.startDate).length || 0}
+                {projectsQuery.data?.filter(p => p.status?.toLowerCase() === 'in progress').length || 0}
               </p>
             </div>
           </div>
@@ -158,65 +156,67 @@ const GraduationProject: React.FC = () => {
       </div>
 
       {/* Projects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {projectsQuery.data?.map((project: any) => (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {projectsQuery.data?.map((project) => (
           <div
-            key={project.id || project._id || Math.random()}
+            key={project.id}
             className="card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 border-l-4 border-primary dark:border-dark-primary"
           >
             {/* Project Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-start gap-3">
-                <div
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center ${getAvatarColor(project.supervisor)}`}
-                >
-                  <span className="font-bold">
-                    {getInitial(project.supervisor)}
-                  </span>
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getAvatarColor(project.supervisor)}`}>
+                  <span className="font-bold">{getInitial(project.supervisor)}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-bold text-gray-800 dark:text-gray-100 line-clamp-2">
-                    {project.title || "Untitled Project"}
-                  </h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  <div className="flex items-center gap-3">
+                    <h3 className="font-bold text-gray-800 dark:text-gray-100 line-clamp-1">
+                      {project.title || "Untitled Project"}
+                    </h3>
+                    {/* <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(project.status)}`}>
+                      {project.status || "Unknown"}
+                    </span> */}
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">
+                    <User size={12} />
                     Supervisor: {project.supervisor || "Not assigned"}
                   </p>
                 </div>
               </div>
-              {/* <div className="flex gap-1">
-                <button className="p-1.5 text-gray-400 hover:text-primary dark:hover:text-dark-primary transition-colors">
-                  <Edit size={16} />
-                </button>
-                <button className="p-1.5 text-gray-400 hover:text-red-500 transition-colors">
-                  <Trash2 size={16} />
-                </button>
-              </div> */}
             </div>
 
-            {/* Project Details */}
-            <div className="space-y-3 mb-6">
-              {project.description && (
+            {/* Description */}
+            {project.description && (
+              <div className="mb-4">
                 <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
                   {project.description}
                 </p>
-              )}
+              </div>
+            )}
 
-              <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                <Users size={14} className="mr-2 text-gray-400" />
-                <span className="font-medium">Members:</span>
-                <span className="ml-2 font-semibold">
-                  {project.memberCount || 0}
-                </span>
+            {/* Project Details */}
+            <div className="space-y-3 mb-4">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div className="flex items-center text-gray-600 dark:text-gray-400">
+                  <Calendar size={14} className="mr-2 text-gray-400" />
+                  <div>
+                    <div className="font-medium">Start Date</div>
+                    <div>{formatDate(project.startDate)}</div>
+                  </div>
+                </div>
+                
+                {project.endDate && (
+                  <div className="flex items-center text-gray-600 dark:text-gray-400">
+                    <Calendar size={14} className="mr-2 text-gray-400" />
+                    <div>
+                      <div className="font-medium">End Date</div>
+                      <div>{formatDate(project.endDate)}</div>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {project.startDate && (
-                <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                  <Calendar size={14} className="mr-2 text-gray-400" />
-                  <span className="font-medium">Started:</span>
-                  <span className="ml-2">{project.startDate}</span>
-                </div>
-              )}
-
+              {/* Repository Link */}
               {project.repositoryLink && (
                 <div className="flex items-center text-sm">
                   <GitBranch size={14} className="mr-2 text-gray-400" />
@@ -226,33 +226,54 @@ const GraduationProject: React.FC = () => {
                     rel="noopener noreferrer"
                     className="text-primary dark:text-dark-primary hover:underline truncate"
                   >
-                    Repository Link
+                    View Repository
                   </a>
                 </div>
               )}
+
+              {/* Students Section */}
+              <div className="pt-2">
+                <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-2">
+                  <Users size={14} className="mr-2 text-gray-400" />
+                  <span className="font-medium">Students ({project.students?.length || 0})</span>
+                </div>
+                
+                {project.students && project.students.length > 0 ? (
+                  <div className="space-y-2 pl-6">
+                    {project.students.map((student) => (
+                      <div key={student.id} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <User size={12} className="text-gray-400" />
+                            <span className="font-medium text-gray-700 dark:text-gray-300 truncate">
+                              {student.name}
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2">
+                            <span>ID: {student.studentId}</span>
+                            <span className="flex items-center gap-1">
+                              <Mail size={10} />
+                              {student.email}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-sm text-gray-500 dark:text-gray-400 italic pl-6">
+                    No students assigned to this project
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Footer */}
             <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-800">
-              <div className="flex items-center">
-                <div className="w-6 h-6 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-                    {displayId(project.id || project._id)}
-                  </span>
-                </div>
-                <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
-                  ID: {displayId(project.id || project._id)}
-                </span>
+              <div className="text-xs text-gray-500 dark:text-gray-400">
+                Project ID: {project.id}
               </div>
-              <div
-                className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  project.memberCount > 0
-                    ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
-                    : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                }`}
-              >
-                {project.memberCount > 0 ? "Active" : "Empty"}
-              </div>
+             
             </div>
           </div>
         ))}
@@ -268,8 +289,7 @@ const GraduationProject: React.FC = () => {
             No Projects Yet
           </div>
           <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
-            Start by adding graduation projects to track student progress and
-            assignments
+            Start by adding graduation projects to track student progress and assignments
           </p>
           <button className="btn-primary px-8">Create First Project</button>
         </div>
@@ -279,3 +299,6 @@ const GraduationProject: React.FC = () => {
 };
 
 export default GraduationProject;
+
+// Import PlusCircle icon
+import { PlusCircle } from "lucide-react";

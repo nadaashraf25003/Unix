@@ -34,17 +34,19 @@ import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
 
 const daysMap: Record<string, string> = {
-  Sunday: "الأحد",
-  Monday: "الإثنين",
-  Tuesday: "الثلاثاء",
-  Wednesday: "الأربعاء",
-  Thursday: "الخميس",
+  Sunday: "Sunday",
+  Monday: "Monday",
+  Tuesday: "Tuesday",
+  Wednesday: "Wednesday",
+  Thursday: "Thursday",
+  Friday: "Friday",
+  Saturday: "Saturday"
 };
 
 const scheduleTypeMap: Record<string, string> = {
-  Lecture: "محاضرة",
-  Lab: "معمل",
-  Section: "سكشن"
+  Lecture: "Lecture",
+  Lab: "Lab",
+  Section: "Section"
 };
 
 const ScheduleManager: React.FC = () => {
@@ -95,7 +97,7 @@ const ScheduleManager: React.FC = () => {
 
   const onSubmit = async (data: CreateScheduleDto) => {
     if (!selectedSectionId) {
-      toast.error("📝 اختر الشعبة أولًا");
+      toast.error("📝 Select a section first");
       return;
     }
 
@@ -105,11 +107,11 @@ const ScheduleManager: React.FC = () => {
 
       if (editingId) {
         await updateScheduleMutation.mutateAsync({ id: editingId, data });
-        toast.success("✅ تم تعديل الجدول بنجاح");
+        toast.success("✅ Schedule updated successfully");
         setEditingId(null);
       } else {
         await createScheduleMutation.mutateAsync(data);
-        toast.success("✨ تم إضافة الجدول بنجاح");
+        toast.success("✨ Schedule added successfully");
       }
 
       scheduleQuery.refetch();
@@ -124,7 +126,7 @@ const ScheduleManager: React.FC = () => {
         endTime: "",
       });
     } catch {
-      toast.error("❌ فشل حفظ الجدول");
+      toast.error("❌ Failed to save schedule");
     } finally {
       setIsSaving(false);
     }
@@ -134,27 +136,26 @@ const ScheduleManager: React.FC = () => {
     if (!selectedSectionId) return;
 
     Swal.fire({
-      title: '<div class="text-right text-2xl font-bold text-gray-800 dark:text-white">⚠️ تأكيد الحذف</div>',
+      title: '<div class="text-2xl font-bold text-gray-800 dark:text-white">⚠️ Confirm Deletion</div>',
       html: `
-        <div class="text-right">
+        <div>
           <div class="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl mb-4">
-            <p class="text-gray-600 dark:text-gray-300 mb-2">سيتم حذف الحصة التالية نهائياً:</p>
+            <p class="text-gray-600 dark:text-gray-300 mb-2">The following schedule will be permanently deleted:</p>
             <p class="font-bold text-lg text-gray-800 dark:text-white">
-              ${scheduleQuery.data?.find(s => s.id === id)?.courseName || 'هذه الحصة'}
+              ${scheduleQuery.data?.find(s => s.id === id)?.courseName || 'This schedule'}
             </p>
           </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400">هذا الإجراء لا يمكن التراجع عنه</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">This action cannot be undone</p>
         </div>
       `,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: '<span class="flex items-center gap-2"><Trash2 class="w-4 h-4" /> تأكيد الحذف</span>',
-      cancelButtonText: '<span class="flex items-center gap-2">إلغاء</span>',
+      confirmButtonText: '<span class="flex items-center gap-2"><Trash2 class="w-4 h-4" /> Confirm Delete</span>',
+      cancelButtonText: '<span class="flex items-center gap-2">Cancel</span>',
       confirmButtonColor: "#ef4444",
       cancelButtonColor: "#6b7280",
-      reverseButtons: true,
       customClass: {
-        popup: 'rtl rounded-2xl',
+        popup: 'rounded-2xl',
         confirmButton: 'px-6 py-3 rounded-xl font-bold',
         cancelButton: 'px-6 py-3 rounded-xl font-bold'
       }
@@ -162,10 +163,10 @@ const ScheduleManager: React.FC = () => {
       if (result.isConfirmed) {
         deleteScheduleMutation.mutate(id, {
           onSuccess: () => {
-            toast.success("🗑️ تم حذف الجدول بنجاح");
+            toast.success("🗑️ Schedule deleted successfully");
             scheduleQuery.refetch();
           },
-          onError: () => toast.error("❌ فشل حذف الجدول"),
+          onError: () => toast.error("❌ Failed to delete schedule"),
         });
       }
     });
@@ -191,6 +192,8 @@ const ScheduleManager: React.FC = () => {
       Tuesday: "bg-gradient-to-r from-green-500 to-teal-500 text-white",
       Wednesday: "bg-gradient-to-r from-purple-500 to-violet-500 text-white",
       Thursday: "bg-gradient-to-r from-orange-500 to-amber-500 text-white",
+      Friday: "bg-gradient-to-r from-indigo-500 to-purple-500 text-white",
+      Saturday: "bg-gradient-to-r from-teal-500 to-emerald-500 text-white",
     };
     return colors[day as keyof typeof colors] || "bg-gradient-to-r from-gray-500 to-gray-400 text-white";
   };
@@ -208,7 +211,7 @@ const ScheduleManager: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 min-h-screen" dir="rtl">
+    <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 min-h-screen">
       {/* Animated Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl"></div>
@@ -227,11 +230,11 @@ const ScheduleManager: React.FC = () => {
             </div>
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                إدارة الجدول الدراسي
+                Schedule Management
               </h1>
               <p className="text-gray-600 dark:text-gray-400 mt-2 flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-yellow-500" />
-                نظم وجدول الحصص للشعب المختلفة
+                Organize and schedule classes for different sections
               </p>
             </div>
           </div>
@@ -242,13 +245,13 @@ const ScheduleManager: React.FC = () => {
               <div className="text-2xl font-bold text-primary dark:text-dark-primary">
                 {scheduleQuery.data?.length || 0}
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">إجمالي الحصص</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">Total Classes</div>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-lg">
               <div className="text-2xl font-bold text-info dark:text-dark-info">
                 {coursesQuery.data?.length || 0}
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">المقررات</div>
+              <div className="text-sm text-gray-500 dark:text-gray-400">Courses</div>
             </div>
           </div>
         </div>
@@ -261,23 +264,23 @@ const ScheduleManager: React.FC = () => {
             <Users className="w-6 h-6 text-white" />
           </div>
           <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-            اختيار الشعبة
+            Select Section
           </h2>
         </div>
         
         <div className="max-w-lg">
           <label className="block mb-3 text-sm font-medium text-gray-700 dark:text-gray-300">
-            اختر الشعبة المراد جدولتها
+            Choose section to manage schedule
           </label>
           <select
             className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"
             value={selectedSectionId}
             onChange={(e) => setSelectedSectionId(Number(e.target.value))}
           >
-            <option value={0}>اختر الشعبة...</option>
+            <option value={0}>Select Section...</option>
             {sectionsQuery.data?.map((sec) => (
               <option key={sec.id} value={sec.id}>
-                {sec.name} - المرحلة {sec.stage}
+                {sec.name} - Stage {sec.stage}
               </option>
             ))}
           </select>
@@ -290,12 +293,12 @@ const ScheduleManager: React.FC = () => {
                     {getSelectedSectionName()}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    المرحلة {sectionsQuery.data?.find(s => s.id === selectedSectionId)?.stage}
+                    Stage {sectionsQuery.data?.find(s => s.id === selectedSectionId)?.stage}
                   </p>
                 </div>
                 <div className="text-2xl font-bold text-primary dark:text-dark-primary">
                   {scheduleQuery.data?.length || 0}
-                  <span className="text-sm font-normal text-gray-500"> حصة</span>
+                  <span className="text-sm font-normal text-gray-500"> classes</span>
                 </div>
               </div>
             </div>
@@ -315,9 +318,9 @@ const ScheduleManager: React.FC = () => {
                     <CalendarDays className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white">جدول الشعبة</h2>
+                    <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Section Schedule</h2>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {getSelectedSectionName()} - {scheduleQuery.data?.length || 0} حصة
+                      {getSelectedSectionName()} - {scheduleQuery.data?.length || 0} classes
                     </p>
                   </div>
                 </div>
@@ -325,13 +328,13 @@ const ScheduleManager: React.FC = () => {
                 {/* Filters */}
                 <div className="flex flex-col sm:flex-row gap-3">
                   <div className="relative">
-                    <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
                       type="text"
-                      placeholder="ابحث في الجدول..."
+                      placeholder="Search in schedule..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-4 pr-10 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 w-full sm:w-64"
+                      className="pr-4 pl-10 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 w-full sm:w-64"
                     />
                   </div>
                   <div className="flex gap-2">
@@ -340,7 +343,7 @@ const ScheduleManager: React.FC = () => {
                       onChange={(e) => setFilterDay(e.target.value)}
                       className="px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50"
                     >
-                      <option value="all">جميع الأيام</option>
+                      <option value="all">All Days</option>
                       {Object.entries(daysMap).map(([key, value]) => (
                         <option key={key} value={key}>{value}</option>
                       ))}
@@ -350,10 +353,10 @@ const ScheduleManager: React.FC = () => {
                       onChange={(e) => setFilterType(e.target.value)}
                       className="px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50"
                     >
-                      <option value="all">جميع الأنواع</option>
-                      <option value="Lecture">محاضرات</option>
-                      <option value="Lab">معامل</option>
-                      <option value="Section">سكشن</option>
+                      <option value="all">All Types</option>
+                      <option value="Lecture">Lectures</option>
+                      <option value="Lab">Labs</option>
+                      <option value="Section">Sections</option>
                     </select>
                   </div>
                 </div>
@@ -368,7 +371,7 @@ const ScheduleManager: React.FC = () => {
                     <div className="w-16 h-16 border-4 border-primary/20 rounded-full"></div>
                     <div className="absolute top-0 left-0 w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                   </div>
-                  <p className="mt-4 text-gray-600 dark:text-gray-400">جاري تحميل الجدول...</p>
+                  <p className="mt-4 text-gray-600 dark:text-gray-400">Loading schedule...</p>
                 </div>
               ) : filteredSchedules?.length === 0 ? (
                 <div className="text-center py-16">
@@ -376,19 +379,19 @@ const ScheduleManager: React.FC = () => {
                     <Calendar className="w-12 h-12 text-gray-400" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">
-                    لا توجد حصص
+                    No classes found
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400 mb-6">
                     {searchTerm || filterDay !== "all" || filterType !== "all" 
-                      ? "لم يتم العثور على نتائج" 
-                      : "ابدأ بإضافة حصص جديدة"}
+                      ? "No results found" 
+                      : "Start by adding new classes"}
                   </p>
                   {searchTerm || filterDay !== "all" || filterType !== "all" && (
                     <button
                       onClick={() => { setSearchTerm(""); setFilterDay("all"); setFilterType("all"); }}
                       className="px-6 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-medium hover:shadow-lg transition-shadow"
                     >
-                      عرض الكل
+                      Show All
                     </button>
                   )}
                 </div>
@@ -456,14 +459,14 @@ const ScheduleManager: React.FC = () => {
                             className="px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded-xl hover:shadow-lg transition-all flex items-center gap-2 group"
                           >
                             <Edit2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                            <span>تعديل</span>
+                            <span>Edit</span>
                           </button>
                           <button
                             onClick={() => handleDelete(sch.id)}
                             className="px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-xl hover:shadow-lg transition-all flex items-center gap-2 group"
                           >
                             <Trash2 className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                            <span>حذف</span>
+                            <span>Delete</span>
                           </button>
                         </div>
                       </div>
@@ -479,11 +482,11 @@ const ScheduleManager: React.FC = () => {
                 <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
-                    <span>إجمالي الحصص: {filteredSchedules?.length}</span>
+                    <span>Total classes: {filteredSchedules?.length}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Bell className="w-4 h-4" />
-                    <span>آخر تحديث: الآن</span>
+                    <span>Last updated: Now</span>
                   </div>
                 </div>
                 {searchTerm && (
@@ -491,7 +494,7 @@ const ScheduleManager: React.FC = () => {
                     onClick={() => setSearchTerm("")}
                     className="text-sm text-primary hover:text-primary/80 transition-colors"
                   >
-                    ✕ مسح البحث
+                    ✕ Clear Search
                   </button>
                 )}
               </div>
@@ -507,7 +510,7 @@ const ScheduleManager: React.FC = () => {
                     {editingId ? <Edit2 className="w-5 h-5" /> : <PlusCircle className="w-5 h-5" />}
                   </div>
                   <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-                    {editingId ? "تعديل الحصة" : "إضافة حصة جديدة"}
+                    {editingId ? "Edit Class" : "Add New Class"}
                   </h2>
                 </div>
                 {editingId && (
@@ -515,7 +518,7 @@ const ScheduleManager: React.FC = () => {
                     onClick={() => { reset(); setEditingId(null); }}
                     className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                   >
-                    ✕ إلغاء التعديل
+                    ✕ Cancel Edit
                   </button>
                 )}
               </div>
@@ -527,16 +530,16 @@ const ScheduleManager: React.FC = () => {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                     <BookOpen className="w-4 h-4" />
-                    المادة
+                    Course
                   </label>
                   <select
                     {...register("courseId", {
-                      required: "اختر المادة",
+                      required: "Select a course",
                       valueAsNumber: true,
                     })}
                     className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border ${errors.courseId ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all`}
                   >
-                    <option value="">اختر المادة...</option>
+                    <option value="">Select Course...</option>
                     {coursesQuery.data?.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.courseName}
@@ -549,16 +552,16 @@ const ScheduleManager: React.FC = () => {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                     <Building className="w-4 h-4" />
-                    الغرفة
+                    Room
                   </label>
                   <select
                     {...register("roomId", {
-                      required: "اختر الغرفة",
+                      required: "Select a room",
                       valueAsNumber: true,
                     })}
                     className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border ${errors.roomId ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all`}
                   >
-                    <option value="">اختر الغرفة...</option>
+                    <option value="">Select Room...</option>
                     {roomsQuery.data?.map((r) => (
                       <option key={r.id} value={r.id}>
                         {r.roomCode}
@@ -571,16 +574,16 @@ const ScheduleManager: React.FC = () => {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                     <User className="w-4 h-4" />
-                    المحاضر
+                    Instructor
                   </label>
                   <select
                     {...register("instructorId", {
-                      required: "اختر المحاضر",
+                      required: "Select an instructor",
                       valueAsNumber: true,
                     })}
                     className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border ${errors.instructorId ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all`}
                   >
-                    <option value="">اختر المحاضر...</option>
+                    <option value="">Select Instructor...</option>
                     {instructorsQuery.data?.map((i) => (
                       <option key={i.id} value={i.id}>
                         {i.fullName}
@@ -592,33 +595,35 @@ const ScheduleManager: React.FC = () => {
                 {/* Schedule Type */}
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    نوع الحصة
+                    Class Type
                   </label>
                   <select
                     {...register("scheduleType", { required: true })}
                     className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all"
                   >
-                    <option value="Lecture">محاضرة</option>
-                    <option value="Lab">معمل</option>
-                    <option value="Section">سكشن</option>
+                    <option value="Lecture">Lecture</option>
+                    <option value="Lab">Lab</option>
+                    <option value="Section">Section</option>
                   </select>
                 </div>
 
                 {/* Day */}
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    اليوم
+                    Day
                   </label>
                   <select 
-                    {...register("dayOfWeek", { required: "اختر اليوم" })} 
+                    {...register("dayOfWeek", { required: "Select a day" })} 
                     className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border ${errors.dayOfWeek ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all`}
                   >
-                    <option value="">اختر اليوم...</option>
-                    <option value="Sunday">الأحد</option>
-                    <option value="Monday">الإثنين</option>
-                    <option value="Tuesday">الثلاثاء</option>
-                    <option value="Wednesday">الأربعاء</option>
-                    <option value="Thursday">الخميس</option>
+                    <option value="">Select Day...</option>
+                    <option value="Sunday">Sunday</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
                   </select>
                 </div>
 
@@ -626,20 +631,20 @@ const ScheduleManager: React.FC = () => {
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2">
                     <Clock className="w-4 h-4" />
-                    الوقت
+                    Time
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <input
                         type="time"
-                        {...register("startTime", { required: "اختر وقت البداية" })}
+                        {...register("startTime", { required: "Select start time" })}
                         className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border ${errors.startTime ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all`}
                       />
                     </div>
                     <div>
                       <input
                         type="time"
-                        {...register("endTime", { required: "اختر وقت النهاية" })}
+                        {...register("endTime", { required: "Select end time" })}
                         className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border ${errors.endTime ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'} rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all`}
                       />
                     </div>
@@ -657,17 +662,17 @@ const ScheduleManager: React.FC = () => {
                   {isSaving ? (
                     <span className="flex items-center justify-center gap-2">
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      جاري الحفظ...
+                      Saving...
                     </span>
                   ) : editingId ? (
                     <span className="flex items-center justify-center gap-2">
                       <CheckCircle className="w-5 h-5" />
-                      تحديث الحصة
+                      Update Class
                     </span>
                   ) : (
                     <span className="flex items-center justify-center gap-2">
                       <PlusCircle className="w-5 h-5" />
-                      إضافة الحصة
+                      Add Class
                     </span>
                   )}
                 </button>
@@ -676,12 +681,12 @@ const ScheduleManager: React.FC = () => {
           </div>
 
           {/* Weekly Stats */}
-          <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-4">
-            {Object.entries(daysMap).map(([day, arabicDay]) => (
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-7 gap-4">
+            {Object.entries(daysMap).map(([day, displayDay]) => (
               <div key={day} className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-700 shadow-lg">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{arabicDay}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">{displayDay}</div>
                     <div className="text-2xl font-bold text-gray-800 dark:text-white">
                       {getDayStats()[day] || 0}
                     </div>
@@ -703,14 +708,14 @@ const ScheduleManager: React.FC = () => {
             <GraduationCap className="w-12 h-12 text-primary" />
           </div>
           <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-3">
-            🎓 ابدأ بإدارة الجدول
+            🎓 Start Managing Schedule
           </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            اختر شعبة من القائمة أعلاه لعرض جدولها الدراسي وإضافة حصص جديدة
+            Select a section from the list above to view its schedule and add new classes
           </p>
           <div className="flex items-center justify-center gap-2 text-sm text-primary">
             <School className="w-4 h-4" />
-            <span>اختر الشعبة لبدء إدارة الجدول الدراسي</span>
+            <span>Select a section to start managing the schedule</span>
           </div>
         </div>
       )}

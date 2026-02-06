@@ -26,10 +26,10 @@ const StudentStageDriversPage: React.FC = () => {
       <div className="p-6 max-w-6xl mx-auto">
         <div className="card p-6 text-center">
           <div className="text-red-500 dark:text-red-400 text-lg mb-2">
-            حدث خطأ أثناء تحميل المواد
+            Error loading materials
           </div>
           <p className="text-gray-600 dark:text-gray-400">
-            حاول تحديث الصفحة أو الاتصال بالدعم
+            Try refreshing the page or contact support
           </p>
         </div>
       </div>
@@ -41,10 +41,10 @@ const StudentStageDriversPage: React.FC = () => {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-          Stage Drivers الخاصة بك
+          Your Study Materials
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          المواد التعليمية المتاحة لمرحلتك الدراسية
+          Educational materials available for your academic stage
         </p>
       </div>
 
@@ -75,11 +75,11 @@ const StudentStageDriversPage: React.FC = () => {
 
               <div className="space-y-3 mb-6">
                 <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                  <span className="font-medium w-16">النوع:</span>
+                  <span className="font-medium w-16">Type:</span>
                   <span>{item.type}</span>
                 </div>
                 <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                  <span className="font-medium w-16">المرحلة:</span>
+                  <span className="font-medium w-16">Stage:</span>
                   <span className="font-semibold text-primary dark:text-dark-primary">
                     {item.stage}
                   </span>
@@ -93,7 +93,7 @@ const StudentStageDriversPage: React.FC = () => {
                   rel="noopener noreferrer"
                   className="btn-primary w-full flex items-center justify-center gap-2"
                 >
-                  عرض المادة
+                  View Material
                 </a>
               </div>
             </div>
@@ -102,10 +102,10 @@ const StudentStageDriversPage: React.FC = () => {
       ) : (
         <div className="card p-8 text-center">
           <div className="text-gray-400 dark:text-gray-500 text-lg mb-2">
-            لا توجد مواد متاحة حالياً
+            No materials available at the moment
           </div>
           <p className="text-gray-500 dark:text-gray-400">
-            سيتم إضافة المواد الخاصة بمرحلتك قريباً
+            Materials for your stage will be added soon
           </p>
         </div>
       )}

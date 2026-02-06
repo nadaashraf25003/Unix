@@ -20,7 +20,7 @@ const Urls = {
   USERS: {
     GET_ALL: "users", // fetch all users (admin only)
     GET_BY_ID: (id: number) => `users/${id}`,
-     DELETE: (id: number) => `users/${id}`, // add this
+    DELETE: (id: number) => `users/${id}`, // add this
     ACTIVATE: (id: number) => `users/${id}/activate`,
     DEACTIVATE: (id: number) => `users/${id}/deactivate`,
     GET_PROFILE: "users/profile", // fetch own profile
@@ -29,6 +29,7 @@ const Urls = {
   STUDENTS: {
     GET_ALL: "students",
     GET_BY_ID: (id: number) => `students/${id}`,
+    PROFILE: (studentId: number) => `studentprofile/${studentId}/profile`, 
   },
 
   INSTRUCTORS: {
@@ -99,7 +100,7 @@ const Urls = {
   ROOMS: {
     GET_ALL: "rooms",
     GET_BY_BUILDING: (buildingId: number) => `rooms/by-building/${buildingId}`,
-    AVAILABILITY: "rooms/availability",
+    AVAILABILITY: "rooms/availability/all",
     CREATE: "rooms", // [Authorize(Roles = "Admin")]
   },
 

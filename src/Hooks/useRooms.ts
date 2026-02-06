@@ -33,7 +33,20 @@ export interface RoomDto {
   building: BuildingDto;
   floor: FloorDto;
 }
+export interface RoomAvailabilityDto {
+  roomId: number;
+  dayOfWeek: string;       // "Monday", "Tuesday", ...
+  startTime: string;       // "08:00:00"
+  endTime: string;         // "10:00:00"
+  isAvailable: boolean;
 
+  // Optional fields for convenience
+  roomCode?: string;
+  roomType?: string;
+  floorId?: number;
+  buildingId?: number;
+  id?: string | number;
+}
 /* =======================
    Hook
 ======================= */
@@ -57,9 +70,23 @@ const useRooms = () => {
       enabled: !!buildingId,
     });
 
+  const roomAvailability = (roomId?: number) =>
+    useQuery({
+      queryKey: roomId ? ["roomsAvailability", roomId] : ["roomsAvailability"],
+      queryFn: async () => {
+        const url = roomId
+          ? `${Urls.ROOMS.AVAILABILITY}?roomId=${roomId}`
+          : Urls.ROOMS.AVAILABILITY;
+        const res = await api.get(url);
+        return res.data as RoomAvailabilityDto[];
+      },
+      enabled: roomId !== undefined, // optional: fetch only if roomId is passed
+    });
+
   return {
     roomsQuery,
     roomsByBuilding,
+    roomAvailability,
   };
 };
 

@@ -189,19 +189,19 @@ const AdminUsersPage: React.FC = () => {
         <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-2 xs:gap-3">
           <div className="flex-1 min-w-0">
             <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-light mb-1 truncate">
-              إدارة المستخدمين
+              User Management
             </h1>
             <p className="text-xs xs:text-sm sm:text-base text-gray-600 dark:text-gray-400 truncate">
-              إدارة جميع المستخدمين المسجلين في النظام
+              Manage all registered users in the system
             </p>
           </div>
           <div className="flex items-center gap-1 xs:gap-2 min-w-fit">
             <div className="text-xs xs:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-              إجمالي المستخدمين:{" "}
+              Total Users:{" "}
               <span className="font-bold text-primary dark:text-dark-primary">
                 {filteredUsers.length}
               </span>{" "}
-              من{" "}
+              of{" "}
               <span className="font-bold">{usersQuery.data?.length || 0}</span>
             </div>
           </div>
@@ -214,7 +214,7 @@ const AdminUsersPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <FiFilter className="text-gray-600 dark:text-gray-400 text-sm" />
             <h3 className="font-semibold text-gray-700 dark:text-gray-300 text-sm">
-              الفلاتر
+              Filters
             </h3>
           </div>
           <button
@@ -222,7 +222,7 @@ const AdminUsersPage: React.FC = () => {
             className="flex items-center gap-1 text-sm text-primary dark:text-dark-primary hover:opacity-80"
           >
             {showFilters ? <FiChevronUp /> : <FiChevronDown />}
-            <span>{showFilters ? "إخفاء الفلاتر" : "عرض الفلاتر"}</span>
+            <span>{showFilters ? "Hide Filters" : "Show Filters"}</span>
           </button>
         </div>
 
@@ -230,14 +230,13 @@ const AdminUsersPage: React.FC = () => {
           <div className="space-y-3 pt-3 border-t border-gray-200 dark:border-gray-700">
             {/* Search Input */}
             <div className="relative">
-              <FiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
               <input
                 type="text"
-                placeholder="ابحث بالاسم، البريد الإلكتروني، أو الدور..."
+                placeholder="Search by name, email, or role..."
                 value={filters.search}
                 onChange={(e) => handleFilterChange("search", e.target.value)}
-                className="input pr-10 text-sm h-10 w-full"
-                dir="rtl"
+                className="input pl-10 text-sm h-10 w-full"
               />
             </div>
 
@@ -245,36 +244,34 @@ const AdminUsersPage: React.FC = () => {
               {/* Role Filter */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  الدور
+                  Role
                 </label>
                 <select
                   value={filters.role}
                   onChange={(e) => handleFilterChange("role", e.target.value)}
                   className="input text-sm h-10 w-full"
-                  dir="rtl"
                 >
-                  <option value="all">جميع الأدوار</option>
-                  <option value="admin">مدير</option>
-                  <option value="student">طالب</option>
-                  <option value="instructor">محاضر</option>
-                  <option value="superadmin">مدير عام</option>
+                  <option value="all">All Roles</option>
+                  <option value="admin">Admin</option>
+                  <option value="student">Student</option>
+                  <option value="instructor">Instructor</option>
+                  <option value="superadmin">Super Admin</option>
                 </select>
               </div>
 
               {/* Verification Filter */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  التحقق
+                  Verification
                 </label>
                 <select
                   value={filters.verified}
                   onChange={(e) => handleFilterChange("verified", e.target.value)}
                   className="input text-sm h-10 w-full"
-                  dir="rtl"
                 >
-                  <option value="all">الكل</option>
-                  <option value="verified">تم التحقق</option>
-                  <option value="unverified">غير محقق</option>
+                  <option value="all">All</option>
+                  <option value="verified">Verified</option>
+                  <option value="unverified">Unverified</option>
                 </select>
               </div>
 
@@ -284,14 +281,14 @@ const AdminUsersPage: React.FC = () => {
                   onClick={clearFilters}
                   className="w-full h-10 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
-                  مسح الفلاتر
+                  Clear Filters
                 </button>
               </div>
             </div>
 
             <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                {filteredUsers.length} مستخدم {filteredUsers.length !== 1 ? '' : ''} يطابق الفلاتر
+                {filteredUsers.length} user{filteredUsers.length !== 1 ? 's' : ''} match{filteredUsers.length !== 1 ? '' : 'es'} filters
               </div>
             </div>
           </div>
@@ -308,7 +305,7 @@ const AdminUsersPage: React.FC = () => {
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 dark:from-primary/30 dark:to-secondary/30 flex items-center justify-center flex-shrink-0">
                     <FiUser className="text-primary dark:text-dark-primary text-sm" />
                   </div>
-                  <div className="min-w-0 flex-1" dir="rtl">
+                  <div className="min-w-0 flex-1">
                     <h3 className="font-semibold text-gray-900 dark:text-light text-sm truncate">
                       {user.name}
                     </h3>
@@ -338,41 +335,41 @@ const AdminUsersPage: React.FC = () => {
                   )}`}
                 >
                   {getRoleIcon(user.role)}
-                  <span>{user.role || "مستخدم"}</span>
+                  <span>{user.role || "User"}</span>
                 </div>
               </div>
 
               {/* User Details - Compact Grid */}
               <div className="grid grid-cols-2 gap-2 mb-2">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1 text-xs" dir="rtl">
+                  <div className="flex items-center gap-1 text-xs">
                     <FiBriefcase className="text-gray-400 text-xs flex-shrink-0" />
-                    <span className="text-gray-600 dark:text-gray-400">القسم:</span>
-                    <span className="font-medium truncate">{user.departmentId || "غير محدد"}</span>
+                    <span className="text-gray-600 dark:text-gray-400">Department:</span>
+                    <span className="font-medium truncate">{user.departmentId || "Not specified"}</span>
                   </div>
-                  <div className="flex items-center gap-1 text-xs" dir="rtl">
+                  <div className="flex items-center gap-1 text-xs">
                     <FiHash className="text-gray-400 text-xs" />
-                    <span className="text-gray-600 dark:text-gray-400">المرحلة:</span>
-                    <span className="font-medium">{user.stage || "غير محدد"}</span>
+                    <span className="text-gray-600 dark:text-gray-400">Stage:</span>
+                    <span className="font-medium">{user.stage || "Not specified"}</span>
                   </div>
                 </div>
-                <div className="space-y-1" dir="rtl">
+                <div className="space-y-1">
                   <div className="text-xs">
-                    <span className="text-gray-600 dark:text-gray-400">الحالة:</span>
+                    <span className="text-gray-600 dark:text-gray-400">Status:</span>
                     <span
-                      className={`mr-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${user.isActive ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'}`}
+                      className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${user.isActive ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'}`}
                     >
-                      {user.isActive ? "نشط" : "غير نشط"}
+                      {user.isActive ? "Active" : "Inactive"}
                     </span>
                   </div>
                   <div className="text-xs">
-                    <span className="text-gray-600 dark:text-gray-400">التحقق:</span>
+                    <span className="text-gray-600 dark:text-gray-400">Verified:</span>
                     <span
-                      className={`mr-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${getVerificationBadge(
+                      className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${getVerificationBadge(
                         user.isEmailVerified
                       )}`}
                     >
-                      {user.isEmailVerified ? "تم" : "قيد الانتظار"}
+                      {user.isEmailVerified ? "Verified" : "Pending"}
                     </span>
                   </div>
                 </div>
@@ -380,9 +377,9 @@ const AdminUsersPage: React.FC = () => {
 
               {/* Footer */}
               <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400" dir="rtl">
+                <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                   <FiCalendar className="text-xs" />
-                  {new Date(user.createdAt).toLocaleDateString('ar-SA')}
+                  {new Date(user.createdAt).toLocaleDateString('en-US')}
                 </div>
                 <button
                   onClick={() => handleDeleteClick(user)}
@@ -390,16 +387,15 @@ const AdminUsersPage: React.FC = () => {
                   className="flex items-center gap-1 px-2 py-1 text-xs rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 disabled:opacity-50 transition-colors"
                 >
                   <FiTrash2 className="text-xs" />
-                  حذف
+                  Delete
                 </button>
               </div>
 
               {/* Mobile Action Menu Dropdown */}
               {showMobileActions === user.id && (
                 <div 
-                  className="absolute left-3 top-10 z-10 mt-1 w-32 rounded-lg bg-white dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 animate-slideDown"
+                  className="absolute right-3 top-10 z-10 mt-1 w-32 rounded-lg bg-white dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 animate-slideDown"
                   onClick={(e) => e.stopPropagation()}
-                  dir="rtl"
                 >
                   <div className="py-1">
                     <button
@@ -407,7 +403,7 @@ const AdminUsersPage: React.FC = () => {
                       onClick={() => handleDeleteClick(user)}
                     >
                       <FiTrash2 className="text-xs" />
-                      حذف المستخدم
+                      Delete User
                     </button>
                   </div>
                 </div>
@@ -421,16 +417,16 @@ const AdminUsersPage: React.FC = () => {
                 🔍
               </div>
               <h3 className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                لم يتم العثور على مستخدمين
+                No users found
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
-                جرب تعديل الفلاتر للعثور على نتائج
+                Try adjusting your filters to find results
               </p>
               <button
                 onClick={clearFilters}
                 className="text-sm text-primary dark:text-dark-primary hover:opacity-80"
               >
-                مسح جميع الفلاتر
+                Clear all filters
               </button>
             </div>
           )}
@@ -441,23 +437,23 @@ const AdminUsersPage: React.FC = () => {
       <div className="hidden lg:block xl:hidden">
         <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[700px]" dir="rtl">
+            <table className="w-full min-w-[700px]">
               <thead>
                 <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">المستخدم</th>
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">الدور</th>
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">القسم</th>
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">التحقق</th>
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">تاريخ التسجيل</th>
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">الإجراءات</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">User</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Role</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Department</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Verification</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Join Date</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredUsers.map((user: UserDto) => (
                   <tr key={user.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                     <td className="p-4">
-                      <div className="flex items-center gap-3" dir="rtl">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 dark:from-primary/30 dark:to-secondary/30 flex items-center justify-center">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 dark:from-primary/30 dark:to-secondary-30 flex items-center justify-center">
                           <FiUser className="text-primary dark:text-dark-primary" />
                         </div>
                         <div>
@@ -471,51 +467,49 @@ const AdminUsersPage: React.FC = () => {
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="flex items-center gap-2 justify-end">
+                      <div className="flex items-center gap-2">
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role || "User")}`}>
-                          {user.role || "مستخدم"}
+                          {user.role || "User"}
                         </span>
                         {getRoleIcon(user.role)}
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="text-gray-700 dark:text-gray-300 text-right">
-                        {user.departmentId || "غير محدد"}
+                      <div className="text-gray-700 dark:text-gray-300">
+                        {user.departmentId || "Not specified"}
                       </div>
                       {user.stage && (
-                        <div className="text-sm text-gray-600 dark:text-gray-400 text-right">
-                          المرحلة: {user.stage}
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          Stage: {user.stage}
                         </div>
                       )}
                     </td>
                     <td className="p-4">
-                      <div className="flex justify-end">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getVerificationBadge(user.isEmailVerified)}`}>
-                          <div className="flex items-center gap-1">
-                            {user.isEmailVerified ? <FiCheck /> : <FiX />}
-                            {user.isEmailVerified ? "تم التحقق" : "قيد الانتظار"}
-                          </div>
-                        </span>
-                      </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getVerificationBadge(user.isEmailVerified)}`}>
+                        <div className="flex items-center gap-1">
+                          {user.isEmailVerified ? <FiCheck /> : <FiX />}
+                          {user.isEmailVerified ? "Verified" : "Pending"}
+                        </div>
+                      </span>
                     </td>
                     <td className="p-4">
-                      <div className="text-sm text-gray-600 dark:text-gray-400 text-right">
-                        {new Date(user.createdAt).toLocaleDateString('ar-SA')}
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        {new Date(user.createdAt).toLocaleDateString('en-US')}
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-500 text-right">
-                        {new Date(user.createdAt).toLocaleTimeString('ar-SA', {
+                      <div className="text-xs text-gray-500 dark:text-gray-500">
+                        {new Date(user.createdAt).toLocaleTimeString('en-US', {
                           hour: "2-digit",
                           minute: "2-digit",
                         })}
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="flex items-center gap-2 justify-end">
+                      <div className="flex items-center gap-2">
                         <button
                           onClick={() => handleDeleteClick(user)}
                           disabled={deleteUserMutation.isPending}
                           className="p-2 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 disabled:opacity-50 transition-colors"
-                          title="حذف المستخدم"
+                          title="Delete User"
                         >
                           <FiTrash2 className="text-sm" />
                         </button>
@@ -533,23 +527,23 @@ const AdminUsersPage: React.FC = () => {
       <div className="hidden xl:block">
         <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="overflow-x-auto scrollbar-thin">
-            <table className="w-full min-w-[1000px]" dir="rtl">
+            <table className="w-full min-w-[1000px]">
               <thead>
                 <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">المستخدم</th>
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">الدور</th>
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">القسم</th>
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">المرحلة</th>
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">التحقق</th>
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">تاريخ التسجيل</th>
-                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">الإجراءات</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">User</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Role</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Department</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Stage</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Verification</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Join Date</th>
+                  <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredUsers.map((user: UserDto) => (
                   <tr key={user.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                     <td className="p-4">
-                      <div className="flex items-center gap-3" dir="rtl">
+                      <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 dark:from-primary/30 dark:to-secondary/30 flex items-center justify-center">
                           <FiUser className="text-primary dark:text-dark-primary text-lg" />
                         </div>
@@ -561,57 +555,55 @@ const AdminUsersPage: React.FC = () => {
                             {user.email}
                           </div>
                           <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs mt-1 ${user.isActive ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'}`}>
-                            {user.isActive ? "نشط" : "غير نشط"}
+                            {user.isActive ? "Active" : "Inactive"}
                           </div>
                         </div>
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="flex items-center gap-2 justify-end">
+                      <div className="flex items-center gap-2">
                         <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${getRoleColor(user.role || "User")}`}>
-                          {user.role || "مستخدم"}
+                          {user.role || "User"}
                         </span>
                         {getRoleIcon(user.role)}
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="text-gray-700 dark:text-gray-300 text-right text-base">
-                        {user.departmentId || "غير محدد"}
+                      <div className="text-gray-700 dark:text-gray-300 text-base">
+                        {user.departmentId || "Not specified"}
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="text-gray-700 dark:text-gray-300 text-right">
-                        {user.stage || "غير محدد"}
+                      <div className="text-gray-700 dark:text-gray-300">
+                        {user.stage || "Not specified"}
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="flex justify-end">
-                        <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${getVerificationBadge(user.isEmailVerified)}`}>
-                          <div className="flex items-center gap-2">
-                            {user.isEmailVerified ? <FiCheck /> : <FiX />}
-                            {user.isEmailVerified ? "تم التحقق" : "قيد الانتظار"}
-                          </div>
-                        </span>
-                      </div>
+                      <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${getVerificationBadge(user.isEmailVerified)}`}>
+                        <div className="flex items-center gap-2">
+                          {user.isEmailVerified ? <FiCheck /> : <FiX />}
+                          {user.isEmailVerified ? "Verified" : "Pending"}
+                        </div>
+                      </span>
                     </td>
                     <td className="p-4">
-                      <div className="text-sm text-gray-600 dark:text-gray-400 text-right">
-                        {new Date(user.createdAt).toLocaleDateString('ar-SA')}
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        {new Date(user.createdAt).toLocaleDateString('en-US')}
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-500 text-right">
-                        {new Date(user.createdAt).toLocaleTimeString('ar-SA', {
+                      <div className="text-xs text-gray-500 dark:text-gray-500">
+                        {new Date(user.createdAt).toLocaleTimeString('en-US', {
                           hour: "2-digit",
                           minute: "2-digit",
                         })}
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="flex items-center gap-2 justify-end">
+                      <div className="flex items-center gap-2">
                         <button
                           onClick={() => handleDeleteClick(user)}
                           disabled={deleteUserMutation.isPending}
                           className="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 disabled:opacity-50 transition-colors hover:shadow-lg"
-                          title="حذف المستخدم"
+                          title="Delete User"
                         >
                           <FiTrash2 className="text-base" />
                         </button>
@@ -632,42 +624,42 @@ const AdminUsersPage: React.FC = () => {
             🔍
           </div>
           <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-3">
-            لم يتم العثور على مستخدمين
+            No users found
           </h3>
           <p className="text-base text-gray-500 dark:text-gray-400 mb-4">
-            جرب تعديل الفلاتر للعثور على نتائج.
+            Try adjusting your filters to find results.
           </p>
           <button
             onClick={clearFilters}
             className="text-base text-primary dark:text-dark-primary hover:opacity-80"
           >
-            مسح جميع الفلاتر
+            Clear all filters
           </button>
         </div>
       ) : null}
 
       {/* Delete Confirmation Modal */}
       {userToDelete && (
-        <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 z-50">
-          <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 max-w-md w-full animate-slideDown m-4">
+        <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-10 z-50">
+          <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 max-w-md w-full animate-slideDown m-4 p-5">
             <div className="text-center mb-6">
               <div className="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
                 <FiTrash2 className="text-red-600 dark:text-red-400 text-2xl" />
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-light mb-2">
-                تأكيد الحذف
+                Confirm Delete
               </h3>
               <p className="text-base text-gray-600 dark:text-gray-400">
-                هل أنت متأكد من رغبتك في حذف هذا المستخدم؟
+                Are you sure you want to delete this user?
               </p>
             </div>
 
             <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 mb-6">
-              <div className="flex items-center gap-3 mb-3" dir="rtl">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 dark:from-primary/30 dark:to-secondary/30 flex items-center justify-center">
                   <FiUser className="text-primary dark:text-dark-primary" />
                 </div>
-                <div className="text-right">
+                <div>
                   <div className="font-semibold text-gray-900 dark:text-light">
                     {userToDelete.name}
                   </div>
@@ -676,8 +668,8 @@ const AdminUsersPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400 italic text-right">
-                هذا الإجراء لا يمكن التراجع عنه. جميع بيانات المستخدم سيتم حذفها نهائياً.
+              <div className="text-sm text-gray-500 dark:text-gray-400 italic">
+                This action cannot be undone. All user data will be permanently deleted.
               </div>
             </div>
 
@@ -687,7 +679,7 @@ const AdminUsersPage: React.FC = () => {
                 disabled={deleteUserMutation.isPending}
                 className="flex-1 btn-secondary text-base h-12"
               >
-                إلغاء
+                Cancel
               </button>
               <button
                 onClick={confirmDelete}
@@ -697,12 +689,12 @@ const AdminUsersPage: React.FC = () => {
                 {deleteUserMutation.isPending ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                    جاري الحذف...
+                    Deleting...
                   </>
                 ) : (
                   <>
                     <FiTrash2 />
-                    حذف المستخدم
+                    Delete User
                   </>
                 )}
               </button>

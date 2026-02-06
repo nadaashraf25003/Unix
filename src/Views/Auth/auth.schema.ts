@@ -23,7 +23,9 @@ export const registerSchema = z
 
     password: z
       .string()
-      .min(8, "Password must be at least 8 characters"),
+      .min(8, "Password must be at least 8 characters")
+      .regex(/[a-zA-Z]/, "Password must contain letters")
+      .regex(/\d/, "Password must contain numbers"),
 
     confirmPassword: z.string(),
 

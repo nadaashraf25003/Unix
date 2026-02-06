@@ -23,7 +23,7 @@ const CourseManage: React.FC = () => {
     (CreateCourseDto & { id: number }) | null
   >(null);
 
-  // إضافة أو تعديل كورس
+  // Add or update course
   const onSubmit = async (data: CreateCourseDto) => {
     if (editingCourse) {
       try {
@@ -31,51 +31,51 @@ const CourseManage: React.FC = () => {
           id: editingCourse.id,
           data,
         });
-        toast.success("تم تعديل الكورس بنجاح");
+        toast.success("Course updated successfully");
         setEditingCourse(null);
         reset();
       } catch {
-        toast.error("فشل تعديل الكورس");
+        toast.error("Failed to update course");
       }
     } else {
       try {
         await createCourseMutation.mutateAsync(data);
-        toast.success("تم إضافة الكورس بنجاح");
+        toast.success("Course added successfully");
         reset();
       } catch {
-        toast.error("فشل إضافة الكورس");
+        toast.error("Failed to add course");
       }
     }
   };
 
-  // حذف كورس
+  // Delete course
   const handleDelete = async (id: number, name: string) => {
     toast(
       (t) => (
         <div className="flex flex-col gap-4 p-4">
           <span>
-            هل أنت متأكد من حذف الكورس <strong>{name}</strong>؟
+            Are you sure you want to delete the course <strong>{name}</strong>?
           </span>
           <div className="flex justify-end gap-2">
             <button
               className="px-3 py-1 rounded-lg bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
               onClick={() => toast.dismiss(t.id)}
             >
-              إلغاء
+              Cancel
             </button>
             <button
               className="px-3 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600"
               onClick={async () => {
                 try {
                   await deleteCourseMutation.mutateAsync(id);
-                  toast.success("تم حذف الكورس");
+                  toast.success("Course deleted");
                   toast.dismiss(t.id);
                 } catch {
-                  toast.error("فشل حذف الكورس");
+                  toast.error("Failed to delete course");
                 }
               }}
             >
-              حذف
+              Delete
             </button>
           </div>
         </div>
@@ -113,7 +113,7 @@ const CourseManage: React.FC = () => {
   }
 
   return (
-    <div className="p-4 md:p-6 max-w-7xl mx-auto" dir="rtl">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6 md:mb-8">
         <div className="bg-primary dark:bg-dark-primary p-3 rounded-xl md:rounded-2xl shadow-card dark:shadow-card-dark">
@@ -121,10 +121,10 @@ const CourseManage: React.FC = () => {
         </div>
         <div>
           <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-light">
-            إدارة الكورسات
+            Course Management
           </h1>
           <p className="text-sm md:text-base text-gray-500 dark:text-gray-300">
-            إضافة وتعديل وحذف الكورسات الدراسية
+            Add, edit, and delete courses
           </p>
         </div>
       </div>
@@ -138,7 +138,7 @@ const CourseManage: React.FC = () => {
           <div className="flex items-center justify-between mb-4 md:mb-6">
             <h2 className="text-base md:text-lg font-bold flex items-center gap-2 text-primary dark:text-dark-primary">
               <PlusCircle className="w-4 h-4 md:w-5 md:h-5" />
-              {editingCourse ? "تعديل الكورس" : "إضافة كورس جديد"}
+              {editingCourse ? "Edit Course" : "Add New Course"}
             </h2>
             {editingCourse && (
               <button
@@ -147,7 +147,7 @@ const CourseManage: React.FC = () => {
                 className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 flex items-center gap-2 text-sm"
               >
                 <X size={16} />
-                إلغاء
+                Cancel
               </button>
             )}
           </div>
@@ -155,14 +155,14 @@ const CourseManage: React.FC = () => {
           <div className="space-y-3 md:space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                اسم الكورس *
+                Course Name *
               </label>
               <input
                 {...register("courseName", { 
-                  required: "اسم الكورس مطلوب",
-                  minLength: { value: 3, message: "يجب أن يكون الاسم على الأقل 3 أحرف" }
+                  required: "Course name is required",
+                  minLength: { value: 3, message: "Name must be at least 3 characters" }
                 })}
-                placeholder="مثلاً: هياكل البيانات"
+                placeholder="e.g., Data Structures"
                 className="input text-sm md:text-base"
               />
               {errors.courseName && (
@@ -172,18 +172,18 @@ const CourseManage: React.FC = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                كود الكورس *
+                Course Code *
               </label>
               <div className="relative">
                 <input
                   {...register("courseCode", { 
-                    required: "كود الكورس مطلوب",
+                    required: "Course code is required",
                     pattern: { 
                       value: /^[A-Za-z0-9-]+$/, 
-                      message: "كود غير صحيح (أرقام وحروف إنجليزية فقط)" 
+                      message: "Invalid code (letters, numbers, and hyphens only)" 
                     }
                   })}
-                  placeholder="مثلاً: CS201، MATH101"
+                  placeholder="e.g., CS201, MATH101"
                   className="input text-sm md:text-base pl-10"
                 />
                 <Hash className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
@@ -203,12 +203,12 @@ const CourseManage: React.FC = () => {
                   <>
                     <Loader2 className="animate-spin w-4 h-4" />
                     <span className="text-sm">
-                      {editingCourse ? "جاري التحديث..." : "جاري الإضافة..."}
+                      {editingCourse ? "Updating..." : "Adding..."}
                     </span>
                   </>
                 ) : (
                   <span>
-                    {editingCourse ? "تحديث الكورس" : "حفظ الكورس"}
+                    {editingCourse ? "Update Course" : "Save Course"}
                   </span>
                 )}
               </button>
@@ -219,7 +219,7 @@ const CourseManage: React.FC = () => {
                   onClick={handleCancelEdit}
                   className="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 text-sm"
                 >
-                  إلغاء التعديل
+                  Cancel Edit
                 </button>
               )}
             </div>
@@ -231,11 +231,11 @@ const CourseManage: React.FC = () => {
           <div className="card">
             <div className="flex justify-between items-center mb-4 md:mb-6">
               <h2 className="text-base md:text-lg font-bold text-gray-800 dark:text-light">
-                الكورسات ({courses.length})
+                Courses ({courses.length})
               </h2>
               {courses.length > 0 && (
                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {courses.length} كورس
+                  {courses.length} courses
                 </span>
               )}
             </div>
@@ -246,10 +246,10 @@ const CourseManage: React.FC = () => {
                   <BookOpen className="text-gray-400 w-6 h-6" />
                 </div>
                 <div className="text-gray-400 dark:text-gray-500 text-lg font-semibold mb-2">
-                  لا توجد كورسات
+                  No courses found
                 </div>
                 <p className="text-gray-500 dark:text-gray-400 mb-4">
-                  ابدأ بإضافة كورس جديد
+                  Start by adding your first course
                 </p>
               </div>
             ) : (
@@ -277,7 +277,7 @@ const CourseManage: React.FC = () => {
                         <button
                           onClick={() => handleEdit(course)}
                           className="p-1.5 md:p-2 text-gray-400 hover:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-all"
-                          title="تعديل"
+                          title="Edit"
                         >
                           <Edit2 className="w-4 h-4 md:w-5 md:h-5" />
                         </button>
@@ -285,7 +285,7 @@ const CourseManage: React.FC = () => {
                           onClick={() => handleDelete(course.id, course.courseName)}
                           disabled={deleteCourseMutation.isPending}
                           className="p-1.5 md:p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all"
-                          title="حذف"
+                          title="Delete"
                         >
                           {deleteCourseMutation.isPending ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
@@ -305,7 +305,7 @@ const CourseManage: React.FC = () => {
           {courses.length > 0 && (
             <div className="mt-6 card">
               <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-light mb-4">
-                إحصائيات الكورسات
+                Course Statistics
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                 <div className="text-center">
@@ -313,7 +313,7 @@ const CourseManage: React.FC = () => {
                     {courses.length}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                    إجمالي الكورسات
+                    Total Courses
                   </div>
                 </div>
                 <div className="text-center">
@@ -321,7 +321,7 @@ const CourseManage: React.FC = () => {
                     {new Set(courses.map(c => c.courseCode.substring(0, 2))).size}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                    تخصصات رئيسية
+                    Main Departments
                   </div>
                 </div>
                 <div className="text-center">
@@ -329,7 +329,7 @@ const CourseManage: React.FC = () => {
                     {courses.filter(c => /^\d+$/.test(c.courseCode.slice(-3))).length}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                    كورسات مرقمة
+                    Numbered Courses
                   </div>
                 </div>
               </div>
@@ -342,7 +342,7 @@ const CourseManage: React.FC = () => {
       {courses.length > 0 && (
         <div className="mt-6 md:mt-8 card">
           <h3 className="text-base md:text-lg font-bold text-gray-800 dark:text-light mb-4">
-            كودات الكورسات
+            Course Codes
           </h3>
           <div className="flex flex-wrap gap-2">
             {courses.map((course) => (

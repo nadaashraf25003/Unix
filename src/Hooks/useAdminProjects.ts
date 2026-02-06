@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 /* ================= TYPES ================= */
 
 export interface ProjectStudentDto {
+  id: number;
+  projectId: number;
   name: string;
   email: string;
   studentId: string;
@@ -26,7 +28,10 @@ export interface GraduationProjectDto {
   description: string;
   supervisor: string;
   startDate: string;
+  endDate: string | null;
+  status: string;
   repositoryLink: string;
+  students: ProjectStudentDto[];
   memberCount: number;
 }
 
@@ -36,11 +41,11 @@ const useAdminProjects = () => {
   const queryClient = useQueryClient();
 
   /* ===== GET ALL PROJECTS (ADMIN) ===== */
-  const projectsQuery = useQuery<GraduationProjectDto[]>({
+    const projectsQuery = useQuery<GraduationProjectDto[]>({
     queryKey: ["admin-projects"],
-    queryFn: async () =>
-      (await api.get(Urls.PROJECTS.GET_ALL)).data,
+    queryFn: async () => (await api.get(Urls.PROJECTS.GET_ALL)).data,
   });
+
 
   /* ===== CREATE ===== */
   const createProjectMutation = useMutation<
