@@ -1,6 +1,6 @@
 // home.routes.jsx
 import { lazy, Suspense } from "react";
-import Home from "@/views/Home/Home";
+import Home from "@/views/Home/Home.jsx";
 import Rooms from "@/views/Rooms/Rooms";
 import LostAndFoundUserPage from "@/Views/LostFound/LostFound";
 import Drivers from "@/views/Drivers/Drivers";
