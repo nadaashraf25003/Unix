@@ -70,7 +70,7 @@ const AdminProfile = () => {
               بكل سهولة وكفاءة.
             </p>
 
-            {/* Features Grid */}
+            {/* Features Grid*/}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Feature 1 */}
               <div className="group p-6 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary/30 dark:hover:border-primary/30 transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900">
