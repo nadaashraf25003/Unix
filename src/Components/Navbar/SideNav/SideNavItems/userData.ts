@@ -64,20 +64,41 @@ const sideNav: NavSection[] = [
     section: "Main",
     icon: "Dashboard",
     items: [
-      { title: "Profile", icon: "", url: ROUTES.HOME_STUDENT },
-      { title: "Dashboard", icon: "", url: ROUTES.ADMIN_DASHBOARD, roles: ["Admin"] },
-      { title: "Schedule", icon: "CalendarMonth", url: ROUTES.STUDENT_SCHEDULE }, 
+      // { title: "Profile", icon: "", url: ROUTES.ADMIN_PROFILE  },
+      // { title: "Dashboard", icon: "", url: ROUTES.ADMIN_DASHBOARD, roles: ["Admin"] },
       { title: "Campus Map", icon: "Map", url: ROUTES.CAMPUS_NAVIGATION },
-      { title: "Lost & Found", icon: "ReportProblem", url: ROUTES.LOST_FOUND },
+      { title: "Lost & Found", icon: "ReportProblem", url: ROUTES.LOST_FOUND_ADMIN },
       { title: "Drivers", icon: "DriveEta", url: ROUTES.DRIVERS ,roles: ["Student", "Instructor"]},
     ],
   },
-  {
+    {
     section: "Graduation Projects",
     icon: "School",
     items: [
       { title: "Projects", icon: "Folder", url: ROUTES.GRADUATION_PROJECTS, roles: ["Student", "Instructor","Admin"] },
       { title: "Manage Projects", icon: "ManageAccounts", url: ROUTES.PROJECTS, roles: ["Admin"] },
+    ],
+  },
+   {
+    section: "Admin Dashboard",
+    icon: "DashboardCustomize",
+    items: [
+      
+      { title: "Users", icon: "", url: ROUTES.USERS, roles: ["Admin"] },
+      { title: "Departments", icon: "", url: ROUTES.DEPARTMENTS, roles: ["Admin"] },
+      { title: "Sections", icon: "", url: ROUTES.SECTIONS, roles: ["Admin"] },
+      { title: "Courses", icon: "MenuBook", url: ROUTES.COURSES, roles: ["Admin"] },
+      { title: "Instructors", icon: "Person", url: ROUTES.INSTRUCTORS, roles: ["Admin"] },
+      // { title: "Projects", icon: "Folder", url: ROUTES.PROJECTS, roles: ["Admin"] },
+    ],
+  },
+
+  {
+    section: "Schedule",
+    icon: "School",
+    items: [
+      { title: "Schedule", icon: "CalendarMonth", url: ROUTES.STUDENT_SCHEDULE }, 
+      { title: "Schedule Management", icon: "CalendarMonth", url: ROUTES.SCHEDULE_MANAGEMENT, roles: ["Admin"] },
     ],
   },
   {
@@ -95,20 +116,7 @@ const sideNav: NavSection[] = [
       { title: "Rooms", icon: "MeetingRoom", url: ROUTES.ROOMS },
     ],
   },
-  {
-    section: "Admin Dashboard",
-    icon: "DashboardCustomize",
-    items: [
-      
-      { title: "Users", icon: "", url: ROUTES.USERS, roles: ["Admin"] },
-      { title: "Departments", icon: "", url: ROUTES.DEPARTMENTS, roles: ["Admin"] },
-      { title: "Sections", icon: "", url: ROUTES.SECTIONS, roles: ["Admin"] },
-      { title: "Courses", icon: "MenuBook", url: ROUTES.COURSES, roles: ["Admin"] },
-      { title: "Instructors", icon: "Person", url: ROUTES.INSTRUCTORS, roles: ["Admin"] },
-      { title: "Projects", icon: "Folder", url: ROUTES.PROJECTS, roles: ["Admin"] },
-      { title: "Schedule Management", icon: "CalendarMonth", url: ROUTES.SCHEDULE_MANAGEMENT, roles: ["Admin"] },
-    ],
-  },
+ 
 ];
 
 /* =======================

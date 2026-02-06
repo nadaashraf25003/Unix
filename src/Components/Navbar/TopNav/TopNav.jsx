@@ -130,7 +130,7 @@ export default function TopNav({ toggleSidebar, sidebarOpen }) {
         </div>
 
         {/* Search Bar */}
-        <Box className="flex-1 max-w-2xl mx-4">
+        {/* <Box className="flex-1 max-w-2xl mx-4">
           <Search className="bg-gray-100 dark:bg-gray-800">
             <SearchIconWrapper>
               <SearchIcon className="text-gray-500" />
@@ -145,12 +145,12 @@ export default function TopNav({ toggleSidebar, sidebarOpen }) {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
-        </Box>
+        </Box> */}
 
         {/* Right Side Icons */}
         <Box className="flex items-center space-x-2 relative">
            {/* Mail */}
-          <div className="relative">
+          {/* <div className="relative">
             <IconButton
               color="inherit"
               className="text-gray-600 dark:text-gray-300"
@@ -165,7 +165,7 @@ export default function TopNav({ toggleSidebar, sidebarOpen }) {
               onClose={() => setOpenDropdown(null)}
               items={mailItems}
             />
-          </div>
+          </div> */}
 
           {/* Notifications */}
           <div className="relative">

@@ -14,8 +14,6 @@ import {
   FiSearch,
   FiChevronDown,
   FiChevronUp,
-  FiEdit,
-  FiEye,
   FiMoreVertical,
 } from "react-icons/fi";
 import { FaCrown, FaUser, FaUserShield, FaUserGraduate, FaUserTie } from "react-icons/fa";
@@ -23,7 +21,6 @@ import { FaCrown, FaUser, FaUserShield, FaUserGraduate, FaUserTie } from "react-
 interface FilterState {
   search: string;
   role: string;
-  status: string;
   verified: string;
 }
 
@@ -32,7 +29,6 @@ const AdminUsersPage: React.FC = () => {
   const [filters, setFilters] = useState<FilterState>({
     search: "",
     role: "all",
-    status: "all",
     verified: "all",
   });
   const [showFilters, setShowFilters] = useState(false);
@@ -81,12 +77,6 @@ const AdminUsersPage: React.FC = () => {
       default:
         return "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300";
     }
-  };
-
-  const getStatusBadge = (isActive: boolean) => {
-    return isActive
-      ? "bg-success/20 dark:bg-dark-success/20 text-green-700 dark:text-dark-success"
-      : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400";
   };
 
   const getVerificationBadge = (isVerified: boolean) => {
@@ -161,7 +151,6 @@ const AdminUsersPage: React.FC = () => {
     setFilters({
       search: "",
       role: "all",
-      status: "all",
       verified: "all",
     });
   };
@@ -194,25 +183,25 @@ const AdminUsersPage: React.FC = () => {
   }
 
   return (
-    <div className="p-2 sm:p-4 md:p-6 max-w-[1800px] mx-auto">
+    <div className="p-3 sm:p-4 md:p-6 max-w-[1800px] mx-auto">
       {/* Header */}
-      <div className="mb-3 sm:mb-6">
+      <div className="mb-4 sm:mb-6">
         <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-2 xs:gap-3">
           <div className="flex-1 min-w-0">
             <h1 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-light mb-1 truncate">
-              User Management
+              إدارة المستخدمين
             </h1>
             <p className="text-xs xs:text-sm sm:text-base text-gray-600 dark:text-gray-400 truncate">
-              Manage all registered users and their permissions
+              إدارة جميع المستخدمين المسجلين في النظام
             </p>
           </div>
           <div className="flex items-center gap-1 xs:gap-2 min-w-fit">
             <div className="text-xs xs:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-              Showing:{" "}
+              إجمالي المستخدمين:{" "}
               <span className="font-bold text-primary dark:text-dark-primary">
                 {filteredUsers.length}
               </span>{" "}
-              of{" "}
+              من{" "}
               <span className="font-bold">{usersQuery.data?.length || 0}</span>
             </div>
           </div>
@@ -220,23 +209,20 @@ const AdminUsersPage: React.FC = () => {
       </div>
 
       {/* Filters Section */}
-      <div className="card mb-3 sm:mb-6">
+      <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 mb-4 sm:mb-6">
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-1 sm:gap-2">
-            <FiFilter className="text-gray-600 dark:text-gray-400 text-xs sm:text-base" />
-            <h3 className="font-semibold text-gray-700 dark:text-gray-300 text-xs xs:text-sm sm:text-base">
-              Filters
+          <div className="flex items-center gap-2">
+            <FiFilter className="text-gray-600 dark:text-gray-400 text-sm" />
+            <h3 className="font-semibold text-gray-700 dark:text-gray-300 text-sm">
+              الفلاتر
             </h3>
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-1 text-xs xs:text-sm text-primary dark:text-dark-primary hover:opacity-80"
+            className="flex items-center gap-1 text-sm text-primary dark:text-dark-primary hover:opacity-80"
           >
             {showFilters ? <FiChevronUp /> : <FiChevronDown />}
-            <span className="hidden xs:inline">
-              {showFilters ? "Hide Filters" : "Show Filters"}
-            </span>
-            <span className="xs:hidden">Filters</span>
+            <span>{showFilters ? "إخفاء الفلاتر" : "عرض الفلاتر"}</span>
           </button>
         </div>
 
@@ -244,63 +230,51 @@ const AdminUsersPage: React.FC = () => {
           <div className="space-y-3 pt-3 border-t border-gray-200 dark:border-gray-700">
             {/* Search Input */}
             <div className="relative">
-              <FiSearch className="absolute left-2 xs:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs xs:text-sm" />
+              <FiSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
               <input
                 type="text"
-                placeholder="Search by name, email, or role..."
+                placeholder="ابحث بالاسم، البريد الإلكتروني، أو الدور..."
                 value={filters.search}
                 onChange={(e) => handleFilterChange("search", e.target.value)}
-                className="input pl-7 xs:pl-9 sm:pl-10 text-xs xs:text-sm sm:text-base h-9 xs:h-10"
+                className="input pr-10 text-sm h-10 w-full"
+                dir="rtl"
               />
             </div>
 
-            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-2 xs:gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {/* Role Filter */}
               <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Role
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  الدور
                 </label>
                 <select
                   value={filters.role}
                   onChange={(e) => handleFilterChange("role", e.target.value)}
-                  className="input text-xs xs:text-sm h-8 xs:h-9"
+                  className="input text-sm h-10 w-full"
+                  dir="rtl"
                 >
-                  <option value="all">All Roles</option>
-                  <option value="admin">Admin</option>
-                  <option value="student">Student</option>
-                  <option value="instructor">Instructor</option>
+                  <option value="all">جميع الأدوار</option>
+                  <option value="admin">مدير</option>
+                  <option value="student">طالب</option>
+                  <option value="instructor">محاضر</option>
+                  <option value="superadmin">مدير عام</option>
                 </select>
               </div>
 
               {/* Verification Filter */}
               <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Verification
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  التحقق
                 </label>
                 <select
                   value={filters.verified}
                   onChange={(e) => handleFilterChange("verified", e.target.value)}
-                  className="input text-xs xs:text-sm h-8 xs:h-9"
+                  className="input text-sm h-10 w-full"
+                  dir="rtl"
                 >
-                  <option value="all">All</option>
-                  <option value="verified">Verified</option>
-                  <option value="unverified">Unverified</option>
-                </select>
-              </div>
-
-              {/* Status Filter */}
-              <div>
-                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Status
-                </label>
-                <select
-                  value={filters.status}
-                  onChange={(e) => handleFilterChange("status", e.target.value)}
-                  className="input text-xs xs:text-sm h-8 xs:h-9"
-                >
-                  <option value="all">All Status</option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
+                  <option value="all">الكل</option>
+                  <option value="verified">تم التحقق</option>
+                  <option value="unverified">غير محقق</option>
                 </select>
               </div>
 
@@ -308,38 +282,37 @@ const AdminUsersPage: React.FC = () => {
               <div className="flex items-end">
                 <button
                   onClick={clearFilters}
-                  className="w-full h-8 xs:h-9 text-xs xs:text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  className="w-full h-10 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
-                  Clear Filters
+                  مسح الفلاتر
                 </button>
               </div>
             </div>
 
-            <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-1 xs:gap-0 pt-2 border-t border-gray-200 dark:border-gray-700">
-              <div className="text-xs text-gray-500 dark:text-gray-400">
-                {filteredUsers.length} user{filteredUsers.length !== 1 ? 's' : ''} match your filters
+            <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {filteredUsers.length} مستخدم {filteredUsers.length !== 1 ? '' : ''} يطابق الفلاتر
               </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Extra Small Mobile View (xs) - Very Compact Cards */}
-      <div className="block sm:hidden">
-        <div className="grid grid-cols-1 gap-2 mb-4">
+      {/* Mobile View (xs-sm) - Compact Cards */}
+      <div className="block lg:hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
           {filteredUsers.map((user: UserDto) => (
-            <div key={user.id} className="card animate-slideDown relative p-2">
-              {/* Main Content */}
+            <div key={user.id} className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-3 hover:shadow-xl transition-shadow duration-300">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex items-center gap-2 flex-1 min-w-0">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 dark:bg-dark-primary/20 flex items-center justify-center flex-shrink-0">
-                    <FiUser className="text-primary dark:text-dark-primary text-xs" />
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 dark:from-primary/30 dark:to-secondary/30 flex items-center justify-center flex-shrink-0">
+                    <FiUser className="text-primary dark:text-dark-primary text-sm" />
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-gray-900 dark:text-light text-xs truncate">
+                  <div className="min-w-0 flex-1" dir="rtl">
+                    <h3 className="font-semibold text-gray-900 dark:text-light text-sm truncate">
                       {user.name}
                     </h3>
-                    <p className="text-[10px] text-gray-600 dark:text-gray-400 truncate">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
                       {user.email}
                     </p>
                   </div>
@@ -351,106 +324,90 @@ const AdminUsersPage: React.FC = () => {
                     e.stopPropagation();
                     setShowMobileActions(showMobileActions === user.id ? null : user.id);
                   }}
-                  className="ml-1 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  className="ml-1 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                 >
-                  <FiMoreVertical className="text-gray-500 text-xs" />
+                  <FiMoreVertical className="text-gray-500 text-sm" />
                 </button>
               </div>
 
               {/* Role Badge */}
               <div className="mb-2">
                 <div
-                  className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${getRoleColor(
+                  className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getRoleColor(
                     user.role ?? "user"
                   )}`}
                 >
                   {getRoleIcon(user.role)}
-                  <span>{user.role || "User"}</span>
+                  <span>{user.role || "مستخدم"}</span>
                 </div>
               </div>
 
               {/* User Details - Compact Grid */}
-              <div className="grid grid-cols-2 gap-1 mb-2">
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-0.5 text-[10px]">
-                    <FiBriefcase className="text-gray-400 text-[8px] flex-shrink-0" />
-                    <span className="text-gray-600 dark:text-gray-400">Dept:</span>
-                    <span className="font-medium truncate">{user.departmentId || "N/A"}</span>
+              <div className="grid grid-cols-2 gap-2 mb-2">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1 text-xs" dir="rtl">
+                    <FiBriefcase className="text-gray-400 text-xs flex-shrink-0" />
+                    <span className="text-gray-600 dark:text-gray-400">القسم:</span>
+                    <span className="font-medium truncate">{user.departmentId || "غير محدد"}</span>
                   </div>
-                  <div className="flex items-center gap-0.5 text-[10px]">
-                    <FiHash className="text-gray-400 text-[8px]" />
-                    <span className="text-gray-600 dark:text-gray-400">Stage:</span>
-                    <span className="font-medium">{user.stage || "N/A"}</span>
+                  <div className="flex items-center gap-1 text-xs" dir="rtl">
+                    <FiHash className="text-gray-400 text-xs" />
+                    <span className="text-gray-600 dark:text-gray-400">المرحلة:</span>
+                    <span className="font-medium">{user.stage || "غير محدد"}</span>
                   </div>
                 </div>
-                <div className="space-y-0.5">
-                  <div className="text-[10px]">
-                    <span className="text-gray-600 dark:text-gray-400">Status:</span>
+                <div className="space-y-1" dir="rtl">
+                  <div className="text-xs">
+                    <span className="text-gray-600 dark:text-gray-400">الحالة:</span>
                     <span
-                      className={`ml-0.5 px-1 py-0.5 rounded-full text-[9px] font-medium ${getStatusBadge(
-                        user.isActive
-                      )}`}
+                      className={`mr-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${user.isActive ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'}`}
                     >
-                      {user.isActive ? "Active" : "Inactive"}
+                      {user.isActive ? "نشط" : "غير نشط"}
                     </span>
                   </div>
-                  <div className="text-[10px]">
-                    <span className="text-gray-600 dark:text-gray-400">Verified:</span>
+                  <div className="text-xs">
+                    <span className="text-gray-600 dark:text-gray-400">التحقق:</span>
                     <span
-                      className={`ml-0.5 px-1 py-0.5 rounded-full text-[9px] font-medium ${getVerificationBadge(
+                      className={`mr-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${getVerificationBadge(
                         user.isEmailVerified
                       )}`}
                     >
-                      {user.isEmailVerified ? "Yes" : "No"}
+                      {user.isEmailVerified ? "تم" : "قيد الانتظار"}
                     </span>
                   </div>
                 </div>
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between pt-1 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex items-center gap-0.5 text-[10px] text-gray-500 dark:text-gray-400">
-                  <FiCalendar className="text-[8px]" />
-                  {new Date(user.createdAt).toLocaleDateString()}
+              <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400" dir="rtl">
+                  <FiCalendar className="text-xs" />
+                  {new Date(user.createdAt).toLocaleDateString('ar-SA')}
                 </div>
                 <button
                   onClick={() => handleDeleteClick(user)}
                   disabled={deleteUserMutation.isPending}
-                  className="flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] rounded-md bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 disabled:opacity-50 transition-colors"
+                  className="flex items-center gap-1 px-2 py-1 text-xs rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 disabled:opacity-50 transition-colors"
                 >
-                  <FiTrash2 className="text-[8px]" />
-                  Delete
+                  <FiTrash2 className="text-xs" />
+                  حذف
                 </button>
               </div>
 
               {/* Mobile Action Menu Dropdown */}
               {showMobileActions === user.id && (
                 <div 
-                  className="absolute right-1 top-7 z-10 mt-1 w-36 rounded-md bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 animate-slideDown"
+                  className="absolute left-3 top-10 z-10 mt-1 w-32 rounded-lg bg-white dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700 animate-slideDown"
                   onClick={(e) => e.stopPropagation()}
+                  dir="rtl"
                 >
-                  <div className="py-0.5">
+                  <div className="py-1">
                     <button
-                      className="flex items-center gap-1 w-full px-2 py-1.5 text-[10px] text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      onClick={() => {/* View action */}}
-                    >
-                      <FiEye className="text-[10px]" />
-                      View Details
-                    </button>
-                    <button
-                      className="flex items-center gap-1 w-full px-2 py-1.5 text-[10px] text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                      onClick={() => {/* Edit action */}}
-                    >
-                      <FiEdit className="text-[10px]" />
-                      Edit User
-                    </button>
-                    <div className="border-t border-gray-200 dark:border-gray-700 my-0.5"></div>
-                    <button
-                      className="flex items-center gap-1 w-full px-2 py-1.5 text-[10px] text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                      className="flex items-center gap-1 w-full px-3 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={() => handleDeleteClick(user)}
                     >
-                      <FiTrash2 className="text-[10px]" />
-                      Delete User
+                      <FiTrash2 className="text-xs" />
+                      حذف المستخدم
                     </button>
                   </div>
                 </div>
@@ -459,224 +416,48 @@ const AdminUsersPage: React.FC = () => {
           ))}
           
           {filteredUsers.length === 0 && (
-            <div className="card text-center py-6">
-              <div className="text-gray-400 dark:text-gray-500 text-3xl mb-2">
+            <div className="col-span-full bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 text-center py-8">
+              <div className="text-gray-400 dark:text-gray-500 text-4xl mb-3">
                 🔍
               </div>
-              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                No users found
+              <h3 className="text-base font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                لم يتم العثور على مستخدمين
               </h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                Try adjusting your filters
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                جرب تعديل الفلاتر للعثور على نتائج
               </p>
               <button
                 onClick={clearFilters}
-                className="text-xs text-primary dark:text-dark-primary hover:opacity-80"
+                className="text-sm text-primary dark:text-dark-primary hover:opacity-80"
               >
-                Clear all filters
+                مسح جميع الفلاتر
               </button>
             </div>
           )}
         </div>
       </div>
 
-      {/* Small Mobile View (sm) - Standard Mobile Cards */}
-      <div className="hidden sm:block md:hidden">
-        <div className="grid grid-cols-1 gap-3 mb-4">
-          {filteredUsers.map((user: UserDto) => (
-            <div key={user.id} className="card animate-slideDown relative p-3">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-dark-primary/20 flex items-center justify-center">
-                    <FiUser className="text-primary dark:text-dark-primary" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-semibold text-gray-900 dark:text-light truncate">
-                      {user.name}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                      {user.email}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowMobileActions(showMobileActions === user.id ? null : user.id);
-                  }}
-                  className="ml-2 p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  <FiMoreVertical className="text-gray-500" />
-                </button>
-              </div>
-
-              <div className="mb-3">
-                <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role ?? "user")}`}>
-                  {getRoleIcon(user.role)}
-                  <span>{user.role || "User"}</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 mb-3">
-                <div className="space-y-1.5">
-                  <div className="flex items-center gap-1.5 text-sm">
-                    <FiBriefcase className="text-gray-400 text-sm" />
-                    <span className="text-gray-600 dark:text-gray-400">Dept:</span>
-                    <span className="font-medium">{user.departmentId || "N/A"}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-sm">
-                    <FiHash className="text-gray-400 text-sm" />
-                    <span className="text-gray-600 dark:text-gray-400">Stage:</span>
-                    <span className="font-medium">{user.stage || "N/A"}</span>
-                  </div>
-                </div>
-                <div className="space-y-1.5">
-                  <div className="text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">Status:</span>
-                    <span className={`ml-1.5 px-2 py-1 rounded-full text-xs font-medium ${getStatusBadge(user.isActive)}`}>
-                      {user.isActive ? "Active" : "Inactive"}
-                    </span>
-                  </div>
-                  <div className="text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">Verified:</span>
-                    <span className={`ml-1.5 px-2 py-1 rounded-full text-xs font-medium ${getVerificationBadge(user.isEmailVerified)}`}>
-                      {user.isEmailVerified ? "Yes" : "No"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
-                  <FiCalendar />
-                  {new Date(user.createdAt).toLocaleDateString()}
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleDeleteClick(user)}
-                    disabled={deleteUserMutation.isPending}
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 disabled:opacity-50"
-                  >
-                    <FiTrash2 />
-                    Delete
-                  </button>
-                  <button className="flex items-center gap-1.5 px-2.5 py-1.5 text-sm rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100">
-                    <FiEye />
-                    View
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Medium Tablet View (md) */}
-      <div className="hidden md:block lg:hidden">
-        <div className="card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[600px]">
-              <thead>
-                <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-left p-2 xs:p-3 font-semibold text-gray-700 dark:text-gray-300 text-xs xs:text-sm">
-                    User
-                  </th>
-                  <th className="text-left p-2 xs:p-3 font-semibold text-gray-700 dark:text-gray-300 text-xs xs:text-sm">
-                    Role
-                  </th>
-                  <th className="text-left p-2 xs:p-3 font-semibold text-gray-700 dark:text-gray-300 text-xs xs:text-sm">
-                    Status
-                  </th>
-                  <th className="text-left p-2 xs:p-3 font-semibold text-gray-700 dark:text-gray-300 text-xs xs:text-sm">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.map((user: UserDto) => (
-                  <tr key={user.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                    <td className="p-2 xs:p-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 xs:w-8 xs:h-8 rounded-full bg-primary/10 dark:bg-dark-primary/20 flex items-center justify-center">
-                          <FiUser className="text-primary dark:text-dark-primary text-xs xs:text-sm" />
-                        </div>
-                        <div className="min-w-0">
-                          <div className="font-medium text-gray-900 dark:text-light text-xs xs:text-sm truncate max-w-[120px]">
-                            {user.name}
-                          </div>
-                          <div className="text-[10px] xs:text-xs text-gray-600 dark:text-gray-400 truncate max-w-[120px]">
-                            {user.email}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-2 xs:p-3">
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1">
-                          {getRoleIcon(user.role)}
-                          <span className={`px-2 py-0.5 xs:px-2.5 xs:py-1 rounded-full text-[10px] xs:text-xs font-medium ${getRoleColor(user.role || "User")}`}>
-                            {user.role || "User"}
-                          </span>
-                        </div>
-                        <div className="text-[10px] xs:text-xs text-gray-600 dark:text-gray-400">
-                          Dept: {user.departmentId || "N/A"}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-2 xs:p-3">
-                      <div className="space-y-1">
-                        <span className={`px-2 py-0.5 xs:px-2.5 xs:py-1 rounded-full text-[10px] xs:text-xs font-medium ${getStatusBadge(user.isActive)}`}>
-                          {user.isActive ? "Active" : "Inactive"}
-                        </span>
-                        <div className="text-[10px] xs:text-xs text-gray-600 dark:text-gray-400">
-                          Verified: {user.isEmailVerified ? "Yes" : "No"}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-2 xs:p-3">
-                      <div className="flex flex-wrap gap-1">
-                        <button
-                          onClick={() => handleDeleteClick(user)}
-                          disabled={deleteUserMutation.isPending}
-                          className="flex items-center gap-1 px-2 py-1 rounded-md bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 text-[10px] xs:text-xs"
-                        >
-                          <FiTrash2 className="text-[10px]" />
-                          Delete
-                        </button>
-                        <button className="flex items-center gap-1 px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 text-[10px] xs:text-xs">
-                          <FiEye className="text-[10px]" />
-                          View
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      {/* Large Desktop View (lg+) */}
+      {/* Tablet View (md-lg) */}
       <div className="hidden lg:block xl:hidden">
-        <div className="card overflow-hidden">
+        <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px]">
+            <table className="w-full min-w-[700px]" dir="rtl">
               <thead>
                 <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-left p-3 font-semibold text-gray-700 dark:text-gray-300">User</th>
-                  <th className="text-left p-3 font-semibold text-gray-700 dark:text-gray-300">Role</th>
-                  <th className="text-left p-3 font-semibold text-gray-700 dark:text-gray-300">Department</th>
-                  <th className="text-left p-3 font-semibold text-gray-700 dark:text-gray-300">Status</th>
-                  <th className="text-left p-3 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">المستخدم</th>
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">الدور</th>
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">القسم</th>
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">التحقق</th>
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">تاريخ التسجيل</th>
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">الإجراءات</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredUsers.map((user: UserDto) => (
-                  <tr key={user.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                    <td className="p-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-dark-primary/20 flex items-center justify-center">
+                  <tr key={user.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                    <td className="p-4">
+                      <div className="flex items-center gap-3" dir="rtl">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 dark:from-primary/30 dark:to-secondary/30 flex items-center justify-center">
                           <FiUser className="text-primary dark:text-dark-primary" />
                         </div>
                         <div>
@@ -689,44 +470,52 @@ const AdminUsersPage: React.FC = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="p-3">
-                      <div className="flex items-center gap-2">
-                        {getRoleIcon(user.role)}
+                    <td className="p-4">
+                      <div className="flex items-center gap-2 justify-end">
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role || "User")}`}>
-                          {user.role || "User"}
+                          {user.role || "مستخدم"}
                         </span>
+                        {getRoleIcon(user.role)}
                       </div>
                     </td>
-                    <td className="p-3">
-                      <div className="text-gray-700 dark:text-gray-300">
-                        {user.departmentId || "N/A"}
+                    <td className="p-4">
+                      <div className="text-gray-700 dark:text-gray-300 text-right">
+                        {user.departmentId || "غير محدد"}
                       </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        Stage: {user.stage || "N/A"}
-                      </div>
-                    </td>
-                    <td className="p-3">
-                      <div className="space-y-1">
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(user.isActive)}`}>
-                          {user.isActive ? "Active" : "Inactive"}
-                        </span>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                          Verified: {user.isEmailVerified ? "Yes" : "No"}
+                      {user.stage && (
+                        <div className="text-sm text-gray-600 dark:text-gray-400 text-right">
+                          المرحلة: {user.stage}
                         </div>
+                      )}
+                    </td>
+                    <td className="p-4">
+                      <div className="flex justify-end">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getVerificationBadge(user.isEmailVerified)}`}>
+                          <div className="flex items-center gap-1">
+                            {user.isEmailVerified ? <FiCheck /> : <FiX />}
+                            {user.isEmailVerified ? "تم التحقق" : "قيد الانتظار"}
+                          </div>
+                        </span>
                       </div>
                     </td>
-                    <td className="p-3">
-                      <div className="flex items-center gap-1">
-                        <button className="p-1.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200">
-                          <FiEye className="text-sm" />
-                        </button>
-                        <button className="p-1.5 rounded-md bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100">
-                          <FiEdit className="text-sm" />
-                        </button>
+                    <td className="p-4">
+                      <div className="text-sm text-gray-600 dark:text-gray-400 text-right">
+                        {new Date(user.createdAt).toLocaleDateString('ar-SA')}
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-500 text-right">
+                        {new Date(user.createdAt).toLocaleTimeString('ar-SA', {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-2 justify-end">
                         <button
                           onClick={() => handleDeleteClick(user)}
                           disabled={deleteUserMutation.isPending}
-                          className="p-1.5 rounded-md bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 disabled:opacity-50"
+                          className="p-2 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 disabled:opacity-50 transition-colors"
+                          title="حذف المستخدم"
                         >
                           <FiTrash2 className="text-sm" />
                         </button>
@@ -740,190 +529,180 @@ const AdminUsersPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Extra Large Desktop View (xl+) */}
-      <div className="hidden xl:block card overflow-hidden">
-        <div className="overflow-x-auto scrollbar-thin">
-          <table className="w-full min-w-[1200px]">
-            <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-700">
-                <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">User</th>
-                <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Role</th>
-                <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Department</th>
-                <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Stage/Section</th>
-                <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Status</th>
-                <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Verified</th>
-                <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Joined</th>
-                <th className="text-left p-4 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredUsers.map((user: UserDto) => (
-                <tr key={user.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                  <td className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 dark:bg-dark-primary/20 flex items-center justify-center">
-                        <FiUser className="text-primary dark:text-dark-primary" />
-                      </div>
-                      <div>
-                        <div className="font-medium text-gray-900 dark:text-light">
-                          {user.name}
-                        </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                          {user.email}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <div className="flex items-center gap-2">
-                      {getRoleIcon(user.role)}
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${getRoleColor(user.role || "User")}`}>
-                        {user.role || "User"}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <div className="text-gray-700 dark:text-gray-300">
-                      {user.departmentId || "N/A"}
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <div className="space-y-1">
-                      <div className="text-gray-700 dark:text-gray-300">
-                        Stage: {user.stage || "N/A"}
-                      </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">
-                        Section: {user.sectionId || "N/A"}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(user.isActive)}`}>
-                      {user.isActive ? "Active" : "Inactive"}
-                    </span>
-                  </td>
-                  <td className="p-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getVerificationBadge(user.isEmailVerified)}`}>
-                      <div className="flex items-center gap-1">
-                        {user.isEmailVerified ? <FiCheck /> : <FiX />}
-                        {user.isEmailVerified ? "Verified" : "Pending"}
-                      </div>
-                    </span>
-                  </td>
-                  <td className="p-4">
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      {new Date(user.createdAt).toLocaleDateString()}
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-500">
-                      {new Date(user.createdAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <div className="flex items-center gap-2">
-                      <button className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200">
-                        <FiEye className="text-sm" />
-                      </button>
-                      <button className="p-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100">
-                        <FiEdit className="text-sm" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteClick(user)}
-                        disabled={deleteUserMutation.isPending}
-                        className="p-2 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 disabled:opacity-50"
-                      >
-                        <FiTrash2 className="text-sm" />
-                      </button>
-                    </div>
-                  </td>
+      {/* Desktop View (xl+) */}
+      <div className="hidden xl:block">
+        <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="overflow-x-auto scrollbar-thin">
+            <table className="w-full min-w-[1000px]" dir="rtl">
+              <thead>
+                <tr className="border-b border-gray-200 dark:border-gray-700">
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">المستخدم</th>
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">الدور</th>
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">القسم</th>
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">المرحلة</th>
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">التحقق</th>
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">تاريخ التسجيل</th>
+                  <th className="text-right p-4 font-semibold text-gray-700 dark:text-gray-300">الإجراءات</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredUsers.map((user: UserDto) => (
+                  <tr key={user.id} className="border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                    <td className="p-4">
+                      <div className="flex items-center gap-3" dir="rtl">
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 dark:from-primary/30 dark:to-secondary/30 flex items-center justify-center">
+                          <FiUser className="text-primary dark:text-dark-primary text-lg" />
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900 dark:text-light text-base">
+                            {user.name}
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {user.email}
+                          </div>
+                          <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs mt-1 ${user.isActive ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'}`}>
+                            {user.isActive ? "نشط" : "غير نشط"}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-2 justify-end">
+                        <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${getRoleColor(user.role || "User")}`}>
+                          {user.role || "مستخدم"}
+                        </span>
+                        {getRoleIcon(user.role)}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="text-gray-700 dark:text-gray-300 text-right text-base">
+                        {user.departmentId || "غير محدد"}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="text-gray-700 dark:text-gray-300 text-right">
+                        {user.stage || "غير محدد"}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex justify-end">
+                        <span className={`px-3 py-1.5 rounded-full text-sm font-medium ${getVerificationBadge(user.isEmailVerified)}`}>
+                          <div className="flex items-center gap-2">
+                            {user.isEmailVerified ? <FiCheck /> : <FiX />}
+                            {user.isEmailVerified ? "تم التحقق" : "قيد الانتظار"}
+                          </div>
+                        </span>
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="text-sm text-gray-600 dark:text-gray-400 text-right">
+                        {new Date(user.createdAt).toLocaleDateString('ar-SA')}
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-500 text-right">
+                        {new Date(user.createdAt).toLocaleTimeString('ar-SA', {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </div>
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-2 justify-end">
+                        <button
+                          onClick={() => handleDeleteClick(user)}
+                          disabled={deleteUserMutation.isPending}
+                          className="p-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 disabled:opacity-50 transition-colors hover:shadow-lg"
+                          title="حذف المستخدم"
+                        >
+                          <FiTrash2 className="text-base" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       {/* Empty State - Common for all views */}
       {(filteredUsers.length === 0 && usersQuery.data?.length) ? (
-        <div className="card text-center py-8 sm:py-12">
-          <div className="text-gray-400 dark:text-gray-500 text-4xl sm:text-5xl mb-4">
+        <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 text-center py-12">
+          <div className="text-gray-400 dark:text-gray-500 text-5xl mb-4">
             🔍
           </div>
-          <h3 className="text-lg sm:text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
-            No users found
+          <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-3">
+            لم يتم العثور على مستخدمين
           </h3>
-          <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mb-4">
-            Try adjusting your filters to see more results.
+          <p className="text-base text-gray-500 dark:text-gray-400 mb-4">
+            جرب تعديل الفلاتر للعثور على نتائج.
           </p>
           <button
             onClick={clearFilters}
-            className="text-sm sm:text-base text-primary dark:text-dark-primary hover:opacity-80"
+            className="text-base text-primary dark:text-dark-primary hover:opacity-80"
           >
-            Clear all filters
+            مسح جميع الفلاتر
           </button>
         </div>
       ) : null}
 
       {/* Delete Confirmation Modal */}
       {userToDelete && (
-        <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-2 sm:p-4 z-50">
-          <div className="card max-w-md w-full animate-slideDown m-2">
-            <div className="text-center mb-4 sm:mb-6">
-              <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <FiTrash2 className="text-red-600 dark:text-red-400 text-lg sm:text-2xl" />
+        <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 z-50">
+          <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 max-w-md w-full animate-slideDown m-4">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
+                <FiTrash2 className="text-red-600 dark:text-red-400 text-2xl" />
               </div>
-              <h3 className="text-base sm:text-xl font-bold text-gray-900 dark:text-light mb-1.5 sm:mb-2">
-                Confirm Delete
+              <h3 className="text-xl font-bold text-gray-900 dark:text-light mb-2">
+                تأكيد الحذف
               </h3>
-              <p className="text-xs sm:text-base text-gray-600 dark:text-gray-400">
-                Are you sure you want to delete this user?
+              <p className="text-base text-gray-600 dark:text-gray-400">
+                هل أنت متأكد من رغبتك في حذف هذا المستخدم؟
               </p>
             </div>
 
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
-              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                <div className="w-6 h-6 sm:w-10 sm:h-10 rounded-full bg-primary/10 dark:bg-dark-primary/20 flex items-center justify-center">
-                  <FiUser className="text-primary dark:text-dark-primary text-xs sm:text-base" />
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 mb-6">
+              <div className="flex items-center gap-3 mb-3" dir="rtl">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 dark:from-primary/30 dark:to-secondary/30 flex items-center justify-center">
+                  <FiUser className="text-primary dark:text-dark-primary" />
                 </div>
-                <div>
-                  <div className="font-semibold text-gray-900 dark:text-light text-sm sm:text-base">
+                <div className="text-right">
+                  <div className="font-semibold text-gray-900 dark:text-light">
                     {userToDelete.name}
                   </div>
-                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
                     {userToDelete.email}
                   </div>
                 </div>
               </div>
-              <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 italic">
-                This action cannot be undone. All user data will be permanently
-                deleted.
+              <div className="text-sm text-gray-500 dark:text-gray-400 italic text-right">
+                هذا الإجراء لا يمكن التراجع عنه. جميع بيانات المستخدم سيتم حذفها نهائياً.
               </div>
             </div>
 
-            <div className="flex flex-col xs:flex-row gap-2 sm:gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={cancelDelete}
                 disabled={deleteUserMutation.isPending}
-                className="flex-1 btn-secondary text-sm sm:text-base h-10 sm:h-12"
+                className="flex-1 btn-secondary text-base h-12"
               >
-                Cancel
+                إلغاء
               </button>
               <button
                 onClick={confirmDelete}
                 disabled={deleteUserMutation.isPending}
-                className="flex-1 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white font-bold py-2 px-4 rounded-xl disabled:opacity-50 h-10 sm:h-12 text-sm sm:text-base"
+                className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 dark:bg-red-700 dark:hover:bg-red-600 text-white font-bold py-3 px-4 rounded-xl disabled:opacity-50 h-12 text-base"
               >
                 {deleteUserMutation.isPending ? (
                   <>
-                    <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-b-2 border-white"></div>
-                    Deleting...
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    جاري الحذف...
                   </>
                 ) : (
                   <>
                     <FiTrash2 />
-                    Delete User
+                    حذف المستخدم
                   </>
                 )}
               </button>

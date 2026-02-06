@@ -9,6 +9,6 @@ export const setToken = (token: string | null) => {
 };
 
 export const clearToken = () => {
-  localStorage.removeItem("accessToken");
   localStorage.removeItem("user");
+  localStorage.removeItem("accessToken");
 };

@@ -2,10 +2,10 @@ import { lazy, Suspense } from "react";
 import Loader from "@/Components/Global/Loader";
 import ProtectedRoute from "@/utils/RequireAuth.jsx";
 import { authRoutes } from "./auth.routes";
-import { sharedPublicRoutes } from "./PublicRoutes";
+import { sharedPublicRoutes } from "./public.routes";
 import { homeRoutes } from "./home.routes";
 import { adminProtectedRoutes } from "./admin.routes";
-import CampusRoutes from "./campus.routes";
+import Home from "@/views/Home/Home";
 
 const RoleBasedLayout = lazy(() => import("@/Views/RoleBasedLayout"));
 const AuthLayout = lazy(() => import("@/Views/Auth/AuthLayout"));
@@ -28,7 +28,7 @@ export const erpRoutes = [
             <AuthLayout />
           </Suspense>
         ),
-        children: authRoutes, // ✅ هنا Login/Register وما يدخلش ProtectedRoute
+        children: authRoutes, //  هنا Login/Register وما يدخلش ProtectedRoute
       },
 
       //  PROTECTED ROUTES (Student/Admin)
@@ -37,8 +37,17 @@ export const erpRoutes = [
         children: [...homeRoutes, ...adminProtectedRoutes],
       },
 
-      ...CampusRoutes,
-      ...sharedPublicRoutes,
+      // ...sharedPublicRoutes,
     ],
+  },
+  // non -protected shared routes
+  {
+    path: "unix/home/",
+    element: (
+      <Suspense fallback={<Loader />}>
+        <Home />
+      </Suspense>
+    ),
+    children: [...sharedPublicRoutes],
   },
 ];

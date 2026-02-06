@@ -134,13 +134,13 @@ const DepartmentsPage: React.FC = () => {
     data?.filter((dept) => dept.sections.length > 0).length || 0;
 
   return (
-    <div className="p-3  xs:p-4 sm:p-5 md:p-16 max-w-[2000px] mx-auto">
-      <button
+    <div className="p-3  xs:p-4 sm:p-5 md:p-4 max-w-[2000px] mx-auto">
+      {/* <button
         onClick={() => backHome()}
         className="px-4 py-2 bg-primary dark:bg-dark-primary text-white rounded-lg hover:opacity-90 transition-opacity text-sm sm:text-base mb-4"
       >
         Back to home
-      </button>
+      </button> */}
       {/* Header */}
       <div className="mb-4 sm:mb-6 md:mb-8">
         <div className="flex flex-col xs:flex-row xs:items-center justify-between gap-3 xs:gap-4 mb-4 sm:mb-6">

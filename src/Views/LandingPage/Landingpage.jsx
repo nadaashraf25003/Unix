@@ -18,9 +18,13 @@ export default function LandingPage() {
   // const exploreLink = ROUTES.FEATURES;
   const getStartedLink = ROUTES.REGISTER;
   const campusNavigation = ROUTES.CAMPUS_NAVIGATION;
-
+  const user = localStorage.getItem("user");
+  const role = user ? JSON.parse(user).role : null; // "Admin" | "Student"
+  const profile =
+    role === "Admin" ? ROUTES.ADMIN_PROFILE : ROUTES.STUDENT_PROFILE;
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
     navigate(ROUTES.HOME);
   };
 
@@ -44,6 +48,7 @@ export default function LandingPage() {
         "Exam Schedule",
         "Calendar View",
       ],
+      url: ROUTES.STUDENT_SCHEDULE,
     },
     {
       key: "exams",
@@ -53,7 +58,7 @@ export default function LandingPage() {
     {
       key: "freeRooms",
       label: "Rooms",
-      items: ["Find Rooms",  "Room Status"],
+      items: ["Find Rooms"],
     },
     {
       key: "projects",
@@ -136,6 +141,7 @@ export default function LandingPage() {
       <button
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
         {...props}
+        onClick={()=> navigate(url)}
       >
         {children}
       </button>
@@ -215,7 +221,7 @@ export default function LandingPage() {
                 </a>
               )}
               {token ? (
-                <a href="unix/">
+                <a href={profile}>
                   <Button variant="primary" size="sm">
                     My Account
                   </Button>
@@ -269,7 +275,7 @@ export default function LandingPage() {
                 className="bg-primary dark:bg-dark-primary text-white font-semibold py-3 px-8 rounded-lg text-base hover:bg-primary/90 dark:hover:bg-dark-primary/90 transition-colors duration-200 text-center"
               > */}
               {token ? (
-                <a href="unix/">
+                <a href={profile}>
                   <Button variant="primary" size="lg">
                     My Account
                   </Button>
@@ -310,7 +316,7 @@ export default function LandingPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 {token ? (
-                  <a href="unix/">
+                  <a href={profile}>
                     <Button variant="primary" size="lg">
                       My Account
                     </Button>
@@ -337,14 +343,19 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary dark:from-dark-primary dark:to-dark-secondary"></div>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary dark:from-dark-primary dark:to-dark-secondary flex items-center justify-center text-white font-bold text-xl">
+                  U
+                </div>{" "}
                 <span className="text-xl font-bold">UNIX</span>
               </div>
-              {/* <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
+            </div>
+            {/* <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
                 © {new Date().getFullYear()} Campus Management System
               </p> */}
-            </div>
-            <div className="flex items-center space-x-6">
+            <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
+              Benha University - © {new Date().getFullYear()} UNIX System
+            </p>
+            {/* <div className="flex items-center space-x-6">
               {["Privacy", "Terms", "Contact", "Help"].map((item) => (
                 <a
                   key={item}
@@ -354,7 +365,7 @@ export default function LandingPage() {
                   {item}
                 </a>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
       </footer>

@@ -19,7 +19,7 @@ const Login = () => {
 const location = useLocation();
  
 
-const from = location.state?.from?.pathname || "/unix";
+const from = location.state?.from?.pathname || "/";
 
 const handleLoginSuccess = () => {
   navigate(from, { replace: true });

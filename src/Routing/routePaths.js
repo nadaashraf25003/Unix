@@ -3,14 +3,22 @@ export const ROUTES = {
   HOME: "/",
   DEPARTMENTS: "/unix/departments",
 
-  // Home
-  CAMPUS_NAVIGATION_HOME :"/campus-navigation",
-  ROOMS_HOME: "/rooms",
-  STUDENT_SCHEDULE_HOME: "/schedule",
-  LOST_FOUND_HOME: "/lost-found",
-  DRIVERS_HOME: "/drivers",
-  GRADUATION_PROJECTS_HOME : "/graduation",
-  DEPARTMENTS_HOME: "/departments",
+  // Profiles
+  ADMIN_PROFILE :"/unix/adminprofile",
+  STUDENT_PROFILE : "/unix/profile",
+
+  // Home non protected  (All Users)
+  CAMPUS_NAVIGATION_HOME :"unix/home/campus-navigation",
+  DEPARTMENTS_HOME: "unix/home/departments",
+
+  // Home protected (All Users)
+  ROOMS_HOME: "/unix/rooms",
+  STUDENT_SCHEDULE_HOME: "/unix/schedule",
+  LOST_FOUND_HOME: "/unix/lost-found",
+  DRIVERS_HOME: "/unix/drivers",
+  GRADUATION_PROJECTS_HOME : "/unix/graduation",
+
+
   // Auth
   LOGIN: "/unix/auth/login",
   REGISTER: "/unix/auth/register",
@@ -18,6 +26,7 @@ export const ROUTES = {
   RESET_PASSWORD: "/unix/auth/reset-password",
   RESEND_VERIFICATION: "/unix/auth/resend-verification",
   VERIFY_EMAIL: "/unix/auth/verify-email",
+  LOST_FOUND_ADMIN: "/unix/lost-found-admin",
 
   // Student Protected
   HOME_STUDENT: "/unix/home",

@@ -23,8 +23,8 @@ export const notificationItems = [
 
 // Profile dropdown - attach logout in TopNav dynamically
 export const profileItems = [
-  { label: "Profile", icon: PersonIcon, url: "/erp/profile" },
-  { label: "Dashboard", icon: SettingsIcon, url: "/erp/dashboard/home" },
+  { label: "Profile", icon: PersonIcon, url: "/unix/adminprofile" },
+  // { label: "Dashboard", icon: SettingsIcon, url: "/erp/dashboard/home" },
   { label: "Home", icon: HomeIcon, url: "/" },
   { label: "Logout", icon: LogoutIcon, variant: "danger" }, // onClick added in TopNav
 ];
