@@ -4,17 +4,17 @@ import { lazy } from "react";
 import CampusNavigation from "@/Views/CampusNavigation/pages/CampusNavigation";
 import AdminProfile from "@/Views/Admin/AdminProfile";
 
-const AdminDashboard = lazy(() => import("@/views/Admin/AdminDashboard"));
-const ScheduleManagment = lazy(() => import("@/views/Admin/ScheduleManager"));
-const DriversManagment = lazy(() => import("@/views/Admin/DriversManagment"));
+const AdminDashboard = lazy(() => import("@/Views/Admin/AdminDashboard"));
+const ScheduleManagment = lazy(() => import("@/Views/Admin/ScheduleManager"));
+const DriversManagment = lazy(() => import("@/Views/Admin/DriversManagment"));
 const UserManager = lazy(() => import("@/Views/Admin/AdminUsersPage"));
-const Departments = lazy(() => import("@/views/Admin/Department"));
-const Sections = lazy(() => import("@/views/Admin/Sections"));
-const Courses = lazy(() => import("@/views/Admin/Coursemanage"));
-const Instructors = lazy(() => import("@/views/Admin/InstructorManager"));
-const Projects = lazy(() => import("@/views/Admin/ProjectManager"));
-const ExamSchedule = lazy(() => import("@/views/Admin/ExamSchedule"));
-const LostFound = lazy(() => import("@/views/Admin/LostAndFoundAdminPage"));
+const Departments = lazy(() => import("@/Views/Admin/Department"));
+const Sections = lazy(() => import("@/Views/Admin/Sections"));
+const Courses = lazy(() => import("@/Views/Admin/Coursemanage"));
+const Instructors = lazy(() => import("@/Views/Admin/InstructorManager"));
+const Projects = lazy(() => import("@/Views/Admin/ProjectManager"));
+const ExamSchedule = lazy(() => import("@/Views/Admin/ExamSchedule"));
+const LostFound = lazy(() => import("@/Views/Admin/LostAndFoundAdminPage"));
 
 export const adminProtectedRoutes = [
   { index: true, element: <AdminDashboard /> },

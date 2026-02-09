@@ -3,7 +3,7 @@ import Loader from "@/Components/Global/Loader";
 import { lazy, Suspense } from "react";
 import CampusNavigation from "@/Views/CampusNavigation/pages/CampusNavigation";
 
-const CampusMap = lazy(() => import("@/views/CampusMap/Campus"));
+const CampusMap = lazy(() => import("@/Views/CampusMap/Campus"));
 const DepartmentsPage = lazy(
   () => import("@/Views/LandingPage/DepartmentsPage"),
 );
