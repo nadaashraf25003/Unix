@@ -5,7 +5,7 @@ import { authRoutes } from "./auth.routes";
 import { sharedPublicRoutes } from "./public.routes";
 import { homeRoutes } from "./home.routes";
 import { adminProtectedRoutes } from "./admin.routes";
-import Home from "@/views/Home/Home.jsx";
+import Home from "@/Views/Home/Home.jsx";
 
 const RoleBasedLayout = lazy(() => import("@/Views/RoleBasedLayout"));
 const AuthLayout = lazy(() => import("@/Views/Auth/AuthLayout"));

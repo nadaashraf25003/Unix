@@ -1,14 +1,14 @@
 // home.routes.jsx
 import { lazy, Suspense } from "react";
-import Home from "@/views/Home/Home.jsx";
-import Rooms from "@/views/Rooms/Rooms";
+import Home from "@/Views/Home/Home.jsx";
+import Rooms from "@/Views/Rooms/Rooms";
 import LostAndFoundUserPage from "@/Views/LostFound/LostFound";
-import Drivers from "@/views/Drivers/Drivers";
-import ExamSchedule from "@/views/ExamTable";
+import Drivers from "@/Views/Drivers/Drivers";
+import ExamSchedule from "@/Views/ExamTable";
 import Loader from "@/Components/Global/Loader";
 import GraduationProject from "@/Views/Graduation/GraduationProject";
 import StudentProfile from "@/Views/Student/StudentProfile";
-const StudentSchedule = lazy(() => import("@/views/Schedule/Schedule"));
+const StudentSchedule = lazy(() => import("@/Views/Schedule/Schedule"));
 
 // all routes for student after login protected
 export const homeRoutes = [
