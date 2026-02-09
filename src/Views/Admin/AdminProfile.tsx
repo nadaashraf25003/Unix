@@ -1,7 +1,7 @@
 import React from "react";
 
 const AdminProfile = () => {
-  // get admin info from localStorage
+  // Get admin info from localStorage
   const userString = localStorage.getItem("user");
   const user = userString ? JSON.parse(userString) : null;
   
@@ -21,17 +21,17 @@ const AdminProfile = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
                 <h1 className="text-4xl font-bold text-white mb-2">
-                  مرحباً، {user?.name || "المسؤول"}!
+                  Welcome, {user?.name || "Admin"}!
                 </h1>
                 <p className="text-white/90 text-lg mb-4">
                   {user?.email || "admin@example.com"}
                 </p>
                 <div className="flex items-center gap-3">
                   <span className="px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-full font-medium">
-                    {user?.role || "مدير النظام"}
+                    {user?.role || "System Administrator"}
                   </span>
                   <span className="px-4 py-2 bg-white/10 backdrop-blur-sm text-white/90 rounded-full text-sm">
-                    لوحة التحكم
+                    Dashboard
                   </span>
                 </div>
               </div>
@@ -58,7 +58,7 @@ const AdminProfile = () => {
                 <div className="w-6 h-6 bg-gradient-to-r from-primary to-secondary rounded-md"></div>
               </div>
               <h2 className="text-2xl font-bold text-gray-800 dark:text-light">
-                نظرة عامة على لوحة التحكم
+                Dashboard Overview
               </h2>
             </div>
           </div>
@@ -66,11 +66,10 @@ const AdminProfile = () => {
           {/* Card Content */}
           <div className="p-6">
             <p className="text-gray-700 dark:text-gray-300 text-lg mb-8 leading-relaxed">
-              هنا يمكنك إدارة المستخدمين، الأقسام، الشعب، المقررات، ومراقبة مشاريع التخرج
-              بكل سهولة وكفاءة.
+              Here you can manage users, departments, sections, courses, and monitor graduation projects with ease and efficiency.
             </p>
 
-            {/* Features Grid*/}
+            {/* Features Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Feature 1 */}
               <div className="group p-6 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-primary/30 dark:hover:border-primary/30 transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900">
@@ -79,11 +78,11 @@ const AdminProfile = () => {
                     <div className="w-6 h-6 bg-gradient-to-r from-primary to-secondary rounded-md"></div>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800 dark:text-light">
-                    الملف الشخصي
+                    Profile
                   </h3>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
-                  عرض وتحديث معلومات ملفك الشخصي والإعدادات
+                  View and update your profile information and settings
                 </p>
               </div>
 
@@ -94,11 +93,11 @@ const AdminProfile = () => {
                     <div className="w-6 h-6 bg-gradient-to-r from-info to-cyan-400 rounded-md"></div>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800 dark:text-light">
-                    إدارة المستخدمين
+                    User Management
                   </h3>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
-                  إدارة المستخدمين، المحاضرين، والطلاب في النظام
+                  Manage users, instructors, and students in the system
                 </p>
               </div>
 
@@ -109,11 +108,11 @@ const AdminProfile = () => {
                     <div className="w-6 h-6 bg-gradient-to-r from-success to-green-400 rounded-md"></div>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800 dark:text-light">
-                    مشاريع التخرج
+                    Graduation Projects
                   </h3>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
-                  الإشراف والمراقبة على مشاريع التخرج
+                  Supervise and monitor graduation projects
                 </p>
               </div>
 
@@ -124,11 +123,11 @@ const AdminProfile = () => {
                     <div className="w-6 h-6 bg-gradient-to-r from-warning to-yellow-400 rounded-md"></div>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800 dark:text-light">
-                    الجدول الدراسي
+                    Class Schedule
                   </h3>
                 </div>
                 <p className="text-gray-600 dark:text-gray-400">
-                  مراجعة الجداول الدراسية وتخصيص القاعات
+                  Review class schedules and allocate classrooms
                 </p>
               </div>
             </div>
@@ -140,13 +139,13 @@ const AdminProfile = () => {
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-gradient-to-r from-primary to-secondary rounded-full mt-2"></div>
                     <p className="text-gray-700 dark:text-gray-300">
-                      مراقبة سائقي الحرم الجامعي والموارد
+                      Monitor campus drivers and resources
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-gradient-to-r from-info to-cyan-400 rounded-full mt-2"></div>
                     <p className="text-gray-700 dark:text-gray-300">
-                      إدارة المقررات والمواد الدراسية
+                      Manage courses and study materials
                     </p>
                   </div>
                 </div>
@@ -154,13 +153,13 @@ const AdminProfile = () => {
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-gradient-to-r from-success to-green-400 rounded-full mt-2"></div>
                     <p className="text-gray-700 dark:text-gray-300">
-                      تنظيم الأقسام والشعب الأكاديمية
+                      Organize academic departments and sections
                     </p>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 bg-gradient-to-r from-warning to-yellow-400 rounded-full mt-2"></div>
                     <p className="text-gray-700 dark:text-gray-300">
-                      متابعة التقارير والإحصائيات
+                      Track reports and statistics
                     </p>
                   </div>
                 </div>
@@ -171,14 +170,12 @@ const AdminProfile = () => {
             <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
               <div className="text-center">
                 <p className="text-gray-600 dark:text-gray-400 text-lg">
-                  نحن هنا لمساعدتك في إدارة نظام الجامعة بكفاءة 👋
+                  We're here to help you manage the university system efficiently 👋
                 </p>
               </div>
             </div>
           </div>
         </div>
-
-      
       </div>
     </div>
   );
