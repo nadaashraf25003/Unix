@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useCampus from "@/hooks/useCampus";
+import useCampus from "@/Hooks/useCampus";
 import { FaDoorClosed, FaChevronDown, FaSpinner } from "react-icons/fa6";
 const RoomSelector = ({ buildingId, onSelect, placeholder = "Select Room..." }) => {
   const [isOpen, setIsOpen] = useState(false);
