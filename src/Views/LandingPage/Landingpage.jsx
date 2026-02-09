@@ -241,24 +241,44 @@ export default function LandingPage() {
       {/* Hero Section */}
       <main className="container mx-auto px-4 sm:px-8">
         {/* Hero Content */}
-        <section className="text-center py-16 md:py-24">
+        <section className="text-center py-16 md:py-10">
           <section className="relative text-center py-16 md:py-32 px-4 bg-light dark:bg-dark">
             {/* Hero Heading */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-8 leading-tight tracking-tight text-gray-900 dark:text-light">
-              Your
-              <br className="sm:hidden" />
-              <span className="underline decoration-primary dark:decoration-dark-primary decoration-4 md:decoration-8 underline-offset-8">
-                📕 Schedules
-              </span>{" "}
-              <span className="underline decoration-secondary dark:decoration-dark-secondary decoration-4 md:decoration-8 underline-offset-8">
-                📋 docs
-              </span>
-              , & <br className="hidden sm:block" />
-              <span className="underline decoration-info dark:decoration-dark-info decoration-4 md:decoration-8 underline-offset-8">
-                🎯 projects
-              </span>
-              . Together.
-            </h1>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-8 leading-[1.15]">
+  <span className="text-gray-900 dark:text-light">
+    <span className="block">
+      Your{" "}
+      <span className="relative">
+        <span className="text-primary dark:text-dark-primary font-black">
+          Schedules
+        </span>
+        <span className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-primary to-transparent dark:from-dark-primary"></span>
+      </span>
+    </span>
+    <span className="block">
+      <span className="relative">
+        <span className="text-secondary dark:text-dark-secondary font-black">
+          Docs
+        </span>
+        <span className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-secondary to-transparent dark:from-dark-secondary"></span>
+      </span>
+      , &{" "}
+      <span className="relative">
+        <span className="text-info dark:text-dark-info font-black">
+          Projects
+        </span>
+        <span className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-info to-transparent dark:from-dark-info"></span>
+      </span>
+    </span>
+    <span className="block mt-6">
+      <span className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black">
+        <span className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-light dark:via-gray-300 dark:to-light bg-clip-text text-transparent">
+          Together.
+        </span>
+      </span>
+    </span>
+  </span>
+</h1>
 
             {/* Description */}
             <p className="text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
