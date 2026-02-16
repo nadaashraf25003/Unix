@@ -256,7 +256,7 @@ const ExamsPage: React.FC<ExamsPageProps> = ({ exams = [], sections = [] }) => {
         </div>
         
         {/* تذييل الجدول */}
-        {filteredExams.length > 0 && (
+        {/* {filteredExams.length > 0 && (
           <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-900/20">
             <div className="flex justify-between items-center">
               <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -272,7 +272,7 @@ const ExamsPage: React.FC<ExamsPageProps> = ({ exams = [], sections = [] }) => {
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
