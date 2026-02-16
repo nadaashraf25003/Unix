@@ -7,7 +7,7 @@ interface ExamsPageProps {
   onDelete?: (id: number) => void;
 }
 
-const ExamsPage: React.FC<ExamsPageProps> = ({ exams, sections }) => {
+const ExamsPage: React.FC<ExamsPageProps> = ({ exams = [], sections = [] }) => {
   const [sectionFilter, setSectionFilter] = useState<number | "">("");
   const [typeFilter, setTypeFilter] = useState<string>("");
 

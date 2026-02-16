@@ -1,6 +1,6 @@
 import { ROUTES } from "@/Routing/routePaths";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import UnixFeatures from "./UnixFeatures";
 
 export default function LandingPage() {
@@ -15,13 +15,13 @@ export default function LandingPage() {
   const token = localStorage.getItem("accessToken");
   const login = token ? "unix/" : ROUTES.LOGIN;
   const register = token ? "unix/" : ROUTES.REGISTER;
-  // const exploreLink = ROUTES.FEATURES;
   const getStartedLink = ROUTES.REGISTER;
   const campusNavigation = ROUTES.CAMPUS_NAVIGATION;
   const user = localStorage.getItem("user");
   const role = user ? JSON.parse(user).role : null; // "Admin" | "Student"
   const profile =
     role === "Admin" ? ROUTES.ADMIN_PROFILE : ROUTES.STUDENT_PROFILE;
+  
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("user");
@@ -37,79 +37,164 @@ export default function LandingPage() {
     }));
   };
 
-  // Navigation menu data
+  const closeDropdowns = () => {
+    setDropdownOpen({
+      schedules: false,
+      exams: false,
+      freeRooms: false,
+      projects: false,
+    });
+  };
+
+  // Navigation menu data with proper routes
   const menuItems = [
     {
       key: "schedules",
       label: "Schedules",
+      icon: "",
       items: [
-        "Weekly Schedule",
-        "Daily Schedule",
-        "Exam Schedule",
-        "Calendar View",
+        { 
+          label: "Student Schedule", 
+          url: ROUTES.STUDENT_SCHEDULE,
+          roles: ["Student", "Instructor", "Admin"]
+        },
+        { 
+          label: "Schedule Management", 
+          url: ROUTES.SCHEDULE_MANAGEMENT,
+          roles: ["Admin"]
+        },
+        // { 
+        //   label: "Exams Schedule", 
+        //   url: ROUTES.EXAMS_MANAGEMENT,
+        //   roles: ["Student", "Instructor", "Admin"]
+        // },
       ],
-      url: ROUTES.STUDENT_SCHEDULE,
+      mainUrl: ROUTES.STUDENT_SCHEDULE,
     },
     {
       key: "exams",
       label: "Exams",
-      items: ["Upcoming Exams", "Past Exams", "Results", "Exam Rules"],
+      icon: "",
+      items: [
+        { 
+          label: "Upcoming Exams", 
+          url: ROUTES.EXAMS_HOME,
+          roles: ["Student", "Instructor", "Admin"]
+        },
+        { 
+          label: "Exam Management", 
+          url: ROUTES.EXAMS_MANAGEMENT,
+          roles: ["Admin"]
+        },
+        // { 
+        //   label: "Exam Rules", 
+        //   url: ROUTES.EXAMS_RULES,
+        //   roles: ["Student", "Instructor"]
+        // },
+      ],
+      mainUrl: ROUTES.EXAMS_HOME,
     },
     {
       key: "freeRooms",
       label: "Rooms",
-      items: ["Find Rooms"],
+      icon: "",
+      items: [
+        { 
+          label: "Find Rooms", 
+          url: ROUTES.CAMPUS_NAVIGATION,
+          roles: ["Student", "Instructor", "Admin"]
+        },
+        { 
+          label: "Room Availability", 
+          url: ROUTES.ROOMS,
+          roles: ["Student", "Instructor", "Admin"]
+        },
+        // { 
+        //   label: "Room Management", 
+        //   url: ROUTES.ROOMS_MANAGEMENT,
+        //   roles: ["Admin"]
+        // },
+      ],
+      mainUrl: ROUTES.ROOMS_HOME,
     },
     {
       key: "projects",
       label: "Projects",
+      icon: " ",
       items: [
-        "Graduation Projects",
-        // "Individual Projects",
-        // "Submission",
-        // "Templates",
+        { 
+          label: "Graduation Projects", 
+          url: ROUTES.GRADUATION_PROJECTS_HOME,
+          roles: ["Student", "Instructor", "Admin"]
+        },
+        { 
+          label: "Project Management", 
+          url: ROUTES.DRIVERS_MANAGEMENT,
+          roles: ["Admin"]
+        },
+        // { 
+        //   label: "Project Submissions", 
+        //   url: ROUTES.PROJECTS_SUBMISSIONS,
+        //   roles: ["Student"]
+        // },
       ],
+      mainUrl: ROUTES.GRADUATION_PROJECTS_HOME,
     },
   ];
 
-  // Component: Dropdown Menu
-  const DropdownMenu = ({ menu }) => (
-    <div className="relative group">
-      <button
-        onClick={() => toggleDropdown(menu.key)}
-        onMouseEnter={() => toggleDropdown(menu.key)}
-        className="flex items-center gap-2 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-card transition-all duration-200 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-dark-primary"
-      >
-        <span>{menu.icon}</span>
-        <span className="font-medium">{menu.label}</span>
-        <span
-          className={`transform transition-transform ${dropdownOpen[menu.key] ? "rotate-180" : ""}`}
-        >
-          ▾
-        </span>
-      </button>
+  // Filter items based on user role
+  const getFilteredItems = (items) => {
+    if (!token || !role) return items;
+    return items.filter(item => !item.roles || item.roles.includes(role));
+  };
 
-      {dropdownOpen[menu.key] && (
-        <div
-          className="absolute z-50 mt-2 w-56 bg-white dark:bg-dark-card rounded-xl shadow-card dark:shadow-card-dark border border-gray-200 dark:border-gray-700 animate-slideDown overflow-hidden"
-          onMouseLeave={() => toggleDropdown(menu.key)}
+  // Component: Dropdown Menu
+  const DropdownMenu = ({ menu }) => {
+    const filteredItems = getFilteredItems(menu.items);
+    
+    if (filteredItems.length === 0) return null;
+
+    return (
+      <div className="relative group">
+        <Link
+          to={menu.mainUrl}
+          className="flex items-center gap-2 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-card transition-all duration-200 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-dark-primary"
+          onMouseEnter={() => toggleDropdown(menu.key)}
         >
-          <div className="py-2 max-h-80 overflow-y-auto scrollbar-thin">
-            {menu.items.map((item, index) => (
-              <a
-                key={index}
-                href="#"
-                className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-dark-primary transition-colors border-b border-gray-100 dark:border-gray-800 last:border-b-0"
-              >
-                <span className="w-2 h-2 rounded-full bg-primary dark:bg-dark-primary"></span>
-                {item}
-              </a>
-            ))}
+          <span>{menu.icon}</span>
+          <span className="font-medium">{menu.label}</span>
+          {filteredItems.length > 1 && (
+            <span
+              className={`transform transition-transform ml-1 ${dropdownOpen[menu.key] ? "rotate-180" : ""}`}
+            >
+              ▾
+            </span>
+          )}
+        </Link>
+
+        {dropdownOpen[menu.key] && filteredItems.length > 1 && (
+          <div
+            className="absolute z-50 mt-2 w-64 bg-white dark:bg-dark-card rounded-xl shadow-card dark:shadow-card-dark border border-gray-200 dark:border-gray-700 animate-slideDown overflow-hidden"
+            onMouseLeave={() => toggleDropdown(menu.key)}
+          >
+            <div className="py-2 max-h-96 overflow-y-auto scrollbar-thin">
+              {filteredItems.map((item, index) => (
+                <Link
+                  key={index}
+                  to={item.url}
+                  className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary dark:hover:text-dark-primary transition-colors border-b border-gray-100 dark:border-gray-800 last:border-b-0"
+                  onClick={closeDropdowns}
+                >
+                  <span className="w-2 h-2 rounded-full bg-primary dark:bg-dark-primary"></span>
+                  {item.label}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-  );
+        )}
+      </div>
+    );
+  };
 
   // Component: Button
   const Button = ({
@@ -141,7 +226,6 @@ export default function LandingPage() {
       <button
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
         {...props}
-        // onClick={()=> navigate(url)}
       >
         {children}
       </button>
@@ -179,8 +263,8 @@ export default function LandingPage() {
       <header className="sticky top-0 z-40 bg-white/80 dark:bg-dark-card/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 sm:px-8 py-4">
           <div className="flex items-center justify-between">
-            {/* Logo */}
-            <div className="flex items-center space-x-3">
+            {/* Logo - Link to Home */}
+            <Link to={ROUTES.HOME} className="flex items-center space-x-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary dark:from-dark-primary dark:to-dark-secondary flex items-center justify-center text-white font-bold text-xl">
                 U
               </div>
@@ -189,55 +273,72 @@ export default function LandingPage() {
                   UNIX
                 </span>
               </div>
-            </div>
+            </Link>
 
             {/* Navigation - Desktop */}
             <nav className="hidden lg:flex items-center space-x-1">
               {menuItems.map((menu) => (
                 <DropdownMenu key={menu.key} menu={menu} />
               ))}
+              
+              {/* Additional Links */}
+              {/* {token && (
+                <>
+                  <Link
+                    to={ROUTES.CAMPUS_NAVIGATION}
+                    className="flex items-center gap-2 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-card transition-all duration-200 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-dark-primary"
+                  >
+                    <span>🗺️</span>
+                    <span className="font-medium">Campus Map</span>
+                  </Link>
+                  <Link
+                    to={ROUTES.LOST_FOUND_ADMIN}
+                    className="flex items-center gap-2 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-card transition-all duration-200 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-dark-primary"
+                  >
+                    <span>🔍</span>
+                    <span className="font-medium">Lost & Found</span>
+                  </Link>
+                </>
+              )} */}
             </nav>
 
             {/* Right Side */}
             <div className="flex items-center space-x-4">
               <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800">
-                {/* <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Egypt.svg/20px-Flag_of_Egypt.svg.png"
-                  alt="Egypt Flag"
-                  className="w-5 h-5"
-                /> */}
                 <span className="text-sm font-medium">Banha University</span>
               </div>
 
               {token ? (
-                <Button variant="ghost" size="sm" onClick={handleLogout}>
-                  Logout
-                </Button>
+                <>
+                  <Link to={profile}>
+                    <Button variant="ghost" size="sm">
+                      Profile
+                    </Button>
+                  </Link>
+                  <Button variant="primary" size="sm" onClick={handleLogout}>
+                    Logout
+                  </Button>
+                </>
               ) : (
-                <a href={login}>
-                  <Button variant="ghost" size="sm">
-                    Log in
-                  </Button>
-                </a>
-              )}
-              {token ? (
-                <a href={profile}>
-                  <Button variant="primary" size="sm">
-                    My Account
-                  </Button>
-                </a>
-              ) : (
-                <a href={register}>
-                  <Button variant="primary" size="sm">
-                    Explore
-                  </Button>
-                </a>
+                <>
+                  <Link to={login}>
+                    <Button variant="ghost" size="sm">
+                      Log in
+                    </Button>
+                  </Link>
+                  <Link to={register}>
+                    <Button variant="primary" size="sm">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </>
               )}
             </div>
           </div>
         </div>
       </header>
 
+      {/* Rest of your component remains the same... */}
       {/* Hero Section */}
       <main className="container mx-auto px-4 sm:px-8">
         {/* Hero Content */}
@@ -245,40 +346,40 @@ export default function LandingPage() {
           <section className="relative text-center py-16 md:py-32 px-4 bg-light dark:bg-dark">
             {/* Hero Heading */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-8 leading-[1.15]">
-  <span className="text-gray-900 dark:text-light">
-    <span className="block">
-      Your{" "}
-      <span className="relative">
-        <span className="text-primary dark:text-dark-primary font-black">
-          Schedules
-        </span>
-        <span className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-primary to-transparent dark:from-dark-primary"></span>
-      </span>
-    </span>
-    <span className="block">
-      <span className="relative">
-        <span className="text-secondary dark:text-dark-secondary font-black">
-          Docs
-        </span>
-        <span className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-secondary to-transparent dark:from-dark-secondary"></span>
-      </span>
-      , &{" "}
-      <span className="relative">
-        <span className="text-info dark:text-dark-info font-black">
-          Projects
-        </span>
-        <span className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-info to-transparent dark:from-dark-info"></span>
-      </span>
-    </span>
-    <span className="block mt-6">
-      <span className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black">
-        <span className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-light dark:via-gray-300 dark:to-light bg-clip-text text-transparent">
-          Together.
-        </span>
-      </span>
-    </span>
-  </span>
-</h1>
+              <span className="text-gray-900 dark:text-light">
+                <span className="block">
+                  Your{" "}
+                  <span className="relative">
+                    <span className="text-primary dark:text-dark-primary font-black">
+                      Schedules
+                    </span>
+                    <span className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-primary to-transparent dark:from-dark-primary"></span>
+                  </span>
+                </span>
+                <span className="block">
+                  <span className="relative">
+                    <span className="text-secondary dark:text-dark-secondary font-black">
+                      Exams
+                    </span>
+                    <span className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-secondary to-transparent dark:from-dark-secondary"></span>
+                  </span>
+                  , &{" "}
+                  <span className="relative">
+                    <span className="text-info dark:text-dark-info font-black">
+                      Projects
+                    </span>
+                    <span className="absolute -bottom-1 left-0 right-0 h-[3px] bg-gradient-to-r from-info to-transparent dark:from-dark-info"></span>
+                  </span>
+                </span>
+                <span className="block mt-6">
+                  <span className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black">
+                    <span className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 dark:from-light dark:via-gray-300 dark:to-light bg-clip-text text-transparent">
+                      Together.
+                    </span>
+                  </span>
+                </span>
+              </span>
+            </h1>
 
             {/* Description */}
             <p className="text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
@@ -290,32 +391,21 @@ export default function LandingPage() {
 
             {/* Call-to-Action Button */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              {/* <a
-                href={getStartedLink}
-                className="bg-primary dark:bg-dark-primary text-white font-semibold py-3 px-8 rounded-lg text-base hover:bg-primary/90 dark:hover:bg-dark-primary/90 transition-colors duration-200 text-center"
-              > */}
               {token ? (
-                <a href={profile}>
+                <Link to={profile}>
                   <Button variant="primary" size="lg">
-                    My Account
+                    Go to Dashboard
                   </Button>
-                </a>
+                </Link>
               ) : (
-                <a href={register}>
+                <Link to={register}>
                   <Button variant="primary" size="lg">
                     Get Started Free
                   </Button>
-                </a>
+                </Link>
               )}
-
-              {/* {token ? "My Account" : "Get Started Free"} */}
-              {/* </a> */}
             </div>
-
-            {/* Illustration Section */}
           </section>
-
-          {/* Hero Illustration */}
 
           {/* Features Section */}
           <section className="pt-20">
@@ -336,21 +426,18 @@ export default function LandingPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 {token ? (
-                  <a href={profile}>
+                  <Link to={profile}>
                     <Button variant="primary" size="lg">
-                      My Account
+                      Go to Dashboard
                     </Button>
-                  </a>
+                  </Link>
                 ) : (
-                  <a href={register}>
+                  <Link to={register}>
                     <Button variant="primary" size="lg">
                       Get Started Free
                     </Button>
-                  </a>
+                  </Link>
                 )}
-                {/* <Button variant="secondary" size="lg">
-                  <a href={exploreLink}>Unix Features</a>
-                </Button> */}
               </div>
             </div>
           </div>
@@ -362,28 +449,30 @@ export default function LandingPage() {
         <div className="container mx-auto px-4 sm:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
-              <div className="flex items-center space-x-2">
+              <Link to={ROUTES.HOME} className="flex items-center space-x-2">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary dark:from-dark-primary dark:to-dark-secondary flex items-center justify-center text-white font-bold text-xl">
                   U
-                </div>{" "}
+                </div>
                 <span className="text-xl font-bold">UNIX</span>
-              </div>
+              </Link>
             </div>
-            {/* <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
-                © {new Date().getFullYear()} Campus Management System
-              </p> */}
             <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
               Benha University - © {new Date().getFullYear()} UNIX System
             </p>
             {/* <div className="flex items-center space-x-6">
-              {["Privacy", "Terms", "Contact", "Help"].map((item) => (
-                <a
-                  key={item}
-                  href="#"
+              {[
+                { label: "Privacy", url: ROUTES.PRIVACY },
+                { label: "Terms", url: ROUTES.TERMS },
+                { label: "Contact", url: ROUTES.CONTACT },
+                { label: "Help", url: ROUTES.HELP }
+              ].map((item) => (
+                <Link
+                  key={item.label}
+                  to={item.url}
                   className="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-dark-primary transition-colors"
                 >
-                  {item}
-                </a>
+                  {item.label}
+                </Link>
               ))}
             </div> */}
           </div>

@@ -41,6 +41,19 @@ const features = [
     link: ROUTES.STUDENT_SCHEDULE_HOME,
   },
   {
+    title: "Exam Schedule",
+    description:
+      "View the complete schedule of exams by section and type. Filter by date, room, or exam type to plan your studies efficiently.",
+    icon: "📚",
+    category: "Academic",
+    badge: "Updated",
+    badgeColor: "bg-red-500",
+    gradient: "from-red-100 to-red-50",
+    darkGradient: "from-dark-red/20 to-transparent",
+    link: ROUTES.EXAMS_HOME, // create this route
+  },
+
+  {
     title: "Lost & Found",
     description:
       "Report lost or found items and search through reported items with filters like type, location, or date.",
@@ -77,18 +90,17 @@ const features = [
     link: ROUTES.GRADUATION_PROJECTS_HOME,
   },
   {
-  title: "Departments",
-  description:
-    "Explore all university departments and their sections. View stages, sections, and department details in multiple layouts.",
-  icon: "🏛️",
-  category: "Academic",
-  badge: "Core",
-  badgeColor: "bg-primary",
-  gradient: "from-primary/10 to-primary/5",
-  darkGradient: "from-dark-primary/20 to-transparent",
-  link: ROUTES.DEPARTMENTS_HOME,
-},
-
+    title: "Departments",
+    description:
+      "Explore all university departments and their sections. View stages, sections, and department details in multiple layouts.",
+    icon: "🏛️",
+    category: "Academic",
+    badge: "Core",
+    badgeColor: "bg-primary",
+    gradient: "from-primary/10 to-primary/5",
+    darkGradient: "from-dark-primary/20 to-transparent",
+    link: ROUTES.DEPARTMENTS_HOME,
+  },
 ];
 
 const UnixFeatures = () => {
@@ -114,82 +126,80 @@ const UnixFeatures = () => {
 
   return (
     // <section className="bg-gray-100 dark:bg-dark-bg min-h-screen py-16 px-4 md:px-8 lg:px-12">
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Main Features of{" "}
-            <span className="text-primary dark:text-dark-primary">Unix</span>
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Explore the comprehensive suite of smart campus features designed to
-            enhance student life and campus management.
-          </p>
-        </div>
+    <div className="max-w-7xl mx-auto">
+      {/* Header Section */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          Main Features of{" "}
+          <span className="text-primary dark:text-dark-primary">Unix</span>
+        </h1>
+        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          Explore the comprehensive suite of smart campus features designed to
+          enhance student life and campus management.
+        </p>
+      </div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredFeatures.map((feature, index) => (
-            <div
+      {/* Features Grid */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredFeatures.map((feature, index) => (
+          <div
             onClick={() => navigate(feature.link)}
-              key={index}
-              className={`card group relative overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.02]`}
-            >
-              {/* Gradient Background */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} dark:${feature.darkGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-              />
+            key={index}
+            className={`card group relative overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.02]`}
+          >
+            {/* Gradient Background */}
+            <div
+              className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} dark:${feature.darkGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+            />
 
-              <div className="relative">
-                {/* Header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="text-3xl p-2 bg-white dark:bg-dark-card rounded-xl shadow-sm">
-                      {feature.icon}
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-bold text-gray-800 dark:text-white group-hover:text-primary dark:group-hover:text-dark-primary transition-colors">
-                        {feature.title}
-                      </h2>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
-                        {feature.category}
-                      </span>
-                    </div>
+            <div className="relative">
+              {/* Header */}
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center space-x-3">
+                  <div className="text-3xl p-2 bg-white dark:bg-dark-card rounded-xl shadow-sm">
+                    {feature.icon}
                   </div>
-                  <span
-                    className={`${feature.badgeColor} text-white text-xs font-bold px-3 py-1 rounded-full`}
-                  >
-                    {feature.badge}
-                  </span>
-                </div>
-
-                {/* Description */}
-                <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-3">
-                  {feature.description}
-                </p>
-
-                {/* Footer */}
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
-                  <button className="text-primary dark:text-dark-primary font-medium hover:underline flex items-center gap-1">
-                    Learn more
-                    <span className="group-hover:translate-x-1 transition-transform">
-                      →
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-800 dark:text-white group-hover:text-primary dark:group-hover:text-dark-primary transition-colors">
+                      {feature.title}
+                    </h2>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {feature.category}
                     </span>
-                  </button>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    Click to explore
-                  </span>
+                  </div>
                 </div>
+                <span
+                  className={`${feature.badgeColor} text-white text-xs font-bold px-3 py-1 rounded-full`}
+                >
+                  {feature.badge}
+                </span>
               </div>
 
-              {/* Hover Indicator */}
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-secondary dark:from-dark-primary dark:to-dark-secondary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-            </div>
-          ))}
-        </div>
+              {/* Description */}
+              <p className="text-gray-600 dark:text-gray-300 mb-6 line-clamp-3">
+                {feature.description}
+              </p>
 
-       
+              {/* Footer */}
+              <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                <button className="text-primary dark:text-dark-primary font-medium hover:underline flex items-center gap-1">
+                  Learn more
+                  <span className="group-hover:translate-x-1 transition-transform">
+                    →
+                  </span>
+                </button>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Click to explore
+                </span>
+              </div>
+            </div>
+
+            {/* Hover Indicator */}
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-secondary dark:from-dark-primary dark:to-dark-secondary transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+          </div>
+        ))}
       </div>
+    </div>
     // </section>
   );
 };

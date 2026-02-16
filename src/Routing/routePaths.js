@@ -35,6 +35,7 @@ export const ROUTES = {
   DRIVERS: "/unix/drivers",
   GRADUATION_PROJECTS: "/unix/graduation",
   NOTIFICATIONS: "/unix/notifications",
+  EXAMS_HOME: "/unix/exam-schedule",
 
   // Admin Protected
   ADMIN_DASHBOARD: "/unix/dashboard",
