@@ -7,6 +7,7 @@ import Urls from "@/API/URLs";
 ======================= */
 export interface ExamDto {
   id: number;
+  sectionId: number;
   courseName: string;
   sectionName: string;
   instructorName: string;
@@ -35,19 +36,17 @@ export interface CreateExamDto {
 ======================= */
 const useExams = () => {
   const queryClient = useQueryClient();
-
- const adminExamsQuery = useQuery({
+const adminExamsQuery = useQuery({
   queryKey: ["admin-exams"],
   queryFn: async () => {
-    const { data } = await api.get(Urls.EXAMS.CREATE); // GET على "exams" للأدمين
+    const { data } = await api.get(Urls.EXAMS.CREATE); 
+
     return data.map((exam: any) => ({
       id: exam.id,
-      courseId: exam.course?.id || 0,
-      sectionId: exam.section?.id || 0,
-      courseName: exam.course?.name || "",
-      sectionName: exam.section?.name || "",
-      instructorName: exam.instructor?.fullName || "",
-      roomCode: exam.room?.code || "",
+      courseName: exam.courseName,   // ✅ مباشر
+      sectionName: exam.sectionId?.toString() || "", // لو معندكش اسم القسم
+      instructorName: exam.instructorName,
+      roomCode: exam.roomCode,
       stage: exam.stage,
       examType: exam.examType,
       examDate: exam.examDate,

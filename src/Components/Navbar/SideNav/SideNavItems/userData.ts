@@ -99,6 +99,7 @@ const sideNav: NavSection[] = [
     items: [
       { title: "Schedule", icon: "CalendarMonth", url: ROUTES.STUDENT_SCHEDULE }, 
       { title: "Schedule Management", icon: "CalendarMonth", url: ROUTES.SCHEDULE_MANAGEMENT, roles: ["Admin"] },
+      { title: "Exams Management", icon: "CalendarMonth", url: ROUTES.EXAMS_MANAGEMENT, roles: ["Admin"] },
     ],
   },
   {

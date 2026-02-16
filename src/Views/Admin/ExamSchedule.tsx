@@ -15,7 +15,7 @@ const AdminExamsPage = () => {
   const { sectionsQuery } = useSections();
   const { roomsQuery } = useRooms();
   const { instructorsQuery } = useInstructors();
-
+console.log("Admin Exams:", adminExamsQuery.data);
   const [editingExam, setEditingExam] = useState<ExamDto | null>(null);
 
   const { register, handleSubmit, reset, watch } = useForm<CreateExamDto>();

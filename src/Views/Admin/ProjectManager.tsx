@@ -381,7 +381,7 @@ const AdminProjectsPage: React.FC = () => {
                 <div className="flex items-center justify-between text-sm">
                   <div className="flex items-center text-gray-600 dark:text-gray-400">
                     <Users size={14} className="mr-1" />
-                    <span>{project.memberCount || 0} members</span>
+                    <span>{project.students?.length || 0} members</span>
                   </div>
                   <span className={`px-2 py-1 rounded-full text-xs ${
                     project.startDate
@@ -439,7 +439,7 @@ const AdminProjectsPage: React.FC = () => {
                       <div className="flex items-center">
                         <Users size={14} className="mr-2 text-gray-400" />
                         <span className="font-medium text-sm md:text-base">
-                          {project.memberCount || 0}
+                          {project.students?.length || 0}
                         </span>
                       </div>
                     </td>

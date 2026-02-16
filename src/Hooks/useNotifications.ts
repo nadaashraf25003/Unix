@@ -1,11 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/API/Config";
 import Urls from "@/API/URLs";
-
-/* =======================
-   Types
-======================= */
 
 export interface Notification {
   id: number;
@@ -13,10 +8,6 @@ export interface Notification {
   isRead: boolean;
   createdAt: string;
 }
-
-/* =======================
-   Hook
-======================= */
 
 const useNotifications = () => {
   const queryClient = useQueryClient();
@@ -33,7 +24,7 @@ const useNotifications = () => {
   // Mark as read
   const markAsReadMutation = useMutation({
     mutationFn: async (id: number) => {
-      const res = await api.put(`${Urls.NOTIFICATIONS.MARK_READ}/${id}/read`);
+      const res = await api.put(Urls.NOTIFICATIONS.MARK_READ(id));
       return res.data;
     },
     onSuccess: () => {

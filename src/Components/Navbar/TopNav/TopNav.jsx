@@ -168,7 +168,7 @@ export default function TopNav({ toggleSidebar, sidebarOpen }) {
           </div> */}
 
           {/* Notifications */}
-          <div className="relative">
+          {/* <div className="relative">
             <IconButton
               color="inherit"
               className="text-gray-600 dark:text-gray-300"
@@ -183,7 +183,7 @@ export default function TopNav({ toggleSidebar, sidebarOpen }) {
               onClose={() => setOpenDropdown(null)}
               items={notificationItems}
             />
-          </div>
+          </div> */}
         
           {/* Profile */}
           <div className="relative">

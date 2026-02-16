@@ -34,10 +34,12 @@ export const ROUTES = {
   LOST_FOUND: "/unix/lost-found",
   DRIVERS: "/unix/drivers",
   GRADUATION_PROJECTS: "/unix/graduation",
+  NOTIFICATIONS: "/unix/notifications",
 
   // Admin Protected
   ADMIN_DASHBOARD: "/unix/dashboard",
   SCHEDULE_MANAGEMENT: "/unix/schedulemang",
+  EXAMS_MANAGEMENT: "/unix/examsmange",
   DRIVERS_MANAGEMENT: "/unix/driversmang",
   USERS: "/unix/users",
   DEPARTMENTS: "/unix/departments",
