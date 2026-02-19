@@ -153,4 +153,4 @@ It provides real-time data about rooms, tables, schedules, and campus navigation
 ## 🚀 Explore the Project
 
 - 🎤 Presentation & Idea: [View Presentation](https://rby2nsfor34u4.ok.kimi.link/)
-- - 🌐 Live Demo: [Open Project](https://unix-banha.vercel.app/)
+- 🌐 Live Demo: [Open Project](https://unix-banha.vercel.app/)
