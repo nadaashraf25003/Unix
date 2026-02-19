@@ -21,7 +21,7 @@ export default function LandingPage() {
   const role = user ? JSON.parse(user).role : null; // "Admin" | "Student"
   const profile =
     role === "Admin" ? ROUTES.ADMIN_PROFILE : ROUTES.STUDENT_PROFILE;
-  
+
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("user");
@@ -53,18 +53,18 @@ export default function LandingPage() {
       label: "Schedules",
       icon: "",
       items: [
-        { 
-          label: "Student Schedule", 
+        {
+          label: "Student Schedule",
           url: ROUTES.STUDENT_SCHEDULE,
-          roles: ["Student", "Instructor", "Admin"]
+          roles: ["Student", "Instructor", "Admin"],
         },
-        { 
-          label: "Schedule Management", 
+        {
+          label: "Schedule Management",
           url: ROUTES.SCHEDULE_MANAGEMENT,
-          roles: ["Admin"]
+          roles: ["Admin"],
         },
-        // { 
-        //   label: "Exams Schedule", 
+        // {
+        //   label: "Exams Schedule",
         //   url: ROUTES.EXAMS_MANAGEMENT,
         //   roles: ["Student", "Instructor", "Admin"]
         // },
@@ -76,18 +76,18 @@ export default function LandingPage() {
       label: "Exams",
       icon: "",
       items: [
-        { 
-          label: "Upcoming Exams", 
+        {
+          label: "Upcoming Exams",
           url: ROUTES.EXAMS_HOME,
-          roles: ["Student", "Instructor", "Admin"]
+          roles: ["Student", "Instructor", "Admin"],
         },
-        { 
-          label: "Exam Management", 
+        {
+          label: "Exam Management",
           url: ROUTES.EXAMS_MANAGEMENT,
-          roles: ["Admin"]
+          roles: ["Admin"],
         },
-        // { 
-        //   label: "Exam Rules", 
+        // {
+        //   label: "Exam Rules",
         //   url: ROUTES.EXAMS_RULES,
         //   roles: ["Student", "Instructor"]
         // },
@@ -99,18 +99,18 @@ export default function LandingPage() {
       label: "Rooms",
       icon: "",
       items: [
-        { 
-          label: "Find Rooms", 
+        {
+          label: "Find Rooms",
           url: ROUTES.CAMPUS_NAVIGATION,
-          roles: ["Student", "Instructor", "Admin"]
+          roles: ["Student", "Instructor", "Admin"],
         },
-        { 
-          label: "Room Availability", 
+        {
+          label: "Room Availability",
           url: ROUTES.ROOMS,
-          roles: ["Student", "Instructor", "Admin"]
+          roles: ["Student", "Instructor", "Admin"],
         },
-        // { 
-        //   label: "Room Management", 
+        // {
+        //   label: "Room Management",
         //   url: ROUTES.ROOMS_MANAGEMENT,
         //   roles: ["Admin"]
         // },
@@ -122,18 +122,18 @@ export default function LandingPage() {
       label: "Projects",
       icon: " ",
       items: [
-        { 
-          label: "Graduation Projects", 
+        {
+          label: "Graduation Projects",
           url: ROUTES.GRADUATION_PROJECTS_HOME,
-          roles: ["Student", "Instructor", "Admin"]
+          roles: ["Student", "Instructor", "Admin"],
         },
-        { 
-          label: "Project Management", 
+        {
+          label: "Project Management",
           url: ROUTES.DRIVERS_MANAGEMENT,
-          roles: ["Admin"]
+          roles: ["Admin"],
         },
-        // { 
-        //   label: "Project Submissions", 
+        // {
+        //   label: "Project Submissions",
         //   url: ROUTES.PROJECTS_SUBMISSIONS,
         //   roles: ["Student"]
         // },
@@ -145,13 +145,13 @@ export default function LandingPage() {
   // Filter items based on user role
   const getFilteredItems = (items) => {
     if (!token || !role) return items;
-    return items.filter(item => !item.roles || item.roles.includes(role));
+    return items.filter((item) => !item.roles || item.roles.includes(role));
   };
 
   // Component: Dropdown Menu
   const DropdownMenu = ({ menu }) => {
     const filteredItems = getFilteredItems(menu.items);
-    
+
     if (filteredItems.length === 0) return null;
 
     return (
@@ -280,7 +280,7 @@ export default function LandingPage() {
               {menuItems.map((menu) => (
                 <DropdownMenu key={menu.key} menu={menu} />
               ))}
-              
+
               {/* Additional Links */}
               {/* {token && (
                 <>
@@ -410,6 +410,211 @@ export default function LandingPage() {
           {/* Features Section */}
           <section className="pt-20">
             <UnixFeatures />
+          </section>
+
+          {/* Pricing Section */}
+          <section className="py-20">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold mb-4">Pick a plan that fits</h2>
+              <p className="text-gray-600 dark:text-gray-300 text-lg">
+                Choose the perfect plan for your academic journey. Upgrade or
+                downgrade anytime.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto px-4">
+              {/* Most Popular Badge - Positioned absolutely to float above the middle card */}
+              {/* <div className="md:col-start-2 relative">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
+                  <span className="bg-primary dark:bg-dark-primary text-white px-4 py-1 rounded-full text-sm font-semibold">
+                    Most Popular
+                  </span>
+                </div>
+              </div> */}
+
+              {/* Free Plan */}
+              <Card className="relative flex flex-col h-full border-2 border-gray-200 dark:border-gray-700 hover:border-primary dark:hover:border-dark-primary">
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold mb-2">Free</h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    Perfect for getting started
+                  </p>
+
+                  <div className="mb-6">
+                    <span className="text-5xl font-bold">EGP 0</span>
+                    <span className="text-gray-500 dark:text-gray-400 ml-2">
+                      /forever
+                    </span>
+                  </div>
+
+                  <ul className="space-y-4 mb-8">
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>View schedules & timetables</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Campus map search</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Browse public projects</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Basic lost & found</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Community support</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <Link to={getStartedLink} className="block mt-auto">
+                  <Button variant="ghost" size="lg" className="w-full">
+                    Get Started
+                  </Button>
+                </Link>
+              </Card>
+
+              {/* Student Plus Plan */}
+              <Card className="relative flex flex-col h-full border-2 border-primary dark:border-dark-primary shadow-xl scale-105 md:scale-110 z-20">
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold mb-2">Student Plus</h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    For serious students
+                  </p>
+
+                  <div className="mb-6">
+                    <span className="text-5xl font-bold">EGP 49</span>
+                    <span className="text-gray-500 dark:text-gray-400 ml-2">
+                      /semester
+                    </span>
+                  </div>
+
+                  <ul className="space-y-4 mb-8">
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Everything in Free</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Smart reminders & alerts</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Early room availability</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Study material downloads</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Priority support</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Ad-free experience</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <Link to={register} className="block mt-auto">
+                  <Button variant="primary" size="lg" className="w-full">
+                    Upgrade Now
+                  </Button>
+                </Link>
+              </Card>
+
+              {/* TA / Admin Plan */}
+              <Card className="relative flex flex-col h-full border-2 border-gray-200 dark:border-gray-700 hover:border-secondary dark:hover:border-dark-secondary">
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold mb-2">TA / Admin</h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    For teaching staff
+                  </p>
+
+                  <div className="mb-6">
+                    <span className="text-5xl font-bold">EGP 99</span>
+                    <span className="text-gray-500 dark:text-gray-400 ml-2">
+                      /semester
+                    </span>
+                  </div>
+
+                  <ul className="space-y-4 mb-8">
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Everything in Student Plus</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Moderation tools</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Department analytics</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Bulk schedule updates</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Admin dashboard</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-primary dark:text-dark-primary mt-1">
+                        ✓
+                      </span>
+                      <span>Dedicated support</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <Link
+                  to={ROUTES.CONTACT_SALES || "#"}
+                  className="block mt-auto"
+                >
+                  <Button variant="ghost" size="lg" className="w-full">
+                    Contact Sales
+                  </Button>
+                </Link>
+              </Card>
+            </div>
           </section>
         </section>
 
