@@ -147,3 +147,10 @@ It provides real-time data about rooms, tables, schedules, and campus navigation
 - Notifications & Announcements
 - Maintenance & Equipment
 - Audit Logs
+
+---
+
+## 🚀 Explore the Project
+
+- 🎤 Presentation & Idea: [View Presentation](https://rby2nsfor34u4.ok.kimi.link/)
+- - 🌐 Live Demo: [Open Project](https://unix-banha.vercel.app/)
